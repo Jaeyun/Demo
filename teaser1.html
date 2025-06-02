@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 기반 광고 기술 & 디지털 마케팅 그룹 인수 기회 제안</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+    - Deal Overview: Key numbers (Price, Revenue, Profitability) presented as prominent cards (Goal: Inform, Method: HTML/Tailwind, Interaction: Static display).
+    - Investment Highlights: List of key points with icons, expandable on click for details (Goal: Inform/Engage, Method: HTML/Tailwind + JS for toggle, Interaction: Click to expand/collapse).
+    - Target Businesses - Ad Agency (einvention) Revenue Growth: Line chart (Goal: Show Change/Trend, Method: Chart.js Canvas, Interaction: Hover for tooltips). Source: einvention IR data (2023: 534억, 2024E: 626억).
+    - Financials - Consolidated Revenue Mix (2024E): Donut chart (Goal: Show Proportion, Method: Chart.js Canvas, Interaction: Hover for tooltips). Source: DMP: 29.59억, DSP: 70억, Ad Agency: 626억.
+    - Textual Content (Summaries, Descriptions): Key information from the M&A teaser note is summarized and placed within relevant sections (Goal: Inform, Method: HTML/Tailwind).
+    - Justification: Visualizations and interactive elements are chosen to make complex M&A information more accessible, engaging, and easier to understand at a glance, supporting the overall goal of presenting a persuasive investment opportunity.
+    - NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Tailwind's default sans-serif stack includes Inter */
+        }
+        .chart-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            max-width: 600px; /* Default max-width for charts */
+        }
+        /* Responsive chart heights */
+        .chart-h-sm { height: 280px; max-height: 280px; } /* Small screens */
+        .chart-h-md { height: 350px; max-height: 350px; } /* Medium screens */
+        .chart-h-lg { height: 400px; max-height: 400px; } /* Large screens */
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            margin-right: 0.5rem;
+            border-radius: 0.375rem; /* rounded-md */
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            border-color: #0ea5e9; /* sky-500 */
+            color: #0ea5e9; /* sky-500 */
+            font-weight: 600;
+            background-color: #f0f9ff; /* sky-50 */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .highlight-item .details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .highlight-item.open .details {
+            max-height: 500px; /* Adjust as needed */
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-lg */
+        }
+    </style>
+</head>
+<body class="bg-neutral-100 text-neutral-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-sky-600">M&A 투자 제안</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 px-3 py-2 rounded-md text-sm font-medium">거래 개요</a>
+                        <a href="#highlights" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 px-3 py-2 rounded-md text-sm font-medium">투자 포인트</a>
+                        <a href="#businesses" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 px-3 py-2 rounded-md text-sm font-medium">매각 대상</a>
+                        <a href="#financials" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 px-3 py-2 rounded-md text-sm font-medium">재무 현황</a>
+                        <a href="#synergies" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 px-3 py-2 rounded-md text-sm font-medium">기대 시너지</a>
+                        <a href="#next-steps" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 px-3 py-2 rounded-md text-sm font-medium">다음 단계</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-neutral-500 hover:text-neutral-700 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#overview" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 block px-3 py-2 rounded-md text-base font-medium">거래 개요</a>
+                <a href="#highlights" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 block px-3 py-2 rounded-md text-base font-medium">투자 포인트</a>
+                <a href="#businesses" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 block px-3 py-2 rounded-md text-base font-medium">매각 대상</a>
+                <a href="#financials" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 block px-3 py-2 rounded-md text-base font-medium">재무 현황</a>
+                <a href="#synergies" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 block px-3 py-2 rounded-md text-base font-medium">기대 시너지</a>
+                <a href="#next-steps" class="text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 block px-3 py-2 rounded-md text-base font-medium">다음 단계</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-sky-600 text-white py-16 sm:py-20 md:py-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">AI 기반 광고 기술 & 디지털 마케팅 그룹</h1>
+            <p class="text-xl sm:text-2xl mb-8">혁신적인 기술력과 폭발적 성장성을 동시에 확보할 독점적 인수 기회</p>
+            <a href="#overview" class="bg-white text-sky-600 font-semibold px-8 py-3 rounded-lg text-lg hover:bg-sky-50 transition duration-300">자세히 보기</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <section id="overview" class="py-12 md:py-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-neutral-700">거래 개요</h2>
+            <p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">본 M&A는 AI 기반 광고 기술 플랫폼(DMP/DSP)과 고성장 디지털 마케팅 에이전시를 통합하여 인수하는 특별한 기회입니다. 이를 통해 인수 기업은 즉각적인 시장 점유율 확대와 미래 성장 동력을 확보할 수 있습니다.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="stat-card">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-2">총 매각 희망가</h3>
+                    <p class="text-4xl font-bold">400<span class="text-2xl">억원</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-2">2024년 예상 총 매출</h3>
+                    <p class="text-4xl font-bold">700<span class="text-2xl">억원 이상</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="text-2xl font-semibold text-sky-600 mb-2">2024년 예상 영업손익</h3>
+                    <p class="text-4xl font-bold">BEP <span class="text-2xl">이상 달성 전망</span></p>
+                </div>
+            </div>
+             <p class="mt-8 text-center text-neutral-500 text-sm">
+                인수 대상은 DMP 기업, DSP 사업부, 광고대행사 3개 사업 부문을 통합한 패키지입니다. <br class="hidden sm:inline"/>이를 통해 시너지를 극대화하고 시장 경쟁력을 강화할 수 있습니다.
+            </p>
+        </section>
+
+        <section id="highlights" class="py-12 md:py-16 bg-white rounded-xl shadow-lg my-12">
+            <h2 class="text-3xl font-bold text-center mb-2 text-neutral-700">주요 투자 포인트</h2>
+            <p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">본 인수는 단순한 규모 확장을 넘어, 미래 광고 시장을 선도할 수 있는 핵심 경쟁력을 확보하는 전략적 투자입니다. 다음과 같은 매력적인 투자 포인트를 제공합니다.</p>
+            <div class="space-y-6">
+                <div class="highlight-item bg-neutral-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between cursor-pointer highlight-header">
+                        <h3 class="text-xl font-semibold text-sky-700 flex items-center"><span class="text-2xl mr-3">🎯</span>AI 기반 풀스택 광고 기술력</h3>
+                        <span class="text-sky-500 transform transition-transform duration-300 arrow-icon">▼</span>
+                    </div>
+                    <div class="details mt-4 text-neutral-600">
+                        <p>자체 DMP, DSP, 빅데이터 분석 플랫폼, 머신러닝 플랫폼을 포괄하는 엔드-투-엔드(End-to-End) 광고 솔루션과 16년간 축적된 운영 노하우를 확보하여 기술적 우위를 점할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="highlight-item bg-neutral-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between cursor-pointer highlight-header">
+                        <h3 class="text-xl font-semibold text-sky-700 flex items-center"><span class="text-2xl mr-3">💡</span>검증된 기술력 및 글로벌 확장 잠재력</h3>
+                        <span class="text-sky-500 transform transition-transform duration-300 arrow-icon">▼</span>
+                    </div>
+                    <div class="details mt-4 text-neutral-600">
+                        <p>미국 대형 Ad Tech 기업에 플랫폼 라이선스를 제공하며 글로벌 표준에 부합하는 기술력을 입증했습니다. 이를 바탕으로 해외 시장 진출의 교두보를 마련할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="highlight-item bg-neutral-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                     <div class="flex items-center justify-between cursor-pointer highlight-header">
+                        <h3 class="text-xl font-semibold text-sky-700 flex items-center"><span class="text-2xl mr-3">📊</span>방대한 고품질 사용자 데이터</h3>
+                        <span class="text-sky-500 transform transition-transform duration-300 arrow-icon">▼</span>
+                    </div>
+                    <div class="details mt-4 text-neutral-600">
+                        <p>약 4,300만 명의 개인 비식별 사용자 데이터, 250TB 이상의 행동 데이터, 5,000개 이상의 세분화된 데이터 카테고리 및 ID 페어링 기술을 통해 정교한 타겟팅과 심층적인 소비자 분석이 가능합니다.</p>
+                    </div>
+                </div>
+                <div class="highlight-item bg-neutral-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                     <div class="flex items-center justify-between cursor-pointer highlight-header">
+                        <h3 class="text-xl font-semibold text-sky-700 flex items-center"><span class="text-2xl mr-3">🚀</span>고성장 디지털 마케팅 사업</h3>
+                        <span class="text-sky-500 transform transition-transform duration-300 arrow-icon">▼</span>
+                    </div>
+                    <div class="details mt-4 text-neutral-600">
+                        <p>최근 3년간 연평균 40% 이상 성장하고, 2024년 약 626억 매출이 예상되는 마케팅 회사를 통해 디지털 마케팅 시장에서의 강력한 성장 동력을 확보할 수 있습니다.</p>
+                    </div>
+                </div>
+                 <div class="highlight-item bg-neutral-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between cursor-pointer highlight-header">
+                        <h3 class="text-xl font-semibold text-sky-700 flex items-center"><span class="text-2xl mr-3">💰</span>매력적인 가치 평가</h3>
+                        <span class="text-sky-500 transform transition-transform duration-300 arrow-icon">▼</span>
+                    </div>
+                    <div class="details mt-4 text-neutral-600">
+                        <p>연 매출 700억원 이상, BEP 달성이 전망되는 사업 포트폴리오를 400억원에 인수하는 기회입니다. PSR 0.6 미만의 매력적인 조건으로, 기술 자산과 성장성을 고려할 때 높은 투자 가치를 지닙니다.</p>
+                    </div>
+                </div>
+                <div class="highlight-item bg-neutral-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between cursor-pointer highlight-header">
+                        <h3 class="text-xl font-semibold text-sky-700 flex items-center"><span class="text-2xl mr-3">✨</span>AI 기술 시너지 및 미래 성장 동력</h3>
+                        <span class="text-sky-500 transform transition-transform duration-300 arrow-icon">▼</span>
+                    </div>
+                    <div class="details mt-4 text-neutral-600">
+                        <p>DMP/DSP의 AI/ML 기술과 광고대행사의 AI 광고 자동화 솔루션 개발 역량 결합을 통해 광고 효율성을 극대화하고, 혁신적인 신규 서비스 개발을 가속화하여 차세대 광고 시장을 선도할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="businesses" class="py-12 md:py-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-neutral-700">매각 대상 사업 소개</h2>
+            <p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">본 매각은 검증된 기술 플랫폼과 성장성 높은 광고 대행사의 결합으로 구성되어, 각 사업 부문이 상호 보완하며 강력한 시너지를 창출합니다.</p>
+            <div class="mb-8 flex justify-center">
+                <button class="tab-button active" data-tab="tech-platform">통합 광고 기술 플랫폼 (DMP/DSP)</button>
+                <button class="tab-button" data-tab="ad-agency">디지털 광고 대행사</button>
+            </div>
+
+            <div id="tech-platform-content" class="tab-content active">
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-semibold text-sky-700 mb-6">통합 광고 기술 플랫폼 </h3>
+                    <p class="text-neutral-600 mb-6">국내 최고 수준의 데이터 처리 기술과 16년 간의 운영 노하우를 바탕으로 구축된 DMP와 DSP는 하나의 솔루션처럼 유기적으로 연동되어 광고 효율을 극대화합니다. 이미 미국 Ad Tech 기업에 라이선스를 제공하며 글로벌 기술력을 입증했습니다.</p>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-xl font-semibold text-neutral-700 mb-2">DMP (Data Management Platform)</h4>
+                            <ul class="list-disc list-inside text-neutral-600 space-y-1">
+                                <li>AI 기반 데이터 분석 및 관리, 4,300만 사용자 프로파일</li>
+                                <li>국내 최대 3rd Party 데이터 보유 (250TB+ 행동 데이터)</li>
+                                <li>'Molecule Data Marketplace' 운영 (데이터 거래 플랫폼)</li>
+                                <li>2024년 예상 매출: 29.59억원</li>
+                                <li>2024년 예상 영업손익: -9.79억원 (성장 투자 단계)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-neutral-700 mb-2">DSP (Demand-Side Platform)</h4>
+                            <ul class="list-disc list-inside text-neutral-600 space-y-1">
+                                <li>16년 운영 노하우, 자체 풀스택 DSP</li>
+                                <li>DMP 연동을 통한 정교한 타겟팅</li>
+                                <li>미국 Ad Tech 기업에 플랫폼 라이선스 제공</li>
+                                <li>2024년 예상 매출: 70억원</li>
+                                <li>2024년 예상 영업손익: BEP 수준 추정</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-sky-50 rounded-lg">
+                        <p class="text-sky-700 font-medium"><span class="font-bold">핵심 경쟁력:</span> 국내 최대 규모의 데이터와 AI 기술을 결합한 독보적인 플랫폼으로, 실시간 데이터 분석과 정밀 타겟팅을 통해 광고 성과를 극대화합니다. 글로벌 시장에서도 통하는 기술력은 향후 확장 가능성을 시사합니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ad-agency-content" class="tab-content">
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-semibold text-sky-700 mb-6">디지털 퍼포먼스 마케팅 대행사</h3>
+                    <p class="text-neutral-600 mb-6">마케팅 대행사는 2010년 설립 이후 퍼포먼스 중심의 마케팅 전략과 실행에서 뛰어난 역량을 입증해 온 디지털 광고 전문 대행사입니다. 다양한 산업군에서 성공적인 캠페인을 이끌었으며, 최근 3년간 연평균 40% 이상의 괄목할 만한 매출 성장을 기록하고 있습니다.</p>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-xl font-semibold text-neutral-700 mb-2">주요 특징 및 강점</h4>
+                            <ul class="list-disc list-inside text-neutral-600 space-y-1">
+                                <li>퍼포먼스 마케팅 전문 (네이버, 구글, 메타 등 주요 플랫폼)</li>
+                                <li>교육, 의료, 소비재, 패션 등 다양한 산업군 경험</li>
+                                <li>자체 AI 기반 광고 자동화 솔루션 개발 (AdAI, AD-GPT 등)</li>
+                                <li>60명 규모의 숙련된 전문 인력 보유</li>
+                                 <li>2024년 연구·인력개발비 세액공제 약 2.6억원 (R&D 투자)</li>
+                            </ul>
+                            <h4 class="text-xl font-semibold text-neutral-700 mt-4 mb-2">2024년 예상 재무</h4>
+                             <ul class="list-disc list-inside text-neutral-600 space-y-1">
+                                <li>매출: 626억원 (2023년 534억 대비 17% 성장)</li>
+                                <li>영업손익: -6.94억원 (AI 솔루션 등 미래 투자 반영)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-neutral-700 mb-2">마케팅 대행사 매출 성장 추이</h4>
+                            <div class="chart-container chart-h-sm sm:chart-h-md">
+                                <canvas id="einventionRevenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-sky-50 rounded-lg">
+                        <p class="text-sky-700 font-medium"><span class="font-bold">성장 동력:</span> 업계 평균을 웃도는 높은 광고 유지율과 빠른 실행력, AI 기술 기반의 자체 솔루션 개발을 통해 단순 광고 대행사를 넘어 기술 기반 마케팅 솔루션 기업으로 진화하고 있으며, 지속적인 고성장이 기대됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="financials" class="py-12 md:py-16 bg-white rounded-xl shadow-lg my-12">
+            <h2 class="text-3xl font-bold text-center mb-2 text-neutral-700">통합 재무 현황 (2024년 예상)</h2>
+            <p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">본 통합 사업은 안정적인 매출 기반과 성장 잠재력을 동시에 갖추고 있습니다. 인수 후 시너지를 통해 2024년 내 BEP 이상 달성이 충분히 가능할 것으로 전망됩니다.</p>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="text-xl font-semibold text-neutral-700 mb-4">주요 재무 지표</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between p-3 bg-neutral-50 rounded-md">
+                            <span class="font-medium">총 예상 매출액:</span>
+                            <span class="font-bold text-sky-600">700억원 이상</span>
+                        </div>
+                        <div class="flex justify-between p-3 bg-neutral-50 rounded-md">
+                            <span class="font-medium">- DMP 기업 매출:</span>
+                            <span class="font-bold">29.59억원</span>
+                        </div>
+                        <div class="flex justify-between p-3 bg-neutral-50 rounded-md">
+                            <span class="font-medium">- DSP 사업부 매출:</span>
+                            <span class="font-bold">70억원</span>
+                        </div>
+                        <div class="flex justify-between p-3 bg-neutral-50 rounded-md">
+                            <span class="font-medium">- 광고대행사 매출:</span>
+                            <span class="font-bold">626억원</span>
+                        </div>
+                        <div class="flex justify-between p-3 bg-neutral-100 rounded-md">
+                            <span class="font-medium">예상 영업손익:</span>
+                            <span class="font-bold text-green-600">BEP 또는 그 이상</span>
+                        </div>
+                         <div class="flex justify-between p-3 bg-sky-100 text-sky-700 rounded-md">
+                            <span class="font-medium">매각 희망가:</span>
+                            <span class="font-bold">400억원</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-neutral-700 mb-4 text-center md:text-left">2024년 예상 매출 구성</h3>
+                    <div class="chart-container chart-h-sm sm:chart-h-md">
+                        <canvas id="revenueMixChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="synergies" class="py-12 md:py-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-neutral-700">기대 시너지 및 전략적 가치</h2>
+            <p class="text-center text-neutral-600 mb-12 max-w-2xl mx-auto">본 인수는 통신사, 광고 회사, 검색엔진 회사, 소프트웨어 회사 등 AI 기반 광고 사업에 관심 있는 기업들에게 시장 경쟁 구도를 재편할 강력한 시너지 효과와 성장 기회를 제공합니다.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">📢 광고 효율성 극대화</h3>
+                    <p class="text-sm text-neutral-600">AI 및 빅데이터 분석 기술과 퍼포먼스 마케팅 역량 결합으로 타겟팅 정확도 향상 및 ROAS 증대.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">📈 신규 사업 기회 및 교차 판매</h3>
+                    <p class="text-sm text-neutral-600">기존 고객 네트워크에 DMP/DSP 기술 및 디지털 마케팅 솔루션 통합 제공으로 교차 판매 확대.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">🚀 차세대 마케팅 솔루션 개발 가속화</h3>
+                    <p class="text-sm text-neutral-600">AI/ML R&D 역량과 AI 광고 도구 개발 경험 통합으로 혁신적인 솔루션 개발 및 시장 선도.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">🔗 데이터 기반 신규 수익원 창출</h3>
+                    <p class="text-sm text-neutral-600">(특히 통신사) 가입자 데이터와 DMP/DSP 기술 결합으로 초개인화 서비스 및 신규 사업 모델 구축.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">🏆 시장 경쟁력 강화</h3>
+                    <p class="text-sm text-neutral-600">통합 풀스택 광고 기술, 전문 인력, 운영 노하우 확보로 디지털 광고 시장 내 경쟁 우위 확보.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">🌍 글로벌 시장 진출 기반</h3>
+                    <p class="text-sm text-neutral-600">검증된 기술력과 해외 라이선스 경험을 바탕으로 글로벌 시장 확장의 발판 마련.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-8 text-neutral-500 border-t border-neutral-200">
+        <p>&copy; 2025 [리스팅]. All Rights Reserved.</p>
+        <p class="text-xs mt-1">본 자료는 투자 유치를 위한 참고 자료이며, 최종 투자 결정은 신중한 검토 후 이루어져야 합니다.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (menuButton && mobileMenu) {
+                menuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    menuButton.querySelectorAll('svg').forEach(icon => icon.classList.toggle('hidden'));
+                });
+            }
+            
+            // Close mobile menu on link click
+            const mobileNavLinks = mobileMenu.querySelectorAll('a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuButton.querySelectorAll('svg').forEach(icon => {
+                        if(icon.classList.contains('block')) icon.classList.remove('hidden'); else icon.classList.add('hidden');
+                     });
+                     // Ensure correct SVG is shown (hamburger icon)
+                    menuButton.querySelector('svg:first-child').classList.remove('hidden');
+                    menuButton.querySelector('svg:last-child').classList.add('hidden');
+
+                });
+            });
+
+
+            // Tab functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === tabId + '-content') {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Investment Highlights accordion
+            const highlightHeaders = document.querySelectorAll('.highlight-header');
+            highlightHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const item = header.closest('.highlight-item');
+                    item.classList.toggle('open');
+                    const arrowIcon = header.querySelector('.arrow-icon');
+                    if (item.classList.contains('open')) {
+                        arrowIcon.style.transform = 'rotate(180deg)';
+                    } else {
+                        arrowIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+            
+            // Function to wrap labels for charts
+            function wrapLabels(label, maxWidth) {
+                const words = label.split(' ');
+                let line = '';
+                const lines = [];
+                for (let i = 0; i < words.length; i++) {
+                    let testLine = line + words[i] + ' ';
+                    if (testLine.length > maxWidth && i > 0) {
+                        lines.push(line.trim());
+                        line = words[i] + ' ';
+                    } else {
+                        line = testLine;
+                    }
+                }
+                lines.push(line.trim());
+                return lines;
+            }
+
+
+            // Chart.js: (주)이인벤션 매출 성장 추이
+            const einventionRevenueCtx = document.getElementById('einventionRevenueChart');
+            if (einventionRevenueCtx) {
+                new Chart(einventionRevenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2022년(추정)', '2023년', '2024년(예상)'],
+                        datasets: [{
+                            label: '매출액 (억원)',
+                            data: [534 / 1.17, 534, 626], // 2023년 534억, 2024년 626억 (17% 성장), 2022년은 2023년 기반 역산추정
+                            borderColor: 'rgb(14, 165, 233)', // sky-500
+                            backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: '매출액 (억원)' }
+                            },
+                            x: {
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        return wrapLabels(this.getLabelForValue(value), 10); // 10자 단위로 줄바꿈
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y} 억원`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Chart.js: 2024년 예상 매출 구성
+            const revenueMixCtx = document.getElementById('revenueMixChart');
+            if (revenueMixCtx) {
+                 new Chart(revenueMixCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['광고대행사', 'DSP 사업부', 'DMP 기업'],
+                        datasets: [{
+                            label: '매출 구성 비율',
+                            data: [626, 70, 29.59],
+                            backgroundColor: [
+                                'rgb(14, 165, 233)', // sky-500 for Ad Agency
+                                'rgb(56, 189, 248)', // sky-400 for DSP
+                                'rgb(125, 211, 252)'  // sky-300 for DMP
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: { size: 12 },
+                                     boxWidth: 15,
+                                     // Custom label generation for wrapping
+                                    generateLabels: function(chart) {
+                                        const data = chart.data;
+                                        if (data.labels.length && data.datasets.length) {
+                                            return data.labels.map(function(label, i) {
+                                                const meta = chart.getDatasetMeta(0);
+                                                const style = meta.controller.getStyle(i);
+                                                // Wrap label text
+                                                const wrappedLabel = wrapLabels(label, 16); // 16자 단위로 줄바꿈
+
+                                                return {
+                                                    text: wrappedLabel, // Use wrapped label
+                                                    fillStyle: style.backgroundColor,
+                                                    strokeStyle: style.borderColor,
+                                                    lineWidth: style.borderWidth,
+                                                    hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
+                                                    index: i,
+                                                    fontColor: chart.options.plugins.legend.labels.color || Chart.defaults.color
+                                                };
+                                            });
+                                        }
+                                        return [];
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        const value = context.parsed;
+                                        const sum = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = sum > 0 ? (value / sum * 100).toFixed(1) + '%' : '0%';
+                                        return `${label}${value}억원 (${percentage})`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
