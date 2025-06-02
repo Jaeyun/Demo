@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSearch AI: 대화형 전략 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Visualization & Content Choices: 
+        1. Market Data (Table 1) -> Goal: Inform/Compare -> Viz: Bar Charts (Chart.js/Canvas) -> Interaction: Hover tooltips -> Justification: Visually represents market size and growth potential, making quantitative data more digestible than a table.
+        2. Strategy Comparison (Pros/Cons, KPIs, etc.) -> Goal: Compare/Organize -> Viz: Structured HTML/CSS Cards (Tailwind Flex/Grid) -> Interaction: Click to reveal details on features -> Justification: Best for presenting and comparing qualitative, text-heavy information in a structured and clean manner. Progressive disclosure keeps the UI tidy.
+        3. Go-to-Market Strategy -> Goal: Organize/Explain Process -> Viz: HTML/CSS Flow Diagram -> Interaction: Hover highlights -> Justification: More engaging and clearer for explaining a process than a simple bulleted list.
+        4. Recommended Strategy -> Goal: Inform/Summarize -> Viz: HTML/CSS Timeline -> Interaction: None -> Justification: Clearly visualizes the recommended phased approach and actionable steps.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #1e3a8a;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .nav-button:not(.active):hover {
+            background-color: #dbeafe;
+        }
+        .card-reveal-header {
+            cursor: pointer;
+        }
+        .card-reveal-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .card-reveal-content.open {
+            max-height: 1000px;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            line-height: 1;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">DeepSearch AI</h1>
+            <p class="text-lg sm:text-xl text-blue-800 font-medium mt-2">대화형 전략 방향성 분석</p>
+            <p class="mt-4 max-w-3xl mx-auto text-gray-600">
+                DeepSearch AI의 핵심 자산인 '기업/금융 특화 데이터'를 기반으로, 어떤 사업 및 세일즈 전략이 최선일지 탐색합니다. 본 문서는 두 가지 핵심 전략(1안, 2안)을 심층적으로 비교 분석하고, 최적의 실행 계획을 제안합니다.
+            </p>
+        </header>
+
+        <nav id="main-nav" class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+            <button data-view="dashboard" class="nav-button active font-semibold py-2 px-4 rounded-full">대시보드</button>
+            <button data-view="strategy1" class="nav-button font-semibold py-2 px-4 rounded-full">1안: 프리미엄 틈새시장</button>
+            <button data-view="strategy2" class="nav-button font-semibold py-2 px-4 rounded-full">2안: Freemium 확장</button>
+            <button data-view="recommendation" class="nav-button font-semibold py-2 px-4 rounded-full">최종 권장 전략</button>
+        </nav>
+
+        <main>
+            <div id="dashboard" class="view-content space-y-8">
+                <section>
+                    <h2 class="text-2xl font-bold text-center mb-6">핵심 시장 기회 분석</h2>
+                     <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">금융 및 전문가용 AI 시장은 강력한 성장세를 보이고 있습니다. 특히 국내 금융 AI 에이전트 시장의 높은 성장률은 특화 솔루션의 성공 가능성을 시사합니다.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="text-lg font-bold text-center mb-4">글로벌 AI 시장 성장 전망 (USD)</h3>
+                            <div class="chart-container"><canvas id="globalMarketChart"></canvas></div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                             <h3 class="text-lg font-bold text-center mb-4">국내 AI 시장 성장 전망 (USD)</h3>
+                            <div class="chart-container"><canvas id="koreaMarketChart"></canvas></div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-bold text-center mb-6">전략 옵션 한눈에 비교하기</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-800">
+                            <h3 class="text-xl font-bold mb-4 text-blue-800">1안: 프리미엄 틈새시장 공략</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li><span class="font-semibold text-gray-900">🎯 타겟:</span> 소수 정예 기업 고객 (금융 기관, 대기업)</li>
+                                <li><span class="font-semibold text-gray-900">💎 가치:</span> 고유 데이터 기반의 고부가가치 의사결정 지원</li>
+                                <li><span class="font-semibold text-gray-900">💰 가격:</span> 고가의 연간 구독 (High ACV)</li>
+                                <li><span class="font-semibold text-gray-900">📈 장점:</span> 높은 수익성, 강력한 고객 유지, 방어 가능한 시장</li>
+                                <li><span class="font-semibold text-gray-900">⚠️ 리스크:</span> 작은 시장 규모(TAM), 긴 영업 주기, 높은 고객 확보 비용(CAC)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600">
+                             <h3 class="text-xl font-bold mb-4 text-green-600">2안: Freemium 모델로 시장 확장</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li><span class="font-semibold text-gray-900">🎯 타겟:</span> 다수의 일반 직장인, 전문가, 중소기업</li>
+                                <li><span class="font-semibold text-gray-900">💎 가치:</span> 범용 LLM 편의성 + 전문 금융 기능(옵션)</li>
+                                <li><span class="font-semibold text-gray-900">💰 가격:</span> 부분 유료화(Freemium), 종량제</li>
+                                <li><span class="font-semibold text-gray-900">📈 장점:</span> 빠른 사용자 확보, 네트워크 효과, 낮은 초기 CAC</li>
+                                <li><span class="font-semibold text-gray-900">⚠️ 리스크:</span> 낮은 유료 전환율, 무료 서비스 운영 비용, 치열한 경쟁</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="strategy1" class="view-content hidden space-y-8">
+                <header class="text-center">
+                    <h2 class="text-2xl font-bold">1안: 프리미엄 틈새시장 공략 (기업 중심)</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">소수의 핵심 기업 고객에게 대체 불가능한 가치를 제공하여 높은 수익성을 확보하는 전략입니다.</p>
+                </header>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <div class="text-2xl mb-2">🏦</div>
+                        <h4 class="font-bold">자산운용사</h4>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <div class="text-2xl mb-2">🏢</div>
+                        <h4 class="font-bold">M&A 자문</h4>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <div class="text-2xl mb-2">💼</div>
+                        <h4 class="font-bold">대기업 재무팀</h4>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <div class="text-2xl mb-2">📈</div>
+                        <h4 class="font-bold">투자은행</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4 card-reveal-header flex justify-between items-center">
+                        <span>주요 기능 및 제공 가치</span>
+                        <span class="text-sm text-gray-500">▼ 클릭하여 상세보기</span>
+                    </h3>
+                    <div class="card-reveal-content space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold">투자 포트폴리오 백테스팅</h4>
+                            <p class="text-sm text-gray-600">투자 아이디어를 실제 투자 가능한 포트폴리오로 전환하고, 과거 데이터 기반으로 성과를 검증하여 알파 창출 기회를 제공합니다.</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold">자동 기업 분석 보고서 생성</h4>
+                            <p class="text-sm text-gray-600">M&A, 법인 영업, 투자 심사 등 목적에 맞는 기업 리서치 및 분석 보고서를 자동으로 생성하여 업무 효율을 극대화합니다.</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold">AI 기반 기업 가치 평가</h4>
+                            <p class="text-sm text-gray-600">DCF, 비교 기업 분석 등 다양한 모델을 활용한 자동 기업 평가 보고서를 산출하여 신속하고 표준화된 의사결정을 지원합니다.</p>
+                        </div>
+                         <div class="p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold">특화 데이터 LLM 질의응답</h4>
+                            <p class="text-sm text-gray-600">뉴스, 공시, 특허, 리서치 등 DeepSearch의 고유 데이터를 기반으로 정확하고 깊이 있는 답변을 제공하는 전문가용 Q&A 서비스입니다.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4">영업 및 시장 출시(Go-to-Market) 전략</h3>
+                    <div class="flex items-center justify-between text-center flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="p-4 bg-blue-100 rounded-lg h-full flex flex-col justify-center">
+                                <p class="text-2xl">👨‍💼</p>
+                                <h4 class="font-semibold">직접 기업 영업</h4>
+                                <p class="text-sm text-gray-600">금융 전문성을 갖춘 영업팀이 C-level을 직접 공략</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&rarr;</div>
+                        <div class="flex-1">
+                            <div class="p-4 bg-blue-100 rounded-lg h-full flex flex-col justify-center">
+                                <p class="text-2xl">🎯</p>
+                                <h4 class="font-semibold">계정 기반 마케팅 (ABM)</h4>
+                                <p class="text-sm text-gray-600">핵심 타겟 고객 대상 맞춤형 마케팅 활동 전개</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&rarr;</div>
+                         <div class="flex-1">
+                            <div class="p-4 bg-blue-100 rounded-lg h-full flex flex-col justify-center">
+                                <p class="text-2xl">🤝</p>
+                                <h4 class="font-semibold">관계 구축 및 ROI 증명</h4>
+                                <p class="text-sm text-gray-600">장기 파트너십과 명확한 ROI 케이스로 높은 계약 가치 정당화</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="strategy2" class="view-content hidden space-y-8">
+                 <header class="text-center">
+                    <h2 class="text-2xl font-bold">2안: Freemium 모델로 시장 확장</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">일반 직장인 시장에 무료로 진입하여 사용자를 확보하고, 이 중 금융 전문가를 유료 고객으로 전환하는 전략입니다.</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-4 text-green-700">무료/일반 등급 (퍼널 상단)</h3>
+                         <ul class="space-y-3">
+                            <li><span class="font-bold">기능:</span> 텍스트 요약, 이메일 작성 등 일반 LLM 기능 제공</li>
+                             <li><span class="font-bold">타겟:</span> 모든 직장인, 학생, 전문가</li>
+                            <li><span class="font-bold">전략:</span> 제품 주도 성장(PLG), 콘텐츠 마케팅으로 사용자 확보</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-4 text-blue-800">프리미엄 금융 모듈 (업셀)</h3>
+                        <ul class="space-y-3">
+                            <li><span class="font-bold">기능:</span> 1안의 모든 전문 금융 기능(백테스팅, 리서치 등)</li>
+                            <li><span class="font-bold">타겟:</span> 무료 사용자 중 식별된 금융 전문가, 기업 고객</li>
+                            <li><span class="font-bold">전략:</span> 인앱 메시지, 가치 기반 트리거, 내부 영업팀을 통한 전환 유도</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4">사용자 확보 및 전환(Acquisition & Conversion) 전략</h3>
+                    <div class="flex items-center justify-between text-center flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="p-4 bg-green-100 rounded-lg h-full flex flex-col justify-center">
+                                <p class="text-2xl">🚀</p>
+                                <h4 class="font-semibold">제품 주도 성장 (PLG)</h4>
+                                <p class="text-sm text-gray-600">가치있는 무료 경험으로 사용자 확보 및 바이럴 유도</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&rarr;</div>
+                        <div class="flex-1">
+                            <div class="p-4 bg-yellow-100 rounded-lg h-full flex flex-col justify-center">
+                                <p class="text-2xl">🎣</p>
+                                <h4 class="font-semibold">가치 기반 전환 유도</h4>
+                                <p class="text-sm text-gray-600">사용량 도달, 프리미엄 기능 시도 시 업그레이드 제안</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&rarr;</div>
+                         <div class="flex-1">
+                            <div class="p-4 bg-blue-100 rounded-lg h-full flex flex-col justify-center">
+                                <p class="text-2xl">💰</p>
+                                <h4 class="font-semibold">내부 영업팀 (Inside Sales)</h4>
+                                <p class="text-sm text-gray-600">전환 가능성 높은 리드를 타겟하여 프리미엄/기업 계약 체결</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="recommendation" class="view-content hidden space-y-8">
+                 <header class="text-center">
+                    <h2 class="text-2xl font-bold">최종 권장 전략: 하이브리드 단계적 접근</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">리스크를 최소화하고 성공 확률을 극대화하기 위해, 1안의 가치 검증 후 2안으로 확장하는 단계적 전략을 권장합니다.</p>
+                </header>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="relative border-l-4 border-blue-200 ml-4">
+                        <div class="mb-8 pl-8 relative">
+                            <div class="absolute -left-[1.6rem] top-0 w-8 h-8 bg-blue-600 rounded-full text-white flex items-center justify-center font-bold">1</div>
+                            <h3 class="text-xl font-bold text-blue-800">Phase 1: 가치 검증 (3-6개월)</h3>
+                            <p class="mt-2 text-gray-700">1안의 핵심 기능을 MVP(최소기능제품)로 개발하여 소수의 핵심 기업 고객을 대상으로 가치를 검증하고 초기 수익을 확보합니다. 이 단계에서 제품의 시장 적합성(PMF)을 찾고, 고유 데이터의 경쟁력을 입증합니다.</p>
+                            <ul class="list-disc list-inside mt-3 text-sm text-gray-600 space-y-1">
+                                <li>MVP 범위 확정 (예: 자동 기업 가치 평가)</li>
+                                <li>베타 기업 고객 5~10곳 확보 및 피드백 수집</li>
+                                <li>데이터 및 AI 모델 정확도 고도화</li>
+                            </ul>
+                        </div>
+                         <div class="mb-8 pl-8 relative">
+                             <div class="absolute -left-[1.6rem] top-0 w-8 h-8 bg-blue-600 rounded-full text-white flex items-center justify-center font-bold">2</div>
+                            <h3 class="text-xl font-bold text-blue-800">Phase 2: 시장 확장 (검증 후)</h3>
+                            <p class="mt-2 text-gray-700">검증된 프리미엄 기능을 기반으로 2안의 Freemium 모델을 출시합니다. 일반 LLM은 더 넓은 사용자층을 유입시키는 관문 역할을 하며, DeepSearch의 차별화된 금융 인텔리전스로 자연스럽게 연결되도록 설계합니다.</p>
+                            <ul class="list-disc list-inside mt-3 text-sm text-gray-600 space-y-1">
+                                <li>무료/유료 등급 기능 및 제한 정의</li>
+                                <li>프리미엄 모듈 전환을 위한 명확한 업그레이드 경로 설계</li>
+                                <li>제품 주도 성장(PLG) 및 콘텐츠 마케팅 전략 실행</li>
+                            </ul>
+                        </div>
+                        <div class="pl-8 relative">
+                             <div class="absolute -left-[1.6rem] top-0 w-8 h-8 bg-green-600 rounded-full text-white flex items-center justify-center font-bold">★</div>
+                            <h3 class="text-xl font-bold text-green-700">장기적 비전</h3>
+                            <p class="mt-2 text-gray-700">"금융 특화 지능형 플랫폼"으로서 시장 리더십을 구축합니다. 단순 LLM 제공업체가 아닌, 고유 데이터를 통해 대체 불가능한 통찰력을 제공하는 핵심 기술 파트너로 자리매김하는 것을 목표로 합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const marketData = {
+                global: {
+                    labels: ['금융 서비스 GenAI', '자산 관리 AI', '금융 AI 서버'],
+                    startValue: [2.7, 3.4, 9.2],
+                    endValue: [18.9, 21.7, 72.9],
+                    cagr: [38.7, 24.2, 23.0]
+                },
+                korea: {
+                    labels: ['금융 AI 에이전트', '전체 AI 시장', 'LLM 시장'],
+                    startValue: [0.0074, 7.42, 0.1824],
+                    endValue: [0.0857, 37.19, 1.2783],
+                    cagr: [51.1, 13.19, 39.4]
+                }
+            };
+
+            const createChart = (ctx, labels, startData, endData, cagrData, startLabel, endLabel) => {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: startLabel,
+                                data: startData,
+                                backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: endLabel,
+                                data: endData,
+                                backgroundColor: 'rgba(34, 197, 94, 0.6)',
+                                borderColor: 'rgba(34, 197, 94, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value + 'B';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += '$' + context.parsed.y + 'B';
+                                        }
+                                        return label;
+                                    },
+                                    afterLabel: function(context) {
+                                         return 'CAGR: ' + cagrData[context.dataIndex] + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const globalCtx = document.getElementById('globalMarketChart').getContext('2d');
+            createChart(globalCtx, marketData.global.labels, marketData.global.startValue, marketData.global.endValue, marketData.global.cagr, '2024년', '2030/34년');
+
+            const koreaCtx = document.getElementById('koreaMarketChart').getContext('2d');
+            createChart(koreaCtx, marketData.korea.labels, marketData.korea.startValue, marketData.korea.endValue, marketData.korea.cagr, '2023/24년', '2030/35년');
+
+            const nav = document.getElementById('main-nav');
+            const views = document.querySelectorAll('.view-content');
+
+            nav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const viewName = e.target.dataset.view;
+                    
+                    nav.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    views.forEach(view => {
+                        if (view.id === viewName) {
+                            view.classList.remove('hidden');
+                        } else {
+                            view.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+
+            const revealHeaders = document.querySelectorAll('.card-reveal-header');
+            revealHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    content.classList.toggle('open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
