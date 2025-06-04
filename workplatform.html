@@ -10,37 +10,37 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #f3f4f6; 
         }
         .chat-bubble {
-            max-width: 70%;
+            max-width: 75%; 
             padding: 10px 15px;
             border-radius: 15px;
             margin-bottom: 10px;
             word-wrap: break-word;
         }
         .chat-bubble-user {
-            background-color: #3b82f6; /* Blue for user */
+            background-color: #3b82f6; 
             color: white;
             margin-left: auto;
             border-bottom-right-radius: 5px;
         }
         .chat-bubble-ai {
-            background-color: #e5e7eb; /* Light gray for AI/others */
-            color: #1f2937; /* Dark gray text */
+            background-color: #e5e7eb; 
+            color: #1f2937; 
             margin-right: auto;
             border-bottom-left-radius: 5px;
         }
-        .chat-bubble-ai.personal-assistant { /* Specific style for personal assistant AI */
-            background-color: #ede9fe; /* Lighter purple */
-            color: #5b21b6; /* Purple text */
+        .chat-bubble-ai.personal-assistant { 
+            background-color: #ede9fe; 
+            color: #5b21b6; 
         }
         .chat-bubble-ai.personal-assistant .font-semibold {
-             color: #6d28d9; /* Darker purple for headers */
+             color: #6d28d9; 
         }
         .chat-bubble-system {
-            background-color: #f9fafb; /* Even lighter gray for system messages */
-            color: #6b7280; /* Medium gray text */
+            background-color: #f9fafb; 
+            color: #6b7280; 
             font-size: 0.875rem;
             text-align: center;
             width: 100%;
@@ -48,7 +48,7 @@
             border-radius: 8px;
         }
         .sidebar-item:hover {
-            background-color: #e5e7eb; /* Lighter gray on hover */
+            background-color: #e5e7eb;
         }
         .active-item { 
             background-color: #d1d5db; 
@@ -69,17 +69,17 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a1a1a1;
         }
-        .news-item-clickable { /* For clickable news summaries within chat */
+        .news-item-clickable { 
             cursor: pointer;
             transition: background-color 0.2s ease-in-out;
             padding: 8px;
             border-radius: 8px;
-            margin-top: 4px; /* Add some space above the clickable area */
+            margin-top: 4px; 
         }
         .news-item-clickable:hover {
             background-color: rgba(0,0,0,0.05);
         }
-        .news-detail-card { /* For expanded news details */
+        .news-detail-card { 
             border: 1px solid #d1d5db; 
             border-radius: 8px;
             padding: 12px;
@@ -90,7 +90,7 @@
 </head>
 <body class="flex h-screen antialiased text-gray-800">
     <!-- Left Sidebar -->
-    <aside class="flex flex-col w-72 bg-gray-100 border-r border-gray-200 p-4 space-y-6">
+    <aside class="flex flex-col w-72 bg-gray-100 border-r border-gray-200 p-4 space-y-6 shrink-0">
         <div class="flex items-center space-x-3 px-2">
             <i class="fas fa-brain fa-2x text-blue-600"></i>
             <h1 class="text-2xl font-bold text-gray-800">AI 워크 플랫폼</h1>
@@ -157,10 +157,10 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col bg-white overflow-hidden">
-        <div id="mainContentArea" class="flex-1 flex flex-col">
-            <!-- Personal Assistant View (Initially hidden, shown by JS) -->
-            <div id="personalAssistantView" class="hidden flex-1 flex-col">
-                <header class="bg-gray-50 border-b border-gray-200 p-4">
+        <div id="mainContentArea" class="flex-1 flex flex-col overflow-hidden"> <!-- Added overflow-hidden here as well for safety -->
+            <!-- Personal Assistant View -->
+            <div id="personalAssistantView" class="hidden flex-1 flex-col overflow-hidden"> <!-- Added overflow-hidden -->
+                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0"> <!-- Added shrink-0 -->
                     <div class="flex items-center justify-between">
                         <h2 class="text-xl font-semibold text-gray-800 flex items-center">
                             <i class="fas fa-user-astronaut text-purple-500 mr-2"></i> 개인 어시스턴트
@@ -171,11 +171,11 @@
                     </div>
                 </header>
 
-                <div id="personalChatArea" class="flex-1 p-6 space-y-4 overflow-y-auto">
+                <div id="personalChatArea" class="flex-1 min-h-0 p-6 space-y-4 overflow-y-auto">
                     <!-- Chat messages for personal assistant will be appended here by JS -->
                 </div>
 
-                <div class="bg-gray-50 p-4 border-t border-gray-200">
+                <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0"> <!-- Added shrink-0 -->
                     <div class="flex items-center space-x-3">
                         <button class="text-gray-500 hover:text-gray-700" title="파일 첨부">
                             <i class="fas fa-paperclip fa-lg"></i>
@@ -188,9 +188,9 @@
                 </div>
             </div>
 
-            <!-- Workspace Chat View (Initially hidden, shown by JS) -->
-            <div id="workspaceChatView" class="hidden flex-1 flex flex-col">
-                <header class="bg-gray-50 border-b border-gray-200 p-4">
+            <!-- Workspace Chat View -->
+            <div id="workspaceChatView" class="hidden flex-1 flex-col overflow-hidden"> <!-- Added overflow-hidden -->
+                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0"> <!-- Added shrink-0 -->
                     <div class="flex items-center justify-between">
                         <h2 id="workspaceTitle" class="text-xl font-semibold text-gray-800">워크스페이스 제목</h2>
                         <div class="flex items-center space-x-3">
@@ -205,10 +205,10 @@
                         </div>
                     </div>
                 </header>
-                <div class="flex-1 p-6 space-y-4 overflow-y-auto" id="chatArea">
+                <div id="chatArea" class="flex-1 min-h-0 p-6 space-y-4 overflow-y-auto">
                     <!-- Workspace chat messages will be loaded here by JS -->
                 </div>
-                <div class="bg-gray-50 p-4 border-t border-gray-200">
+                <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0"> <!-- Added shrink-0 -->
                     <div class="flex items-center space-x-3">
                         <button class="text-gray-500 hover:text-gray-700" title="파일 첨부"><i class="fas fa-paperclip fa-lg"></i></button>
                         <input type="text" id="workspaceChatInput" placeholder="메시지를 입력하거나 AI에게 질문하세요..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-150">
@@ -223,7 +223,7 @@
     </main>
 
     <!-- Right Sidebar -->
-    <aside class="w-80 bg-gray-50 border-l border-gray-200 p-6 space-y-6 overflow-y-auto">
+    <aside class="w-80 bg-gray-50 border-l border-gray-200 p-6 space-y-6 overflow-y-auto shrink-0">
         <div>
             <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">팀 멤버 (4)</h3>
             <div class="space-y-3">
@@ -234,12 +234,12 @@
                 <button class="w-full mt-2 text-sm text-blue-600 hover:text-blue-800 py-1.5 px-3 rounded-md border border-blue-600 hover:bg-blue-50 transition duration-150"><i class="fas fa-user-plus mr-1"></i> 팀원 초대</button>
             </div>
         </div>
-        <div id="attachedFilesSection" class="hidden"> <!-- Initially hidden, shown for workspaces -->
+        <div id="attachedFilesSection" class="hidden"> 
             <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">첨부 파일</h3>
             <div class="space-y-2 text-sm" id="fileList"><p class="text-xs text-gray-500">선택된 워크스페이스의 파일이 여기에 표시됩니다.</p></div>
             <button class="w-full mt-2 text-sm text-gray-600 hover:text-gray-800 py-1.5 px-3 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-150"><i class="fas fa-upload mr-1"></i> 파일 더보기/업로드</button>
         </div>
-        <div id="aiSuggestionsSection"> <!-- Always visible, content changes -->
+        <div id="aiSuggestionsSection"> 
             <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">AI 제안 <i class="fas fa-lightbulb text-yellow-400"></i></h3>
             <div class="space-y-2 text-sm" id="suggestionList"><p class="text-xs text-gray-500">관련 AI 제안이 여기에 표시됩니다.</p></div>
         </div>
@@ -250,7 +250,7 @@
         const workspaceChatView = document.getElementById('workspaceChatView');
         const workspaceTitleElement = document.getElementById('workspaceTitle');
         const personalChatArea = document.getElementById('personalChatArea');
-        const workspaceChatArea = document.getElementById('chatArea'); // Workspace chat area
+        const workspaceChatArea = document.getElementById('chatArea'); 
         const sidebarLinks = document.querySelectorAll('.sidebar-item');
 
         const attachedFilesSection = document.getElementById('attachedFilesSection');
@@ -264,9 +264,8 @@
             if (selectedLink) selectedLink.classList.add('active-item');
         }
         
-        // Function to add initial messages to personal assistant chat
         function initializePersonalAssistantChat() {
-            personalChatArea.innerHTML = ''; // Clear previous messages
+            personalChatArea.innerHTML = ''; 
 
             const welcomeBubble = document.createElement('div');
             welcomeBubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
@@ -284,7 +283,6 @@
             `;
             personalChatArea.appendChild(newsIntroBubble);
             
-            // Add News Item 1
             const news1Bubble = document.createElement('div');
             news1Bubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
             news1Bubble.innerHTML = `
@@ -316,7 +314,6 @@
             `;
             personalChatArea.appendChild(news1Bubble);
 
-            // Add News Item 2
             const news2Bubble = document.createElement('div');
             news2Bubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
             news2Bubble.innerHTML = `
@@ -347,6 +344,38 @@
                 </div>
             `;
             personalChatArea.appendChild(news2Bubble);
+
+            // Add User Question and AI Answer example
+            const userQuestionBubble = document.createElement('div');
+            userQuestionBubble.className = 'chat-bubble chat-bubble-user';
+            userQuestionBubble.innerHTML = `
+                <p class="font-semibold text-sm mb-0.5">김팀장 (나)</p>
+                <p>최근 딥서치(DeepSearch) 기술 현황과 주요 적용 분야에 대해 알려줄 수 있나요?</p>
+            `;
+            personalChatArea.appendChild(userQuestionBubble);
+
+            const aiAnswerBubble = document.createElement('div');
+            aiAnswerBubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
+            aiAnswerBubble.innerHTML = `
+                <p class="font-semibold text-sm mb-0.5"><i class="fas fa-user-astronaut mr-1"></i> 개인 AI 비서</p>
+                <p>네, 김팀장님. 딥서치 기술은 최근 더욱 발전하여 다양한 분야에서 활용되고 있습니다. 주요 현황과 적용 분야는 다음과 같습니다 (목업 데이터):</p>
+                <ul class="list-disc list-inside mt-2 text-sm space-y-1 pl-4">
+                    <li><strong>자연어 처리(NLP) 강화:</strong> 문맥 이해도 향상, 복잡한 질의응답 가능</li>
+                    <li><strong>멀티모달 검색:</strong> 텍스트, 이미지, 음성 등 다양한 데이터 유형 통합 검색 지원</li>
+                    <li><strong>개인화 및 추천 정확도 증대:</strong> 사용자 맞춤형 정보 제공 능력 향상</li>
+                    <li><strong>적용 분야 확대:</strong>
+                        <ul class="list-disc list-inside ml-4 text-xs">
+                            <li>기업 내부 자료 검색: 방대한 문서 및 데이터베이스에서 필요한 정보 신속 추출</li>
+                            <li>법률 및 특허 분석: 관련 판례, 법규, 특허 정보 심층 분석</li>
+                            <li>의료 및 바이오 연구: 논문, 임상 데이터 분석을 통한 신약 개발 지원</li>
+                            <li>고객 지원 및 챗봇: 더욱 지능적인 고객 응대 및 문제 해결</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="mt-2 text-xs">더 궁금한 점이나 특정 분야에 대한 심층 정보가 필요하시면 말씀해주세요.</p>
+            `;
+            personalChatArea.appendChild(aiAnswerBubble);
+
             personalChatArea.scrollTop = personalChatArea.scrollHeight;
         }
 
@@ -354,11 +383,12 @@
         function showPersonalAssistant(event) {
             if(event) event.preventDefault();
             personalAssistantView.classList.remove('hidden');
-            personalAssistantView.classList.add('flex'); 
+            personalAssistantView.classList.add('flex', 'flex-col'); 
             workspaceChatView.classList.add('hidden');
+            workspaceChatView.classList.remove('flex', 'flex-col'); 
             setActiveLink(document.querySelector('a[href="#personal-assistant"]'));
 
-            initializePersonalAssistantChat(); // Load initial chat content for personal assistant
+            initializePersonalAssistantChat(); 
 
             attachedFilesSection.classList.add('hidden'); 
             aiSuggestionsSection.classList.remove('hidden'); 
@@ -380,8 +410,9 @@
         function showWorkspaceView(event, workspaceName, linkElement) {
             if(event) event.preventDefault();
             personalAssistantView.classList.add('hidden');
+            personalAssistantView.classList.remove('flex', 'flex-col'); 
             workspaceChatView.classList.remove('hidden');
-            workspaceChatView.classList.add('flex');
+            workspaceChatView.classList.add('flex', 'flex-col'); 
             workspaceTitleElement.textContent = workspaceName;
             
             setActiveLink(linkElement || (event ? event.currentTarget : null));
@@ -422,7 +453,6 @@
             const detailElement = document.getElementById(detailId);
             if (!detailElement) return;
 
-            // Find all news detail cards within the same parent chat bubble as the clickable element
             const parentBubble = clickableElement.closest('.chat-bubble-ai');
             if (parentBubble) {
                 const allNewsDetailsInBubble = parentBubble.querySelectorAll('.news-detail-card');
@@ -434,8 +464,8 @@
             }
             
             detailElement.classList.toggle('hidden');
-            if (personalChatArea && !detailElement.classList.contains('hidden')) { // Scroll to make detail visible
-                 setTimeout(() => { // Allow time for element to become visible before scrolling
+            if (personalChatArea && !detailElement.classList.contains('hidden')) { 
+                 setTimeout(() => { 
                     detailElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 100);
             }
@@ -453,7 +483,6 @@
             personalChatArea.appendChild(userBubble);
             inputElement.value = ""; 
 
-            // Simulate AI response
             setTimeout(() => {
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
@@ -481,7 +510,6 @@
             workspaceChatArea.appendChild(userBubble);
             inputElement.value = ""; 
 
-            // Simulate AI response
             setTimeout(() => {
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'chat-bubble chat-bubble-ai';
@@ -495,7 +523,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            showPersonalAssistant(); // Show personal assistant by default
+            showPersonalAssistant(); 
         });
     </script>
 </body>

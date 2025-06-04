@@ -11,11 +11,86 @@
             padding: 0;
             background-color: #f4f7f6;
             color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; /* body를 flex container로 유지 */
+            flex-direction: column; /* main-content-wrapper가 body의 flex item이 되도록 */
+            align-items: center; /* main-content-wrapper 내의 header, footer 등이 중앙 정렬되도록 */
             min-height: 100vh;
         }
+
+        /* 비밀번호 입력 섹션 스타일 */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* 어두운 배경 */
+            display: flex; /* 비밀번호 프롬프트를 중앙에 위치시키기 위함 */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* 다른 요소들 위에 표시 */
+        }
+
+        #password-prompt {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 320px;
+        }
+
+        #password-prompt h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        #password-prompt input[type="password"] {
+            width: calc(100% - 22px); /* padding 고려 */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        #password-prompt button {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #password-prompt button:hover {
+            background-color: #0056b3;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 15px;
+            min-height: 1.2em; /* 메시지 공간 확보 */
+            font-size: 0.9em;
+        }
+
+        /* 기존 콘텐츠를 감싸는 래퍼 */
+        #main-content-wrapper {
+            display: none; /* 초기에는 숨김 */
+            width: 100%;
+            flex-grow: 1; /* body의 flex item으로서 남은 공간을 채움 */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* header, container, footer를 중앙 정렬 (body와 동일하게) */
+        }
+
+        /* 기존 스타일 유지 */
         header {
             background-color: #007bff; /* 파란색 계열 헤더 */
             color: white;
@@ -81,43 +156,90 @@
             background-color: #343a40;
             color: white;
             width: 100%;
-            margin-top: auto; /* 페이지 하단에 푸터 고정 */
+            margin-top: auto; /* 페이지 하단에 푸터 고정 (main-content-wrapper가 flex container일 때 작동) */
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>데모 프로젝트 모음</h1>
-    </header>
 
-    <div class="container">
-        <p class="intro-text">
-            다양한 HTML 데모들을 이곳에서 확인하실 수 있습니다. 아래 목록에서 원하는 데모를 클릭하여 이동하세요.
-        </p>
-
-        <ul class="demo-list">
-            <li>
-                <a href="deepsearchai.html">DeepSearch AI: 대화형 전략 분석 (Gemini API 연동)</a>
-                <p class="description">DeepSearch AI의 핵심 자산인 '기업/금융 특화 데이터'를 기반으로, 어떤 사업 및 세일즈 전략이 최선일지 탐색합니다. 본 문서는 두 가지 핵심 전략을 심층적으로 비교 분석하고, Gemini API를 활용한 AI 기능과 함께 최적의 실행 계획 및 가격 정책을 제안합니다.</p>
-            </li>
-            <li>
-                <a href="news.html">뉴스 기반 기업용 AI 서비스 전략 분석</a>
-                <p class="description">본 대시보드는 정보 과부하 시대의 직장인을 위한 뉴스 기반 AI 서비스의 사업 전략을 분석합니다. 시장 기회, 사용자 확보, 사내 확산, 시장 진출(GTM) 전략, 수익 모델을 심층적으로 탐색하고 최종 실행 계획을 제안합니다.</p>
-            </li>
-            <li>
-                <a href="teaser1.html">AI 기반 광고 기술 & 디지털 마케팅 그룹 인수 기회 제안</a>
-                <p class="description">본 M&A는 AI 기반 광고 기술 플랫폼(DMP/DSP)과 고성장 디지털 마케팅 에이전시를 통합하여 인수하는 특별한 기회입니다. 이를 통해 인수 기업은 즉각적인 시장 점유율 확대와 미래 성장 동력을 확보할 수 있습니다.</p>
-            </li>
-            <li>
-                <a href="workplatform.html">AI 워크 플랫폼 (목업)</a>
-                <p class="description">B2B 기업 고객을 위한 보안 강화형 AI 기반 협업 및 리서치 플랫폼</p>
-            </li>
-            </ul>
+    <div id="password-overlay">
+        <div id="password-prompt">
+            <h2>비밀번호 입력</h2>
+            <input type="password" id="password-input" placeholder="비밀번호를 입력하세요" autofocus>
+            <button id="submit-password">접속</button>
+            <p id="error-message"></p>
+        </div>
     </div>
 
-    <footer>
-        <p>&copy; 2025 DeepSearch. All rights reserved.</p>
-    </footer>
+    <div id="main-content-wrapper">
+        <header>
+            <h1>데모 프로젝트 모음</h1>
+        </header>
+
+        <div class="container">
+            <p class="intro-text">
+                다양한 HTML 데모들을 이곳에서 확인하실 수 있습니다. 아래 목록에서 원하는 데모를 클릭하여 이동하세요.
+            </p>
+
+            <ul class="demo-list">
+                <li>
+                    <a href="deepsearchai.html">DeepSearch AI: 대화형 전략 분석 (Gemini API 연동)</a>
+                    <p class="description">DeepSearch AI의 핵심 자산인 '기업/금융 특화 데이터'를 기반으로, 어떤 사업 및 세일즈 전략이 최선일지 탐색합니다. 본 문서는 두 가지 핵심 전략을 심층적으로 비교 분석하고, Gemini API를 활용한 AI 기능과 함께 최적의 실행 계획 및 가격 정책을 제안합니다.</p>
+                </li>
+                <li>
+                    <a href="news.html">뉴스 기반 기업용 AI 서비스 전략 분석</a>
+                    <p class="description">본 대시보드는 정보 과부하 시대의 직장인을 위한 뉴스 기반 AI 서비스의 사업 전략을 분석합니다. 시장 기회, 사용자 확보, 사내 확산, 시장 진출(GTM) 전략, 수익 모델을 심층적으로 탐색하고 최종 실행 계획을 제안합니다.</p>
+                </li>
+                <li>
+                    <a href="teaser1.html">AI 기반 광고 기술 & 디지털 마케팅 그룹 인수 기회 제안</a>
+                    <p class="description">본 M&A는 AI 기반 광고 기술 플랫폼(DMP/DSP)과 고성장 디지털 마케팅 에이전시를 통합하여 인수하는 특별한 기회입니다. 이를 통해 인수 기업은 즉각적인 시장 점유율 확대와 미래 성장 동력을 확보할 수 있습니다.</p>
+                </li>
+                <li>
+                    <a href="workplatform.html">AI 워크 플랫폼 (목업)</a>
+                    <p class="description">B2B 기업 고객을 위한 보안 강화형 AI 기반 협업 및 리서치 플랫폼</p>
+                </li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 DeepSearch. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 중요: "YOUR_PASSWORD_HERE"를 실제 사용할 비밀번호로 변경하세요.
+        const correctPassword = "deepsearch0108";
+
+        const passwordOverlay = document.getElementById("password-overlay");
+        const mainContentWrapper = document.getElementById("main-content-wrapper");
+        const passwordInput = document.getElementById("password-input");
+        const submitButton = document.getElementById("submit-password");
+        const errorMessage = document.getElementById("error-message");
+
+        // 페이지 로드 시 비밀번호 입력 필드에 포커스
+        passwordInput.focus();
+
+        function attemptLogin() {
+            if (passwordInput.value === correctPassword) {
+                passwordOverlay.style.display = "none";
+                mainContentWrapper.style.display = "flex"; // 숨겨뒀던 메인 콘텐츠를 flex로 표시
+            } else {
+                errorMessage.textContent = "비밀번호가 올바르지 않습니다.";
+                passwordInput.value = ""; // 입력 필드 초기화
+                passwordInput.focus(); // 다시 포커스
+            }
+        }
+
+        submitButton.addEventListener("click", attemptLogin);
+
+        passwordInput.addEventListener("keypress", function(event) {
+            // Enter 키를 눌렀을 때도 접속 시도
+            if (event.key === "Enter") {
+                event.preventDefault(); // 기본 동작 방지 (폼 제출 등)
+                attemptLogin();
+            }
+        });
+    </script>
 
 </body>
 </html>
