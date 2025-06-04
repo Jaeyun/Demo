@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js for backtesting results -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -125,6 +126,24 @@
             overflow-y: auto;
             min-height: 0; /* Crucial for scrolling in flex children */
         }
+        .tab-button {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s, color 0.3s;
+            white-space: nowrap; /* Prevent tab text from wrapping */
+        }
+        .tab-button.active {
+            border-color: #4f46e5; /* Indigo-600 */
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="flex h-screen antialiased text-gray-800">
@@ -163,6 +182,10 @@
                 </button>
             </div>
             <nav class="space-y-1">
+                <a href="#workspace-investment-ai-bio" onclick="showInvestmentIdeaView(event, '투자 아이디어: AI + 바이오', this)" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
+                    <i class="fas fa-chart-pie w-5 h-5 text-teal-500"></i>
+                    <span>투자 아이디어: AI + 바이오</span>
+                </a>
                 <a href="#workspace-ma-alpha" onclick="showMADataRoomView(event, 'M&A: 알파 인수 검토', this)" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
                     <i class="fas fa-handshake w-5 h-5 text-red-500"></i>
                     <span>M&A: 알파 인수 검토</span>
@@ -177,7 +200,7 @@
                     <i class="fas fa-chart-line w-5 h-5 text-green-500"></i>
                     <span>2분기 실적 분석</span>
                 </a>
-                <a href="#workspace-news" onclick="showWorkspaceView(event, '최신 산업 뉴스 공유', this)" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
+                <a href="#workspace-news-sharing" onclick="showWorkspaceView(event, '최신 산업 뉴스 공유', this)" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
                     <i class="fas fa-newspaper w-5 h-5 text-yellow-500"></i>
                     <span>최신 산업 뉴스 공유</span>
                 </a>
@@ -298,9 +321,7 @@
                         </div>
                     </div>
                 </header>
-
                 <div class="flex-1 flex min-h-0">
-                    <!-- Left Panel: Document Library & AI Insights -->
                     <div class="w-1/3 flex flex-col border-r border-gray-200 overflow-hidden">
                         <div class="p-4 shrink-0 border-b border-gray-200">
                             <div class="flex justify-between items-center mb-2">
@@ -312,35 +333,16 @@
                             </div>
                         </div>
                         <div id="maDocumentListArea" class="chat-content-scroll p-4 space-y-2">
-                            <!-- Mockup Document List -->
-                            <div class="document-item">
-                                <i class="fas fa-folder text-yellow-500"></i>
-                                <span>01. 재무 실사 자료</span>
-                            </div>
+                            <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>01. 재무 실사 자료</span></div>
                             <div class="pl-6">
-                                <div class="document-item" onclick="showDocumentThread('2023년 감사보고서.pdf', 'doc_fs_2023', 'AI 요약: 매출 100억, 영업이익 10억 달성. 주요 재무 지표 양호하나, 단기차입금 증가 추세 관찰됨.')">
-                                    <i class="fas fa-file-pdf text-red-500"></i>
-                                    <span>2023년 감사보고서.pdf</span>
-                                </div>
-                                <div class="document-item" onclick="showDocumentThread('향후 5년 현금흐름표.xlsx', 'doc_cash_flow', 'AI 분석: 향후 3년간 연평균 15% 매출 성장 가정. 주요 변수는 신제품 출시 성공 여부.')">
-                                    <i class="fas fa-file-excel text-green-500"></i>
-                                    <span>향후 5년 현금흐름표.xlsx</span>
-                                </div>
+                                <div class="document-item" onclick="showDocumentThread('2023년 감사보고서.pdf', 'doc_fs_2023', 'AI 요약: 매출 100억, 영업이익 10억 달성. 주요 재무 지표 양호하나, 단기차입금 증가 추세 관찰됨.')"><i class="fas fa-file-pdf text-red-500"></i><span>2023년 감사보고서.pdf</span></div>
+                                <div class="document-item" onclick="showDocumentThread('향후 5년 현금흐름표.xlsx', 'doc_cash_flow', 'AI 분석: 향후 3년간 연평균 15% 매출 성장 가정. 주요 변수는 신제품 출시 성공 여부.')"><i class="fas fa-file-excel text-green-500"></i><span>향후 5년 현금흐름표.xlsx</span></div>
                             </div>
-                            <div class="document-item">
-                                <i class="fas fa-folder text-yellow-500"></i>
-                                <span>02. 법률 실사 자료</span>
-                            </div>
+                            <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>02. 법률 실사 자료</span></div>
                              <div class="pl-6">
-                                <div class="document-item" onclick="showDocumentThread('주요 공급 계약서_알파_베타.docx', 'doc_contract_ab', 'AI 리스크 식별: 계약 갱신 조건 불명확, 단가 인상 조건(최대 15%)이 특정 상황 발생 시 발동 가능성 있음 (3.2조).')">
-                                    <i class="fas fa-file-word text-blue-500"></i>
-                                    <span>주요 공급 계약서_알파_베타.docx</span>
-                                </div>
+                                <div class="document-item" onclick="showDocumentThread('주요 공급 계약서_알파_베타.docx', 'doc_contract_ab', 'AI 리스크 식별: 계약 갱신 조건 불명확, 단가 인상 조건(최대 15%)이 특정 상황 발생 시 발동 가능성 있음 (3.2조).')"><i class="fas fa-file-word text-blue-500"></i><span>주요 공급 계약서_알파_베타.docx</span></div>
                             </div>
-                             <div class="document-item">
-                                <i class="fas fa-folder text-yellow-500"></i>
-                                <span>03. 사업 실사 자료</span>
-                            </div>
+                             <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>03. 사업 실사 자료</span></div>
                         </div>
                         <div class="p-4 shrink-0 border-t border-gray-200">
                              <h3 class="text-lg font-semibold text-gray-700 mb-2">AI 분석 하이라이트</h3>
@@ -353,7 +355,6 @@
                              </div>
                         </div>
                     </div>
-                    <!-- Right Panel: Document Detail & Thread -->
                     <div id="maDocumentDetailThreadView" class="w-2/3 flex flex-col overflow-hidden">
                         <div id="documentDetailHeader" class="p-4 shrink-0 border-b border-gray-200 bg-gray-50">
                             <h3 id="selectedDocumentName" class="text-lg font-semibold text-gray-800 truncate">문서를 선택해주세요.</h3>
@@ -361,13 +362,117 @@
                         <div id="documentAiAnalysisArea" class="p-4 shrink-0 border-b border-gray-200 max-h-48 overflow-y-auto bg-white">
                              <p class="text-sm text-gray-500">문서 선택 시 AI 분석 결과가 여기에 표시됩니다.</p>
                         </div>
-                        <div id="maDocumentThreadChatArea" class="chat-content-scroll p-4 space-y-3 bg-white">
-                            <!-- 문서별 대화 쓰레드 메시지 -->
-                        </div>
+                        <div id="maDocumentThreadChatArea" class="chat-content-scroll p-4 space-y-3 bg-white"></div>
                         <div class="bg-gray-100 p-3 border-t border-gray-200 shrink-0">
                             <div class="flex items-center space-x-2">
                                 <input type="text" id="maDocumentThreadInput" placeholder="이 문서에 대해 메시지 입력..." class="flex-1 p-2 border border-gray-300 rounded-md text-sm">
                                 <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-md text-sm" onclick="sendMADocumentThreadMessage()">전송</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Idea View -->
+            <div id="investmentIdeaView" class="hidden flex-1 flex-col overflow-hidden">
+                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0">
+                    <div class="flex items-center justify-between">
+                        <h2 id="investmentIdeaTitle" class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-chart-pie text-teal-500 mr-2"></i> 투자 아이디어 검증
+                        </h2>
+                        <div class="flex items-center space-x-3">
+                             <button class="text-gray-500 hover:text-gray-700" title="워크스페이스 설정"><i class="fas fa-cog fa-lg"></i></button>
+                             <div class="flex -space-x-2 overflow-hidden">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/E2E8F0/333?text=김" alt="김펀드매니저">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" alt="이애널리스트">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/FBCFE8/701A75?text=박" alt="박퀀트">
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div class="shrink-0 border-b border-gray-200">
+                    <nav class="flex space-x-1 px-4 overflow-x-auto" aria-label="Tabs">
+                        <button onclick="openInvestmentTab(event, 'ideaOverviewTab', this)" class="tab-button active">아이디어 개요</button>
+                        <button onclick="openInvestmentTab(event, 'aiResearchTab', this)" class="tab-button">AI 리서치</button>
+                        <button onclick="openInvestmentTab(event, 'backtestingTab', this)" class="tab-button">백테스팅</button>
+                        <button onclick="openInvestmentTab(event, 'portfolioReportTab', this)" class="tab-button">포트폴리오/보고서</button>
+                        <button onclick="openInvestmentTab(event, 'discussionTab', this)" class="tab-button">Q&A/토론</button>
+                    </nav>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-6">
+                    <!-- Tab Content: Idea Overview -->
+                    <div id="ideaOverviewTab" class="tab-content active">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">1. 투자 아이디어: AI 신약 개발 플랫폼 기업</h3>
+                        <div class="bg-white p-4 rounded-lg shadow mb-4">
+                            <p class="text-sm text-gray-700"><strong>제안자:</strong> 김펀드매니저</p>
+                            <p class="text-sm text-gray-700 mt-1"><strong>아이디어 요약:</strong> AI 기술을 활용하여 신약 개발 기간을 단축하고 성공률을 높이는 플랫폼 기술 보유 기업에 투자하여 고수익 추구.</p>
+                            <textarea class="w-full mt-2 p-2 border rounded-md text-sm" rows="3" placeholder="아이디어 상세 내용 및 발전 과정 기록...">최근 AI 기술이 신약 개발 기간을 획기적으로 단축하고 성공률을 높이는 데 기여하고 있습니다. 이 분야에 특화된 기술력을 가진 바이오 기업들을 발굴하여 투자하면 높은 수익을 기대할 수 있을 것 같습니다. 특히 AI 기반 후보물질 발굴 플랫폼 기술을 보유한 비상장/초기 상장 바이오 기업을 주요 타겟으로 합니다.</textarea>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow">
+                             <h4 class="text-md font-semibold text-gray-700 mb-2">초기 AI 브리핑</h4>
+                             <div class="chat-bubble chat-bubble-ai">
+                                <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-teal-500"></i> 워크스페이스 AI</p>
+                                <p class="text-sm">김펀드매니저님의 'AI 신약 개발 플랫폼 투자' 아이디어와 관련하여 초기 리서치 자료를 공유드립니다: <a href="#" class="text-blue-500 underline">최신 시장 보고서 링크</a>, <a href="#" class="text-blue-500 underline">관련 주요 뉴스 3건 요약</a>, <a href="#" class="text-blue-500 underline">최근 1년간 주요 특허 동향 그래프</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Content: AI Research -->
+                    <div id="aiResearchTab" class="tab-content">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">2. AI 기반 리서치 및 데이터 분석</h3>
+                        <div class="mb-4">
+                            <input type="text" id="aiResearchQueryInput" value="AI 기반 후보물질 발굴 기술 보유 글로벌 기업 리스트 및 주요 기술, 투자 유치 현황" class="w-full p-2 border rounded-md text-sm">
+                            <button onclick="requestAiResearch()" class="mt-2 bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-md text-sm">AI 리서치 요청</button>
+                        </div>
+                        <div id="aiResearchResultArea" class="bg-white p-4 rounded-lg shadow min-h-[200px]">
+                            <p class="text-sm text-gray-500">AI 리서치 결과가 여기에 표시됩니다.</p>
+                        </div>
+                    </div>
+                    <!-- Tab Content: Backtesting -->
+                    <div id="backtestingTab" class="tab-content">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">3. 백테스팅 시뮬레이션</h3>
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <p class="text-sm mb-2"><strong>백테스팅 조건 설정:</strong> (목업)</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm mb-2">
+                                <div>기간: 2020-01-01 ~ 2024-12-31</div>
+                                <div>대상 기업군: AI 분석 기반 유망 기업 5곳 (가상)</div>
+                                <div>투자 전략: 동일 가중, 월별 리밸런싱</div>
+                                <div>초기 투자금: 1억원</div>
+                            </div>
+                            <button onclick="runBacktesting()" class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-md text-sm">백테스팅 실행</button>
+                            <div class="mt-4">
+                                <canvas id="backtestingChart"></canvas>
+                            </div>
+                            <div id="backtestingResultSummary" class="mt-4 text-sm"></div>
+                        </div>
+                    </div>
+                    <!-- Tab Content: Portfolio/Report -->
+                    <div id="portfolioReportTab" class="tab-content">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">4. 포트폴리오 구성 및 최종 보고서</h3>
+                         <div class="bg-white p-4 rounded-lg shadow mb-4">
+                            <h4 class="text-md font-semibold text-gray-700 mb-2">최종 포트폴리오 (예시)</h4>
+                            <ul class="list-disc list-inside text-sm">
+                                <li>기업 A (AI 신약 플랫폼): 30%</li>
+                                <li>기업 B (유전체 분석 AI): 25%</li>
+                                <li>기업 C (임상 최적화 AI): 25%</li>
+                                <li>기업 D (AI 기반 의료기기): 20%</li>
+                            </ul>
+                        </div>
+                        <button onclick="generateFinalReport()" class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-md text-sm">AI 최종 보고서 생성 요청</button>
+                        <div id="finalReportArea" class="mt-4 bg-white p-4 rounded-lg shadow min-h-[200px]">
+                             <p class="text-sm text-gray-500">AI가 생성한 최종 보고서 초안이 여기에 표시됩니다.</p>
+                        </div>
+                    </div>
+                     <!-- Tab Content: Q&A/Discussion -->
+                    <div id="discussionTab" class="tab-content chat-area-flex">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3 shrink-0">5. Q&A 및 토론</h3>
+                        <div id="investmentIdeaChatArea" class="chat-content-scroll p-1 space-y-4 bg-gray-50 rounded-md">
+                            <!-- Investment Idea Q&A messages will be appended here -->
+                        </div>
+                        <div class="bg-gray-100 p-3 border-t border-gray-200 shrink-0 mt-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="investmentIdeaChatInput" placeholder="이 투자 아이디어에 대해 메시지 입력..." class="flex-1 p-2 border border-gray-300 rounded-md text-sm">
+                                <button class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-3 rounded-md text-sm" onclick="sendInvestmentIdeaMessage()">전송</button>
                             </div>
                         </div>
                     </div>
@@ -406,14 +511,19 @@
         const workspaceChatView = document.getElementById('workspaceChatView');
         const newsFeedView = document.getElementById('newsFeedView'); 
         const maDataRoomView = document.getElementById('maDataRoomView'); 
+        const investmentIdeaView = document.getElementById('investmentIdeaView'); // Investment Idea View
+
         const workspaceTitleElement = document.getElementById('workspaceTitle');
         const maDataRoomTitleElement = document.getElementById('maDataRoomTitle');
+        const investmentIdeaTitleElement = document.getElementById('investmentIdeaTitle');
+
         const personalChatArea = document.getElementById('personalChatArea');
         const workspaceChatArea = document.getElementById('chatArea'); 
         const newsListArea = document.getElementById('newsListArea'); 
         const maDocumentThreadChatArea = document.getElementById('maDocumentThreadChatArea');
         const selectedDocumentNameElement = document.getElementById('selectedDocumentName');
         const documentAiAnalysisArea = document.getElementById('documentAiAnalysisArea');
+        const investmentIdeaChatArea = document.getElementById('investmentIdeaChatArea');
 
         const sidebarLinks = document.querySelectorAll('.sidebar-item');
 
@@ -422,7 +532,8 @@
         const suggestionList = document.getElementById('suggestionList');
         const fileList = document.getElementById('fileList');
 
-        let currentDocumentThreadId = null; // 현재 선택된 문서 쓰레드 ID
+        let currentDocumentThreadId = null; 
+        let backtestingChartInstance = null;
 
         function hideAllMainViews() {
             personalAssistantView.classList.add('hidden');
@@ -433,6 +544,8 @@
             newsFeedView.classList.remove('flex', 'flex-col');
             maDataRoomView.classList.add('hidden');
             maDataRoomView.classList.remove('flex', 'flex-col');
+            investmentIdeaView.classList.add('hidden');
+            investmentIdeaView.classList.remove('flex', 'flex-col');
         }
 
         function setActiveLink(selectedLink) {
@@ -625,7 +738,7 @@
             newsFeedView.classList.add('flex', 'flex-col');
             setActiveLink(document.querySelector('a[href="#news-feed"]'));
             
-            showNewsCategory('my-feed', document.querySelector('.news-category-button')); 
+            showNewsCategory('my-feed', document.querySelector('#newsFeedView .news-category-button')); 
 
             attachedFilesSection.classList.add('hidden'); 
             aiSuggestionsSection.classList.remove('hidden'); 
@@ -644,13 +757,11 @@
             maDataRoomTitleElement.textContent = workspaceName;
             setActiveLink(linkElement || (event ? event.currentTarget : null));
 
-            // Reset M&A document detail and thread view
             selectedDocumentNameElement.textContent = "문서를 선택해주세요.";
             documentAiAnalysisArea.innerHTML = `<p class="text-sm text-gray-500">문서 선택 시 AI 분석 결과가 여기에 표시됩니다.</p>`;
             maDocumentThreadChatArea.innerHTML = '';
             currentDocumentThreadId = null;
 
-            // M&A 데이터룸 오른쪽 사이드바 업데이트 (예시)
             attachedFilesSection.classList.remove('hidden');
             fileList.innerHTML = `
                 <p class="text-xs text-gray-500 mb-1">주요 문서 바로가기:</p>
@@ -668,6 +779,39 @@
             if (maDocumentThreadChatArea) maDocumentThreadChatArea.scrollTop = maDocumentThreadChatArea.scrollHeight;
         }
 
+        function showInvestmentIdeaView(event, workspaceName, linkElement) {
+            if(event) event.preventDefault();
+            hideAllMainViews();
+            investmentIdeaView.classList.remove('hidden');
+            investmentIdeaView.classList.add('flex', 'flex-col');
+            // The title for investmentIdeaView is inside its own header, so it's set there or passed if needed.
+            // For now, we ensure the main workspaceTitle (if used by this view) is updated.
+            // If investmentIdeaTitleElement exists and is separate, update it:
+            // if(investmentIdeaTitleElement) investmentIdeaTitleElement.textContent = workspaceName; 
+            // For this mockup, the title is static in the HTML of investmentIdeaView.
+            setActiveLink(linkElement || (event ? event.currentTarget : null));
+
+            openInvestmentTab(null, 'ideaOverviewTab', document.querySelector('#investmentIdeaView .tab-button'));
+
+            attachedFilesSection.classList.add('hidden'); 
+            aiSuggestionsSection.classList.remove('hidden'); 
+            suggestionList.innerHTML = `
+                <div class="p-3 bg-teal-50 border border-teal-200 rounded-md">
+                    <p class="font-medium text-teal-700"><i class="fas fa-lightbulb mr-1"></i> 투자 아이디어 AI 제안:</p>
+                    <p class="text-teal-600 text-xs">"AI + 바이오 관련 최신 기술 특허 동향을 분석하여 리스크를 점검하세요."</p>
+                    <button class="text-xs mt-1 text-teal-500 hover:underline">AI 특허 분석 요청</button>
+                </div>`;
+            
+            investmentIdeaChatArea.innerHTML = `
+                <div class="chat-bubble chat-bubble-ai">
+                    <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-teal-500"></i> 워크스페이스 AI</p>
+                    <p>"AI + 바이오" 투자 아이디어에 대한 논의를 시작하세요. 궁금한 점이나 분석하고 싶은 내용을 AI에게 요청할 수 있습니다.</p>
+                </div>
+            `;
+            if(investmentIdeaChatArea) investmentIdeaChatArea.scrollTop = investmentIdeaChatArea.scrollHeight;
+        }
+
+
         function showDocumentThread(documentName, documentId, aiSummary) {
             currentDocumentThreadId = documentId;
             selectedDocumentNameElement.textContent = documentName;
@@ -676,14 +820,13 @@
                 <p class="text-sm text-gray-600">${aiSummary || '이 문서에 대한 AI 분석 결과가 없습니다.'}</p>
             `;
             
-            maDocumentThreadChatArea.innerHTML = ''; // Clear previous thread
-            // Mockup thread messages for the selected document
+            maDocumentThreadChatArea.innerHTML = ''; 
             const threadWelcome = document.createElement('div');
             threadWelcome.className = 'chat-bubble-system';
             threadWelcome.innerHTML = `<span>"${documentName}" 문서에 대한 토론 쓰레드입니다.</span>`;
             maDocumentThreadChatArea.appendChild(threadWelcome);
 
-            if (documentId === 'doc_contract_ab') { // Example for "주요 공급 계약서_알파_베타.docx"
+            if (documentId === 'doc_contract_ab') { 
                 const aiRiskBubble = document.createElement('div');
                 aiRiskBubble.className = 'chat-bubble chat-bubble-ai';
                 aiRiskBubble.innerHTML = `
@@ -697,7 +840,7 @@
                 maDocumentThreadChatArea.appendChild(aiRiskBubble);
 
                 const lawyerComment = document.createElement('div');
-                lawyerComment.className = 'chat-bubble chat-bubble-ai'; // Simulate another user
+                lawyerComment.className = 'chat-bubble chat-bubble-ai'; 
                 lawyerComment.innerHTML = `
                     <p class="font-semibold text-sm mb-0.5 text-indigo-600">이변호사 (법무팀)</p>
                     <p>AI가 지적한 공급 단가 인상 조항(섹션 3.2)은 면밀한 검토가 필요합니다. 김팀장님, 이 부분에 대해 매도측에 명확한 해석을 요청해야 할 것 같습니다.</p>`;
@@ -737,7 +880,7 @@
 
 
         function showNewsCategory(category, buttonElement) {
-            const buttons = document.querySelectorAll('.news-category-button');
+            const buttons = document.querySelectorAll('#newsFeedView .news-category-button');
             buttons.forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
             newsListArea.innerHTML = ''; 
@@ -843,8 +986,148 @@
             workspaceChatArea.scrollTop = workspaceChatArea.scrollHeight;
         }
 
+        // --- Investment Idea View Functions ---
+        function openInvestmentTab(event, tabName, buttonElement) {
+            if (event) event.preventDefault();
+            
+            const tabContents = investmentIdeaView.querySelectorAll('.tab-content');
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            
+            const tabButtons = investmentIdeaView.querySelectorAll('#investmentIdeaView .tab-button'); // Ensure we select buttons only within this view
+            tabButtons.forEach(tb => tb.classList.remove('active'));
+
+            const selectedTabContent = document.getElementById(tabName);
+            if (selectedTabContent) selectedTabContent.classList.add('active');
+            
+            // Use the passed buttonElement or the event's currentTarget
+            const currentButton = buttonElement || (event ? event.currentTarget : null);
+            if (currentButton) {
+                currentButton.classList.add('active');
+            }
+        }
+
+
+        function requestAiResearch() {
+            const query = document.getElementById('aiResearchQueryInput').value;
+            const resultArea = document.getElementById('aiResearchResultArea');
+            if (!query) {
+                resultArea.innerHTML = `<p class="text-sm text-red-500">리서치 내용을 입력해주세요.</p>`;
+                return;
+            }
+            resultArea.innerHTML = `<p class="text-sm text-gray-500"><i class="fas fa-spinner fa-spin mr-1"></i> AI가 "${query}" 관련 정보를 리서치 중입니다...</p>`;
+            setTimeout(() => {
+                resultArea.innerHTML = `
+                    <h4 class="text-md font-semibold text-gray-700 mb-2">"${query}" AI 리서치 결과 (목업)</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>관련 시장 규모: 약 500억 달러 (2024년 기준, 출처: ABC 리서치)</li>
+                        <li>주요 기술 동향: 생성형 AI 기반 후보물질 발굴 플랫폼 활성화, 임상시험 데이터 분석 AI 정확도 향상</li>
+                        <li>경쟁사 현황: 기업 A (강점: 독자적 AI 알고리즘, 약점: 후기 임상 파이프라인 부족), 기업 B (강점: 다수 제약사 파트너십, 약점: 핵심 기술 외부 의존도 높음)</li>
+                        <li>관련 뉴스/논문: <a href="#" class="text-blue-500 underline">Nature Medicine 최신 논문: AI 신약개발 동향</a>, <a href="#" class="text-blue-500 underline">TechCrunch: 바이오 AI 스타트업 투자 현황</a></li>
+                    </ul>
+                `;
+            }, 2000);
+        }
+
+        function runBacktesting() {
+            const resultSummary = document.getElementById('backtestingResultSummary');
+            resultSummary.innerHTML = `<p class="text-sm text-gray-500"><i class="fas fa-spinner fa-spin mr-1"></i> 백테스팅 시뮬레이션 실행 중...</p>`;
+            
+            const canvasElement = document.getElementById('backtestingChart');
+            if (!canvasElement) {
+                console.error("Backtesting chart canvas element not found!");
+                resultSummary.innerHTML = `<p class="text-sm text-red-500">백테스팅 차트 요소를 찾을 수 없습니다.</p>`;
+                return;
+            }
+            const ctx = canvasElement.getContext('2d');
+
+            if (backtestingChartInstance) {
+                backtestingChartInstance.destroy();
+            }
+
+            setTimeout(() => {
+                resultSummary.innerHTML = `
+                    <h4 class="text-md font-semibold text-gray-700 mb-1">백테스팅 결과 요약 (목업)</h4>
+                    <p class="text-sm"><strong>누적 수익률:</strong> +150.75%</p>
+                    <p class="text-sm"><strong>연 복리 수익률 (CAGR):</strong> 20.15%</p>
+                    <p class="text-sm"><strong>최대 낙폭 (MDD):</strong> -25.30%</p>
+                    <p class="text-sm"><strong>샤프 지수 (Sharpe Ratio):</strong> 1.25</p>
+                `;
+                backtestingChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2020', '2021', '2022', '2023', '2024'],
+                        datasets: [{
+                            label: '포트폴리오 가치 (AI+바이오)',
+                            data: [100, 120, 150, 130, 180, 250.75], 
+                            borderColor: 'rgb(22, 163, 74)', // Green
+                            backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                            tension: 0.1,
+                            fill: true
+                        }, {
+                            label: '벤치마크 (S&P 500)',
+                            data: [100, 115, 135, 125, 150, 170], 
+                            borderColor: 'rgb(239, 68, 68)', // Red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.1,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: false, ticks: { callback: function(value) { return value + '억';} } } }
+                    }
+                });
+            }, 2500);
+        }
+        
+        function generateFinalReport() {
+            const reportArea = document.getElementById('finalReportArea');
+            reportArea.innerHTML = `<p class="text-sm text-gray-500"><i class="fas fa-spinner fa-spin mr-1"></i> AI가 최종 투자 보고서 초안을 생성 중입니다...</p>`;
+            setTimeout(() => {
+                reportArea.innerHTML = `
+                    <h4 class="text-md font-semibold text-gray-700 mb-2">AI + 바이오 투자 전략 최종 보고서 (AI 초안)</h4>
+                    <p class="text-sm mb-1"><strong>1. 시장 개요:</strong> AI 신약 개발 시장은 연평균 25%의 높은 성장률을 보이며, 특히 후보물질 발굴 단계에서의 AI 활용이 두드러집니다...</p>
+                    <p class="text-sm mb-1"><strong>2. 주요 투자 아이디어:</strong> AI 기반 후보물질 발굴 플랫폼 기술을 보유하고, 명확한 사업화 모델을 가진 초기 단계 기업에 집중 투자하여 성장 과실 공유...</p>
+                    <p class="text-sm mb-1"><strong>3. 대상 기업 분석:</strong> 기업 A (기술력 우수, 성장 잠재력 높음), 기업 B (안정적 파이프라인, 시장 확장 기대), 기업 C (특정 질환 타겟 AI 플랫폼 강점)...</p>
+                    <p class="text-sm mb-1"><strong>4. 백테스팅 결과:</strong> 과거 5년간 연 복리 수익률 20.15%, MDD -25.30%로 시장 대비 우수한 성과 시현...</p>
+                    <p class="text-sm mb-1"><strong>5. 최종 포트폴리오 및 기대 효과:</strong> 기업 A(30%), B(25%), C(25%), D(20%). 향후 3년간 연평균 18~22% 수익 기대. 주요 리스크는 기술 상용화 지연 및 규제 변화...</p>
+                    <button class="text-xs mt-2 bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-2 rounded-md">보고서 다운로드 (PDF)</button>
+                    <button class="text-xs mt-2 ml-2 bg-teal-500 hover:bg-teal-600 text-white py-1 px-2 rounded-md">팀원들과 검토 시작</button>
+                `;
+            }, 2000);
+        }
+
+        function sendInvestmentIdeaMessage() {
+            const inputElement = document.getElementById('investmentIdeaChatInput');
+            const messageText = inputElement.value.trim();
+            if (messageText === "") return;
+
+            const userBubble = document.createElement('div');
+            userBubble.className = 'chat-bubble chat-bubble-user';
+            userBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5">김펀드매니저 (나)</p><p>${messageText}</p>`;
+            investmentIdeaChatArea.appendChild(userBubble);
+            inputElement.value = ""; 
+
+            setTimeout(() => {
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'chat-bubble chat-bubble-ai';
+                aiBubble.innerHTML = `
+                    <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-teal-500"></i> 워크스페이스 AI</p>
+                    <p>김펀드매니저님의 의견: "<span class="font-medium">${messageText}</span>"에 대해 추가 분석이 필요하면 말씀해주세요. (목업)</p>`;
+                investmentIdeaChatArea.appendChild(aiBubble);
+                investmentIdeaChatArea.scrollTop = investmentIdeaChatArea.scrollHeight;
+            }, 1000);
+            investmentIdeaChatArea.scrollTop = investmentIdeaChatArea.scrollHeight;
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             showPersonalAssistant(); 
+            const firstInvestmentTabButton = document.querySelector('#investmentIdeaView .tab-button');
+            if (firstInvestmentTabButton) { // Ensure the element exists
+                 openInvestmentTab(null, 'ideaOverviewTab', firstInvestmentTabButton);
+            }
         });
     </script>
 </body>
