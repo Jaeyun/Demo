@@ -14,7 +14,7 @@
             background-color: #f3f4f6; 
         }
         .chat-bubble {
-            max-width: 75%; 
+            max-width: 85%; /* Increased width for artifact bubbles */
             padding: 10px 15px;
             border-radius: 15px;
             margin-bottom: 10px;
@@ -100,48 +100,38 @@
         .news-list-item:last-child {
             border-bottom: none;
         }
-        .document-item {
+        .document-item { /* For right panel lists */
             display: flex;
             align-items: center;
-            padding: 8px;
+            padding: 6px 8px;
             border-radius: 6px;
             transition: background-color 0.2s;
             cursor: pointer;
+            font-size: 0.875rem;
         }
         .document-item:hover {
-            background-color: #f0f0f0;
+            background-color: #e0e7ff; /* Light indigo for hover */
         }
         .document-item i {
-            margin-right: 10px;
-        }
-        .chat-area-flex {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            min-height: 0; 
+            margin-right: 8px;
+            color: #6b7280;
         }
         .chat-content-scroll {
             flex-grow: 1;
             overflow-y: auto;
             min-height: 0; 
         }
-        .tab-button {
-            padding: 8px 16px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: border-color 0.3s, color 0.3s;
-            white-space: nowrap; 
+        .ai-artifact-card {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
         }
-        .tab-button.active {
-            border-color: #4f46e5; 
-            color: #4f46e5;
+        .ai-artifact-card h4 {
             font-weight: 600;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
+            color: #374151;
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -255,53 +245,85 @@
                 </div>
             </div>
 
-            <!-- Generalized Workspace View -->
+            <!-- Generalized Workspace View (Chat-centric) -->
             <div id="generalizedWorkspaceView" class="hidden flex-1 flex-col overflow-hidden">
                 <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0">
                     <div class="flex items-center justify-between">
                         <h2 id="generalizedWorkspaceTitle" class="text-xl font-semibold text-gray-800 flex items-center">
-                            <i id="generalizedWorkspaceIcon" class="fas fa-briefcase mr-2"></i> <!-- Default Icon -->
+                            <i id="generalizedWorkspaceIcon" class="fas fa-briefcase mr-2"></i> 
                             <span>일반 워크스페이스</span>
                         </h2>
                         <div class="flex items-center space-x-3">
                              <button class="text-gray-500 hover:text-gray-700" title="워크스페이스 설정"><i class="fas fa-cog fa-lg"></i></button>
                              <div id="generalizedWorkspaceMembers" class="flex -space-x-2 overflow-hidden">
-                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/E2E8F0/333?text=김" alt="김팀장">
-                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" alt="이대리">
-                                <a class="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-300" href="#">+1</a>
+                                <!-- Members will be loaded by JS -->
                             </div>
                         </div>
                     </div>
                 </header>
-                <div class="shrink-0 border-b border-gray-200">
-                    <nav id="workspaceTabs" class="flex space-x-1 px-4 overflow-x-auto" aria-label="Tabs">
-                        <button onclick="openWorkspaceTab(event, 'overviewContent', this)" class="tab-button active"><i class="fas fa-bullseye mr-1"></i>개요</button>
-                        <button onclick="openWorkspaceTab(event, 'dataContent', this)" class="tab-button"><i class="fas fa-database mr-1"></i>데이터&자료</button>
-                        <button onclick="openWorkspaceTab(event, 'discussionContent', this)" class="tab-button"><i class="fas fa-comments mr-1"></i>논의&Q&A</button>
-                        <button onclick="openWorkspaceTab(event, 'tasksContent', this)" class="tab-button"><i class="fas fa-tasks mr-1"></i>작업 관리</button>
-                        <button onclick="openWorkspaceTab(event, 'analysisContent', this)" class="tab-button"><i class="fas fa-chart-bar mr-1"></i>AI 분석</button>
-                        <button onclick="openWorkspaceTab(event, 'reportsContent', this)" class="tab-button"><i class="fas fa-file-alt mr-1"></i>보고서&산출물</button>
-                    </nav>
-                </div>
-                <div id="workspaceTabContentArea" class="flex-1 overflow-y-auto p-6 bg-white">
-                    <div id="overviewContent" class="tab-content active"></div>
-                    <div id="dataContent" class="tab-content"></div>
-                    <div id="discussionContent" class="tab-content chat-area-flex">
-                        <div id="workspaceDiscussionChatArea" class="chat-content-scroll p-1 space-y-4 bg-gray-50 rounded-md"></div>
-                        <div class="bg-gray-100 p-3 border-t border-gray-200 shrink-0 mt-2">
-                             <div class="flex items-center space-x-2">
-                                <input type="text" id="workspaceDiscussionInput" placeholder="메시지 입력..." class="flex-1 p-2 border border-gray-300 rounded-md text-sm">
-                                <button id="sendWorkspaceDiscussionButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-3 rounded-md text-sm" onclick="sendWorkspaceDiscussionMessage()">전송</button>
+
+                <div class="flex-1 flex min-h-0"> <!-- Main content area with chat and right panel -->
+                    <!-- Central Chat Area -->
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <div id="mainWorkspaceChatArea" class="chat-content-scroll p-6 space-y-4">
+                            <!-- Chat messages will be appended here by JS -->
+                        </div>
+                        <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0">
+                            <div class="flex items-center space-x-3">
+                                <button class="text-gray-500 hover:text-gray-700" title="파일 첨부">
+                                    <i class="fas fa-paperclip fa-lg"></i>
+                                </button>
+                                <input type="text" id="mainWorkspaceChatInput" placeholder="AI에게 요청하거나 팀원과 대화하세요..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-150">
+                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-150" onclick="sendMainWorkspaceChatMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div id="tasksContent" class="tab-content"></div>
-                    <div id="analysisContent" class="tab-content"></div>
-                    <div id="reportsContent" class="tab-content"></div>
+
+                    <!-- Right Contextual Panel -->
+                    <aside class="w-96 bg-gray-50 border-l border-gray-200 p-4 flex flex-col space-y-4 overflow-y-auto shrink-0">
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2 flex items-center">
+                                <i class="fas fa-folder-open mr-2 text-yellow-500"></i> 관련 자료
+                                <button class="ml-auto text-xs text-blue-500 hover:text-blue-700" onclick="aiSuggestMaterial()">AI 자료 제안</button>
+                            </h3>
+                            <div id="relatedMaterialsList" class="space-y-1 text-sm max-h-60 overflow-y-auto bg-white p-2 rounded-md border">
+                                 <p class="text-xs text-gray-400 p-2">관련 자료가 여기에 표시됩니다.</p>
+                            </div>
+                            <button class="mt-2 w-full text-xs text-gray-600 hover:text-gray-800 py-1.5 px-2 rounded-md border border-gray-300 hover:bg-gray-100">
+                                <i class="fas fa-plus-circle mr-1"></i> 자료 추가/업로드
+                            </button>
+                        </div>
+                        <hr>
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2 flex items-center">
+                                <i class="fas fa-cogs mr-2 text-indigo-500"></i> AI 작업 로그 & 산출물
+                            </h3>
+                            <div id="aiArtifactsList" class="space-y-1 text-sm max-h-60 overflow-y-auto bg-white p-2 rounded-md border">
+                                 <p class="text-xs text-gray-400 p-2">AI 작업 결과가 여기에 기록됩니다.</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="aiSuggestionsSectionInWorkspace">
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2"><i class="fas fa-lightbulb text-yellow-400 mr-1"></i> AI 제안</h3>
+                            <div id="suggestionListInWorkspace" class="space-y-2 text-sm">
+                                 <p class="text-xs text-gray-500">AI 제안이 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                         <hr>
+                        <div id="workspaceTeamMembersSection">
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">팀 멤버</h3>
+                            <div id="workspaceTeamMembersListRight" class="space-y-2 text-sm">
+                                <!-- Team members list for the current workspace -->
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </div>
 
-            <!-- News Feed View -->
+
+            <!-- News Feed View (remains the same as previous version) -->
             <div id="newsFeedView" class="hidden flex-1 flex-col overflow-hidden">
                 <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0">
                     <div class="flex items-center justify-between">
@@ -328,58 +350,35 @@
         </div>
     </main>
 
-    <!-- Right Sidebar -->
-    <aside class="w-80 bg-gray-50 border-l border-gray-200 p-6 space-y-6 overflow-y-auto shrink-0">
-        <div>
-            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">팀 멤버 (워크스페이스)</h3>
-            <div id="workspaceTeamMembersList" class="space-y-3">
-                 <p class="text-xs text-gray-500">워크스페이스를 선택하면 멤버가 표시됩니다.</p>
-            </div>
-             <button class="w-full mt-2 text-sm text-blue-600 hover:text-blue-800 py-1.5 px-3 rounded-md border border-blue-600 hover:bg-blue-50 transition duration-150"><i class="fas fa-user-plus mr-1"></i> 팀원 초대</button>
-        </div>
-        <div id="attachedFilesSection"> 
-            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">첨부 파일 (워크스페이스)</h3>
-            <div class="space-y-2 text-sm" id="fileList"><p class="text-xs text-gray-500">워크스페이스를 선택하면 파일이 표시됩니다.</p></div>
-            <button class="w-full mt-2 text-sm text-gray-600 hover:text-gray-800 py-1.5 px-3 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-150"><i class="fas fa-upload mr-1"></i> 파일 더보기/업로드</button>
-        </div>
-        <div id="aiSuggestionsSection"> 
-            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">AI 제안 <i class="fas fa-lightbulb text-yellow-400"></i></h3>
-            <div class="space-y-2 text-sm" id="suggestionList"><p class="text-xs text-gray-500">현재 작업에 맞는 AI 제안이 여기에 표시됩니다.</p></div>
-        </div>
-    </aside>
+    <!-- Right Sidebar (This is now part of the generalized workspace for its contextual content) -->
+    <!-- The global right sidebar is removed as its content is now integrated into the right panel of generalizedWorkspaceView -->
 
     <script>
         // --- DOM Elements ---
         const personalAssistantView = document.getElementById('personalAssistantView');
-        const generalizedWorkspaceView = document.getElementById('generalizedWorkspaceView'); // Renamed from workspaceChatView
+        const generalizedWorkspaceView = document.getElementById('generalizedWorkspaceView');
         const newsFeedView = document.getElementById('newsFeedView'); 
         
         const generalizedWorkspaceTitleElement = document.getElementById('generalizedWorkspaceTitle').querySelector('span');
         const generalizedWorkspaceIconElement = document.getElementById('generalizedWorkspaceIcon');
-        const generalizedWorkspaceMembersElement = document.getElementById('generalizedWorkspaceMembers');
+        const generalizedWorkspaceMembersElement = document.getElementById('generalizedWorkspaceMembers'); // For header
+        const workspaceTeamMembersListRightElement = document.getElementById('workspaceTeamMembersListRight'); // For right panel
 
         const personalChatArea = document.getElementById('personalChatArea');
+        const mainWorkspaceChatArea = document.getElementById('mainWorkspaceChatArea'); // Central chat for generalized workspace
         const newsListArea = document.getElementById('newsListArea'); 
         
-        const workspaceTabContentArea = document.getElementById('workspaceTabContentArea');
-        const overviewContent = document.getElementById('overviewContent');
-        const dataContent = document.getElementById('dataContent');
-        const discussionContent = document.getElementById('discussionContent');
-        const workspaceDiscussionChatArea = document.getElementById('workspaceDiscussionChatArea');
-        const tasksContent = document.getElementById('tasksContent');
-        const analysisContent = document.getElementById('analysisContent');
-        const reportsContent = document.getElementById('reportsContent');
+        const relatedMaterialsList = document.getElementById('relatedMaterialsList');
+        const aiArtifactsList = document.getElementById('aiArtifactsList');
+        const suggestionListInWorkspace = document.getElementById('suggestionListInWorkspace'); // Renamed
 
         const sidebarLinks = document.querySelectorAll('.sidebar-item');
-        const attachedFilesSection = document.getElementById('attachedFilesSection');
-        const aiSuggestionsSection = document.getElementById('aiSuggestionsSection');
-        const suggestionList = document.getElementById('suggestionList');
-        const fileList = document.getElementById('fileList');
-        const workspaceTeamMembersList = document.getElementById('workspaceTeamMembersList');
-
-        let currentWorkspaceType = null; // To store the type of the currently active workspace
-        let currentActiveTab = 'overviewContent'; // Default active tab for any workspace
-        let backtestingChartInstance = null;
+        
+        // Removed global attachedFilesSection, fileList, aiSuggestionsSection, suggestionList as they are now part of the right panel of generalizedWorkspaceView
+        
+        let currentWorkspaceType = null; 
+        let currentWorkspaceName = '';
+        let backtestingChartInstance = null; // Keep this for potential charts in AI artifacts
 
         // --- Utility Functions ---
         function hideAllMainViews() {
@@ -396,24 +395,50 @@
             if (selectedLink) selectedLink.classList.add('active-item');
         }
 
+        function addChatMessage(chatAreaElement, sender, message, isUser, isPersonalAssistant = false, artifact = null) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-bubble');
+            if (isUser) {
+                bubble.classList.add('chat-bubble-user');
+            } else {
+                bubble.classList.add('chat-bubble-ai');
+                if (isPersonalAssistant) {
+                    bubble.classList.add('personal-assistant');
+                }
+            }
+
+            let senderHtml = `<p class="font-semibold text-sm mb-0.5">${sender}</p>`;
+            if (!isUser) {
+                let iconClass = 'fas fa-robot text-indigo-500'; // Default for workspace AI
+                if (isPersonalAssistant) iconClass = 'fas fa-user-astronaut text-purple-500';
+                senderHtml = `<p class="font-semibold text-sm mb-0.5"><i class="${iconClass} mr-1"></i> ${sender}</p>`;
+            }
+            
+            let messageHtml = `<p>${message}</p>`;
+            if (artifact) {
+                messageHtml += `
+                    <div class="ai-artifact-card">
+                        <h4><i class="fas ${artifact.icon || 'fa-file-alt'} mr-2 text-gray-500"></i>${artifact.title}</h4>
+                        <p class="text-xs text-gray-600">${artifact.summary}</p>
+                        ${artifact.action ? `<button class="text-xs mt-2 bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded" onclick="${artifact.action.func}('${artifact.action.param}')">${artifact.action.label}</button>` : ''}
+                    </div>`;
+            }
+
+            bubble.innerHTML = senderHtml + messageHtml;
+            chatAreaElement.appendChild(bubble);
+            chatAreaElement.scrollTop = chatAreaElement.scrollHeight;
+        }
+        
         // --- Personal Assistant Functions ---
         function initializePersonalAssistantChat() {
-            // ... (기존 Personal Assistant 초기화 코드 유지) ...
             personalChatArea.innerHTML = ''; 
-            const welcomeBubble = document.createElement('div');
-            welcomeBubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
-            welcomeBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5"><i class="fas fa-user-astronaut mr-1"></i> 개인 AI 비서</p><p>반갑습니다, 김팀장님! 오늘 업무를 시작해 볼까요? <i class="fas fa-rocket text-purple-400"></i></p>`;
-            personalChatArea.appendChild(welcomeBubble);
-             const newsIntroBubble = document.createElement('div');
-            newsIntroBubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
-            newsIntroBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5"><i class="fas fa-user-astronaut mr-1"></i> 개인 AI 비서</p><p>오늘 김팀장님이 챙겨볼 만한 주요 뉴스입니다. 클릭하시면 상세 내용을 보실 수 있습니다:</p>`;
-            personalChatArea.appendChild(newsIntroBubble);
-             const news1Bubble = document.createElement('div');
-            news1Bubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
-            news1Bubble.innerHTML = `<div class="news-item-clickable" onclick="toggleNewsDetail('newsDetail1_personal', this)"><h4 class="font-semibold text-indigo-600">글로벌 AI 시장, 연평균 30% 성장 전망</h4><span class="text-xs text-gray-500">ABC 뉴스 - 1시간 전</span><p class="text-sm mt-1">최신 보고서에 따르면...</p><button class="text-xs mt-2 text-purple-500 hover:underline">자세히 보기 / AI 분석</button></div><div id="newsDetail1_personal" class="hidden news-detail-card"><h5 class="text-md font-semibold text-gray-800 mb-2">글로벌 AI 시장, 연평균 30% 성장 전망</h5><p class="text-xs text-gray-500 mb-2">출처: ABC 뉴스 | 발행일: 2025년 6월 5일</p><p class="text-sm text-gray-600">B2B AI 솔루션 도입 가속화 예측.</p></div>`;
-            personalChatArea.appendChild(news1Bubble);
-
-            personalChatArea.scrollTop = personalChatArea.scrollHeight;
+            addChatMessage(personalChatArea, '개인 AI 비서', '반갑습니다, 김팀장님! 오늘 업무를 시작해 볼까요? <i class="fas fa-rocket text-purple-400"></i>', false, true);
+            addChatMessage(personalChatArea, '개인 AI 비서', '오늘 김팀장님이 챙겨볼 만한 주요 뉴스입니다. 클릭하시면 상세 내용을 보실 수 있습니다:', false, true, {
+                title: '뉴스 아티클 (예시)',
+                summary: '글로벌 AI 시장, 연평균 30% 성장 전망. ABC 뉴스 - 1시간 전. 최신 보고서에 따르면...',
+                icon: 'fa-newspaper',
+                action: { label: '자세히 보기', func: 'alert', param: '뉴스 상세 보기 목업' }
+            });
         }
 
         function showPersonalAssistant(event) {
@@ -423,65 +448,47 @@
             personalAssistantView.classList.add('flex', 'flex-col'); 
             setActiveLink(document.querySelector('a[href="#personal-assistant"]'));
             initializePersonalAssistantChat(); 
-            attachedFilesSection.classList.add('hidden'); 
-            workspaceTeamMembersList.innerHTML = `<p class="text-xs text-gray-500">개인 어시스턴트 사용 중입니다.</p>`;
-            aiSuggestionsSection.classList.remove('hidden'); 
-            suggestionList.innerHTML = `
+            // Right panel for personal assistant (simplified or different content)
+            relatedMaterialsList.innerHTML = `<p class="text-xs text-gray-400 p-2">개인 작업 관련 파일 또는 노트를 여기에 표시합니다.</p>`;
+            aiArtifactsList.innerHTML = `<p class="text-xs text-gray-400 p-2">최근 개인 AI 작업 로그가 여기에 표시됩니다.</p>`;
+            workspaceTeamMembersListRightElement.innerHTML = `<p class="text-xs text-gray-500">개인 어시스턴트 사용 중입니다.</p>`;
+            suggestionListInWorkspace.innerHTML = `
                 <div class="p-3 bg-purple-50 border border-purple-200 rounded-md">
                     <p class="font-medium text-purple-700">💡 오늘의 할 일 제안:</p>
                     <p class="text-purple-600 text-xs">"오후 2시 빅테크 Corp 제안 준비 상태 점검."</p>
                     <button class="text-xs mt-1 text-purple-500 hover:underline" onclick="showGeneralizedWorkspaceView(null, '고객 제안: 빅테크 Corp', 'customer_proposal', document.querySelector('a[href=\\'#ws-proposal-bigcorp\\']'))">관련 워크스페이스 가기</button>
                 </div>`;
-            if (personalChatArea) personalChatArea.scrollTop = personalChatArea.scrollHeight;
         }
         
         function sendPersonalChatMessage() {
             const inputElement = document.getElementById('personalChatInput');
             const messageText = inputElement.value.trim();
             if (messageText === "") return;
-            const userBubble = document.createElement('div');
-            userBubble.className = 'chat-bubble chat-bubble-user';
-            userBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5">김팀장 (나)</p><p>${messageText}</p>`;
-            personalChatArea.appendChild(userBubble);
+            addChatMessage(personalChatArea, '김팀장 (나)', messageText, true, true);
             inputElement.value = ""; 
             setTimeout(() => {
-                const aiBubble = document.createElement('div');
-                aiBubble.className = 'chat-bubble chat-bubble-ai personal-assistant';
-                aiBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5"><i class="fas fa-user-astronaut mr-1"></i> 개인 AI 비서</p><p>알겠습니다, 김팀장님. 요청하신 "<span class="font-medium">${messageText}</span>"에 대해 처리 중입니다. (목업 응답)</p><div class="mt-2 p-2 bg-purple-100 rounded-md text-xs"><i class="fas fa-spinner fa-spin mr-1"></i> AI가 생각 중...</div>`;
-                personalChatArea.appendChild(aiBubble);
-                personalChatArea.scrollTop = personalChatArea.scrollHeight;
-            }, 1000);
-            personalChatArea.scrollTop = personalChatArea.scrollHeight;
-        }
-
-        function toggleNewsDetail(detailId, clickableElement) {
-            const detailElement = document.getElementById(detailId);
-            if (!detailElement) return;
-            const parentBubble = clickableElement.closest('.chat-bubble-ai');
-            if (parentBubble) {
-                const allNewsDetailsInBubble = parentBubble.querySelectorAll('.news-detail-card');
-                allNewsDetailsInBubble.forEach(el => {
-                    if (el.id !== detailId) { el.classList.add('hidden'); }
+                addChatMessage(personalChatArea, '개인 AI 비서', `알겠습니다, 김팀장님. 요청하신 "<span class="font-medium">${messageText}</span>"에 대해 처리 중입니다. (목업 응답)`, false, true, {
+                    title: '요청 처리 결과 (예시)',
+                    summary: '관련 정보를 검색하여 요약했습니다. 확인하시겠습니까?',
+                    icon: 'fa-check-circle',
+                    action: { label: '결과 보기', func: 'alert', param: 'AI 요청 처리 결과 목업' }
                 });
-            }
-            detailElement.classList.toggle('hidden');
-            if (personalChatArea && !detailElement.classList.contains('hidden')) { 
-                 setTimeout(() => { detailElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
-            }
+            }, 1000);
         }
         
-        // --- News Feed Functions ---
+        // --- News Feed Functions (remains mostly the same) ---
         function showNewsFeedView(event) {
-            if(event) event.preventDefault();
+             if(event) event.preventDefault();
             hideAllMainViews();
             newsFeedView.classList.remove('hidden');
             newsFeedView.classList.add('flex', 'flex-col');
             setActiveLink(document.querySelector('a[href="#news-feed"]'));
             showNewsCategory('my-feed', document.querySelector('#newsFeedView .news-category-button')); 
-            attachedFilesSection.classList.add('hidden'); 
-            workspaceTeamMembersList.innerHTML = `<p class="text-xs text-gray-500">뉴스 피드 보기 중입니다.</p>`;
-            aiSuggestionsSection.classList.remove('hidden'); 
-            suggestionList.innerHTML = `<div class="p-3 bg-orange-50 border border-orange-200 rounded-md"><p class="font-medium text-orange-700">📰 뉴스 필터링 팁:</p><p class="text-orange-600 text-xs">"키워드 검색이나 필터 기능을 사용하여 원하는 뉴스를 빠르게 찾아보세요."</p></div>`;
+            // Right panel content for news feed
+            relatedMaterialsList.innerHTML = `<p class="text-xs text-gray-400 p-2">스크랩한 뉴스나 관련 메모를 여기에 표시합니다.</p>`;
+            aiArtifactsList.innerHTML = `<p class="text-xs text-gray-400 p-2">뉴스 요약 AI 작업 로그.</p>`;
+            workspaceTeamMembersListRightElement.innerHTML = `<p class="text-xs text-gray-500">뉴스 피드 보기 중입니다.</p>`;
+            suggestionListInWorkspace.innerHTML = `<div class="p-3 bg-orange-50 border border-orange-200 rounded-md"><p class="font-medium text-orange-700">📰 뉴스 필터링 팁:</p><p class="text-orange-600 text-xs">"키워드 검색이나 필터 기능을 사용하여 원하는 뉴스를 빠르게 찾아보세요."</p></div>`;
         }
 
         function showNewsCategory(category, buttonElement) {
@@ -490,11 +497,10 @@
             if(buttonElement) buttonElement.classList.add('active');
             newsListArea.innerHTML = ''; 
             let articlesHtml = `<h3 class="text-lg font-semibold text-gray-700 mb-4">"${getCategoryDisplayName(category)}" 관련 뉴스</h3>`;
-            // ... (기존 Mock News 데이터 및 HTML 생성 로직 유지) ...
             const mockNews = {
-                'my-feed': [{ title: "내 피드 맞춤형 뉴스 1", source: "TechCrunch", time: "30분 전", summary: "...", link: "#" }],
-                'top-issues': [{ title: "오늘의 주요 이슈 1", source: "Reuters", time: "2시간 전", summary: "...", link: "#" }],
-                 'politics': [{ title: "정치 뉴스 1", source: "연합뉴스", time: "1시간 전", summary: "...", link: "#"}]
+                'my-feed': [{ title: "내 피드 맞춤형 뉴스 1: AI가 추천하는 오늘의 주요 기술 동향", source: "TechCrunch", time: "30분 전", summary: "생성형 AI 모델의 새로운 발전과 산업 적용 사례 심층 분석...", link: "#" }],
+                'top-issues': [{ title: "오늘의 주요 이슈 1: 글로벌 공급망 위기, 반도체 산업 영향은?", source: "Reuters", time: "2시간 전", summary: "지정학적 긴장과 물류 대란이 반도체 수급에 미치는 영향 분석...", link: "#" }],
+                'politics': [{ title: "정치 뉴스 1: 여야, 주요 법안 처리 두고 대립", source: "연합뉴스", time: "1시간 전", summary: "국회 본회의를 앞두고 주요 쟁점 법안에 대한 여야 간 입장 차이 여전...", link: "#"}]
             };
             const articles = mockNews[category] || [{ title: "선택하신 카테고리에 대한 뉴스가 없습니다.", source: "", time: "", summary: "", link: "#"}];
              articles.forEach(article => {
@@ -509,347 +515,172 @@
             return names[categoryKey] || categoryKey;
         }
 
-        // --- Generalized Workspace Functions ---
-        function showGeneralizedWorkspaceView(event, workspaceName, type, linkElement) {
+        // --- Generalized Workspace Functions (NEW CHAT-CENTRIC UI) ---
+        function showGeneralizedWorkspaceView(event, workspaceNameFromLink, type, linkElement) {
             if(event) event.preventDefault();
             hideAllMainViews();
             generalizedWorkspaceView.classList.remove('hidden');
             generalizedWorkspaceView.classList.add('flex', 'flex-col');
             
-            generalizedWorkspaceTitleElement.textContent = workspaceName;
-            currentWorkspaceType = type; // Set current workspace type
+            currentWorkspaceType = type; 
+            currentWorkspaceName = workspaceNameFromLink;
+            generalizedWorkspaceTitleElement.textContent = currentWorkspaceName;
             setActiveLink(linkElement || (event ? event.currentTarget : null));
 
-            // Set workspace icon based on type (example)
             const iconClasses = {
-                'market_research': 'fa-search-dollar text-cyan-500',
-                'new_business': 'fa-lightbulb text-amber-500',
-                'mna_dataroom': 'fa-handshake text-red-500',
-                'customer_proposal': 'fa-file-signature text-blue-500',
-                'meeting_management': 'fa-users text-lime-500',
-                'reporting': 'fa-chart-line text-green-500',
-                'legal_review': 'fa-gavel text-gray-500',
-                'investment_portfolio': 'fa-chart-pie text-teal-500',
+                'market_research': 'fa-search-dollar text-cyan-500', 'new_business': 'fa-lightbulb text-amber-500',
+                'mna_dataroom': 'fa-handshake text-red-500', 'customer_proposal': 'fa-file-signature text-blue-500',
+                'meeting_management': 'fa-users text-lime-500', 'reporting': 'fa-chart-line text-green-500',
+                'legal_review': 'fa-gavel text-gray-500', 'investment_portfolio': 'fa-chart-pie text-teal-500',
                 'default': 'fa-briefcase text-gray-700'
             };
             generalizedWorkspaceIconElement.className = `fas ${iconClasses[type] || iconClasses['default']} mr-2`;
 
-
-            // Update right sidebar for the workspace
-            attachedFilesSection.classList.remove('hidden'); // Show files for workspace view
-            workspaceTeamMembersList.innerHTML = `
-                <div class="flex items-center space-x-3"><img src="https://placehold.co/32x32/E2E8F0/333?text=김" class="w-8 h-8 rounded-full"><div><p class="text-sm font-medium">김팀장 (PM)</p></div></div>
-                <div class="flex items-center space-x-3"><img src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" class="w-8 h-8 rounded-full"><div><p class="text-sm font-medium">이전문가</p></div></div>
-            `; // Mock members
+            // Mock members in header
+            generalizedWorkspaceMembersElement.innerHTML = `
+                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/E2E8F0/333?text=김" alt="김팀장">
+                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" alt="이애널리스트">
+                <a class="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-300" href="#">+${Math.floor(Math.random() * 3) + 1}</a>`;
             
-            aiSuggestionsSection.classList.remove('hidden');
-            loadAiSuggestionsForWorkspace(type);
+            // Initialize main chat area for the workspace
+            mainWorkspaceChatArea.innerHTML = '';
+            let initialAiMessage = `안녕하세요, 김팀장님. "${currentWorkspaceName}" 워크스페이스입니다. 무엇을 도와드릴까요?`;
+            if (type === 'market_research') {
+                initialAiMessage = `"${currentWorkspaceName}" 워크스페이스에 오신 것을 환영합니다. 스마트홈 시장의 경쟁사 분석, 시장 동향 파악 등 AI에게 요청해보세요. 예를 들어, "최근 3개월간 스마트홈 보안 기술 관련 뉴스 요약해줘" 와 같이 질문할 수 있습니다.`;
+            } else if (type === 'investment_portfolio') {
+                 initialAiMessage = `"${currentWorkspaceName}" 워크스페이스입니다. AI와 함께 글로벌 ESG 투자 전략을 수립하고 백테스팅을 진행해 보세요. "유망 ESG 기업 리스트 분석해줘" 또는 "특정 ESG 테마의 과거 수익률 알려줘" 등으로 시작할 수 있습니다.`;
+            }
+            addChatMessage(mainWorkspaceChatArea, '워크스페이스 AI', initialAiMessage, false);
 
-
-            // Activate the first tab (Overview) and load its content
-            const firstTabButton = document.querySelector('#generalizedWorkspaceView .tab-button'); // First tab button
-            openWorkspaceTab(null, 'overviewContent', firstTabButton); 
+            // Initialize right panel content
+            loadRelatedMaterials(type);
+            loadAiArtifacts(type);
+            loadAiSuggestionsForWorkspace(type); // Re-using this function, target div is suggestionListInWorkspace
+            loadWorkspaceTeamMembersRight(type);
         }
 
-        function openWorkspaceTab(event, tabId, buttonElement) {
-            if(event) event.preventDefault();
-
-            const tabContents = workspaceTabContentArea.querySelectorAll('.tab-content');
-            tabContents.forEach(tc => tc.classList.remove('active'));
-            
-            const tabButtons = document.getElementById('workspaceTabs').querySelectorAll('.tab-button');
-            tabButtons.forEach(tb => tb.classList.remove('active'));
-
-            const selectedTabContent = document.getElementById(tabId);
-            if (selectedTabContent) selectedTabContent.classList.add('active');
-            
-            const currentButton = buttonElement || (event ? event.currentTarget : null);
-            if (currentButton) {
-                currentButton.classList.add('active');
+        function loadRelatedMaterials(workspaceType) {
+            relatedMaterialsList.innerHTML = ''; // Clear previous
+            let itemsHtml = '';
+            if (workspaceType === 'market_research') {
+                itemsHtml = `
+                    <div class="document-item"><i class="fas fa-file-pdf"></i> 스마트홈 시장 보고서_2024.pdf</div>
+                    <div class="document-item"><i class="fas fa-link"></i> 경쟁사 A 홈페이지</div>
+                    <div class="document-item"><i class="fas fa-table"></i> 소비자 설문조사 Raw Data.xlsx</div>`;
+            } else if (workspaceType === 'investment_portfolio') {
+                itemsHtml = `
+                    <div class="document-item"><i class="fas fa-file-alt"></i> ESG 투자 가이드라인 v3.docx</div>
+                    <div class="document-item"><i class="fas fa-chart-line"></i> S&P ESG Index 과거 데이터.csv</div>`;
+            } else {
+                itemsHtml = `<p class="text-xs text-gray-400 p-2">이 워크스페이스에 추가된 자료가 없습니다.</p>`;
             }
-            currentActiveTab = tabId;
-            loadTabContent(tabId, currentWorkspaceType);
+            relatedMaterialsList.innerHTML = itemsHtml || `<p class="text-xs text-gray-400 p-2">관련 자료 없음</p>`;
         }
 
-        function loadTabContent(tabId, workspaceType) {
-            // Clear previous content first
-            overviewContent.innerHTML = '';
-            dataContent.innerHTML = '';
-            workspaceDiscussionChatArea.innerHTML = ''; // Only clear the chat messages area
-            tasksContent.innerHTML = '';
-            analysisContent.innerHTML = '';
-            reportsContent.innerHTML = '';
-
-            let htmlContent = `<p class="text-sm text-gray-500">"${getTabDisplayName(tabId)}" 탭의 내용이 여기에 표시됩니다. (워크스페이스 유형: ${workspaceType})</p>`;
-
-            // --- Overview Tab Content ---
-            if (tabId === 'overviewContent') {
-                htmlContent = `<h3 class="text-lg font-semibold text-gray-800 mb-3">${getTabDisplayName(tabId)}</h3>`;
-                if (workspaceType === 'market_research') {
-                    htmlContent += `
-                        <p><strong>목표:</strong> 스마트홈 시장 진출을 위한 경쟁 환경 및 소비자 동향 분석</p>
-                        <p><strong>주요 지표:</strong> 경쟁사 수: 5 (업데이트: 1일 전), 시장 성장률 예측: 연 15% (AI 분석)</p>
-                        <p><strong>최근 활동:</strong> AI가 '스마트홈 보안' 관련 최신 뉴스 10건 수집 (2시간 전)</p>
-                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">AI 제안: "스마트홈 사용자 인터페이스(UI) 선호도에 대한 설문조사 데이터를 분석해 보세요."</div>
-                    `;
-                } else if (workspaceType === 'mna_dataroom') {
-                     htmlContent += `
-                        <p><strong>목표:</strong> 베타 솔루션 기업 인수 실사 완료 (D-15)</p>
-                        <p><strong>주요 지표:</strong> 문서 검토율: 75%, 주요 리스크 식별: 3건</p>
-                        <p><strong>최근 활동:</strong> 법무팀, '주요 공급 계약서' 검토 완료 및 의견 추가</p>
-                        <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">AI 제안: "재무제표와 현금흐름표 간 데이터 불일치 가능성이 있습니다. 교차 검증을 실행하세요."</div>
-                    `;
-                } else if (workspaceType === 'investment_portfolio') {
-                     htmlContent += `
-                        <p><strong>목표:</strong> 글로벌 ESG 펀드 구성 및 운용 전략 수립</p>
-                        <p><strong>주요 지표:</strong> 목표 수익률: 연 8%, 현재 포트폴리오 변동성: 12%</p>
-                        <p><strong>최근 활동:</strong> AI, '탄소 중립 기술' 관련 유망 기업 리스트 업데이트</p>
-                        <div class="mt-4 p-3 bg-teal-50 border border-teal-200 rounded-md">AI 제안: "최근 발표된 ESG 평가 기준 변경 사항을 포트폴리오에 반영하여 백테스팅을 재실행하세요."</div>
-                    `;
-                } else {
-                    htmlContent += `<p>"${workspaceType}" 워크스페이스의 개요 정보입니다.</p>`;
-                }
-                overviewContent.innerHTML = htmlContent;
+        function loadAiArtifacts(workspaceType) {
+            aiArtifactsList.innerHTML = ''; // Clear previous
+            let itemsHtml = '';
+            if (workspaceType === 'market_research') {
+                itemsHtml = `
+                    <div class="document-item"><i class="fas fa-file-invoice-dollar text-green-500"></i> AI 생성: 경쟁사 매출 비교 차트</div>
+                    <div class="document-item"><i class="fas fa-lightbulb text-yellow-500"></i> AI 요약: 스마트홈 기술 특허 동향</div>`;
+            } else if (workspaceType === 'investment_portfolio') {
+                 itemsHtml = `
+                    <div class="document-item"><i class="fas fa-history text-blue-500"></i> AI 실행: ESG 포트폴리오 백테스팅 결과_v1</div>
+                    <div class="document-item"><i class="fas fa-clipboard-list text-purple-500"></i> AI 생성: 유망 ESG 기업 스크리닝 리스트</div>`;
+            } else {
+                 itemsHtml = `<p class="text-xs text-gray-400 p-2">생성된 AI 산출물이 없습니다.</p>`;
             }
-            // --- Data & Resources Tab Content ---
-            else if (tabId === 'dataContent') {
-                htmlContent = `<h3 class="text-lg font-semibold text-gray-800 mb-3">${getTabDisplayName(tabId)}</h3>`;
-                 if (workspaceType === 'market_research') {
-                    htmlContent += `
-                        <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>시장 보고서</span></div>
-                        <div class="pl-6 document-item" onclick="alert('시장_규모_2025.pdf 열기 (목업)')"><i class="fas fa-file-pdf text-red-500"></i><span>스마트홈_시장_규모_2025.pdf</span><button class="ml-auto text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 py-0.5 px-1.5 rounded">AI 요약</button></div>
-                        <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>경쟁사 정보</span></div>
-                        <div class="pl-6 document-item" onclick="alert('경쟁사_A_제품_분석.docx 열기 (목업)')"><i class="fas fa-file-word text-blue-500"></i><span>경쟁사_A_제품_분석.docx</span></div>
-                    `;
-                } else if (workspaceType === 'mna_dataroom') {
-                     htmlContent += `
-                        <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>01. 재무 실사</span></div>
-                        <div class="pl-6 document-item" onclick="alert('감사보고서_2023.pdf 열기 (목업)')"><i class="fas fa-file-pdf text-red-500"></i><span>감사보고서_2023.pdf</span></div>
-                        <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>02. 법률 실사</span></div>
-                        <div class="pl-6 document-item" onclick="alert('주요계약서_공급.docx 열기 (목업)')"><i class="fas fa-file-word text-blue-500"></i><span>주요계약서_공급.docx</span></div>
-                     `;
-                } else if (workspaceType === 'investment_portfolio') {
-                     htmlContent += `
-                        <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>리서치 자료</span></div>
-                        <div class="pl-6 document-item"><i class="fas fa-file-alt text-gray-500"></i><span>글로벌 ESG 평가 기준_2025.pdf</span></div>
-                        <div class="document-item"><i class="fas fa-folder text-yellow-500"></i><span>기업 데이터</span></div>
-                        <div class="pl-6 document-item"><i class="fas fa-database text-indigo-500"></i><span>유망 ESG 기업_DB_연결</span></div>
-                     `;
-                } else {
-                     htmlContent += `<p>"${workspaceType}" 워크스페이스의 데이터 및 자료 목록입니다.</p>`;
-                }
-                dataContent.innerHTML = htmlContent;
-            }
-            // --- Discussion & Q&A Tab Content ---
-            else if (tabId === 'discussionContent') {
-                // The base HTML for chat input is already in generalizedWorkspaceView
-                // Just load initial messages for the specific workspaceType
-                workspaceDiscussionChatArea.innerHTML = ''; // Clear previous messages
-                let initialMessage = `"${getWorkspaceDisplayName(workspaceType)}" 워크스페이스의 논의를 시작하세요.`;
-                 if (workspaceType === 'market_research') {
-                    initialMessage = `스마트홈 시장 경쟁 분석에 대한 논의를 시작합니다. AI에게 궁금한 점을 질문하거나 팀원들과 의견을 공유하세요.`;
-                } else if (workspaceType === 'mna_dataroom') {
-                    initialMessage = `베타 솔루션 인수 실사 관련 Q&A 및 논의 채널입니다. 문서별 쓰레드는 해당 문서 상세 보기에서 진행해주세요.`;
-                } else if (workspaceType === 'investment_portfolio') {
-                    initialMessage = `글로벌 ESG 펀드 구성 전략에 대한 토론을 시작합니다. AI 분석 결과를 공유하고 투자 결정을 논의하세요.`;
-                }
-                const systemMessage = document.createElement('div');
-                systemMessage.className = 'chat-bubble-system';
-                systemMessage.innerHTML = `<span>${initialMessage}</span>`;
-                workspaceDiscussionChatArea.appendChild(systemMessage);
-                workspaceDiscussionChatArea.scrollTop = workspaceDiscussionChatArea.scrollHeight;
-            }
-            // --- Tasks Tab Content ---
-             else if (tabId === 'tasksContent') {
-                htmlContent = `<h3 class="text-lg font-semibold text-gray-800 mb-3">${getTabDisplayName(tabId)}</h3>`;
-                 if (workspaceType === 'market_research') {
-                    htmlContent += `
-                        <div class="bg-white p-3 rounded-md shadow text-sm mb-2"><strong>To Do:</strong> 경쟁사 B 재무 분석 (담당: 이애널리스트, 마감: D-3) <span class="ml-2 bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded-full text-xs">진행중</span></div>
-                        <div class="bg-white p-3 rounded-md shadow text-sm"><strong>Done:</strong> 스마트홈 주요 기술 트렌드 조사 (담당: AI 어시스턴트) <span class="ml-2 bg-green-200 text-green-800 px-2 py-0.5 rounded-full text-xs">완료</span></div>
-                    `;
-                } else {
-                    htmlContent += `<p>"${workspaceType}" 워크스페이스의 작업 관리 목록입니다. (칸반보드/리스트 형태 구현 예정)</p>`;
-                }
-                tasksContent.innerHTML = htmlContent;
-            }
-            // --- AI Analysis Tab Content ---
-            else if (tabId === 'analysisContent') {
-                htmlContent = `<h3 class="text-lg font-semibold text-gray-800 mb-3">${getTabDisplayName(tabId)}</h3>`;
-                if (workspaceType === 'investment_portfolio') {
-                     htmlContent += `
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <p class="text-sm mb-2"><strong>백테스팅 조건 (글로벌 ESG 펀드):</strong></p>
-                            <div class="grid grid-cols-2 gap-4 text-sm mb-2">
-                                <div>기간: 2018-01-01 ~ 2023-12-31</div>
-                                <div>대상 기업군: MSCI ESG Leaders Index 편입 상위 50개 기업</div>
-                                <div>투자 전략: ESG 스코어 가중, 분기별 리밸런싱</div>
-                            </div>
-                            <button onclick="runGeneralizedBacktesting('investment_portfolio_esg_chart', 'investment_portfolio_esg_summary')" class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-md text-sm">백테스팅 실행</button>
-                            <div class="mt-4"><canvas id="investment_portfolio_esg_chart"></canvas></div>
-                            <div id="investment_portfolio_esg_summary" class="mt-4 text-sm"></div>
-                        </div>`;
-                } else if (workspaceType === 'market_research') {
-                    htmlContent += `
-                        <p class="mb-2">AI에게 "스마트홈 시장 사용자 연령대별 선호도" 분석을 요청합니다.</p>
-                        <button onclick="alert('스마트홈 사용자 선호도 AI 분석 실행 (목업)')" class="bg-cyan-500 hover:bg-cyan-600 text-white py-2 px-3 rounded-md text-sm">AI 분석 요청</button>
-                        <div class="mt-4 bg-gray-50 p-3 rounded-md min-h-[150px]"><p class="text-sm text-gray-500">AI 분석 결과가 여기에 시각화됩니다.</p></div>
-                    `;
-                } else {
-                    htmlContent += `<p>"${workspaceType}" 워크스페이스의 AI 분석 및 시각화 결과입니다.</p>`;
-                }
-                analysisContent.innerHTML = htmlContent;
-            }
-            // --- Reports Tab Content ---
-            else if (tabId === 'reportsContent') {
-                htmlContent = `<h3 class="text-lg font-semibold text-gray-800 mb-3">${getTabDisplayName(tabId)}</h3>`;
-                 if (workspaceType === 'market_research') {
-                    htmlContent += `
-                        <p class="mb-2">AI에게 "스마트홈 시장 경쟁 분석 보고서" 초안 생성을 요청합니다.</p>
-                        <button onclick="alert('스마트홈 시장 분석 보고서 초안 생성 (목업)')" class="bg-cyan-500 hover:bg-cyan-600 text-white py-2 px-3 rounded-md text-sm">AI 보고서 생성</button>
-                        <div class="mt-4 bg-gray-50 p-3 rounded-md min-h-[200px]"><p class="text-sm text-gray-500">생성된 보고서 초안이 여기에 표시됩니다.</p></div>
-                    `;
-                } else if (workspaceType === 'investment_portfolio') {
-                     htmlContent += `
-                        <p class="mb-2">AI에게 "글로벌 ESG 펀드 투자 제안서" 초안 생성을 요청합니다.</p>
-                        <button onclick="alert('글로벌 ESG 펀드 투자 제안서 초안 생성 (목업)')" class="bg-teal-500 hover:bg-teal-600 text-white py-2 px-3 rounded-md text-sm">AI 제안서 생성</button>
-                        <div class="mt-4 bg-gray-50 p-3 rounded-md min-h-[200px]"><p class="text-sm text-gray-500">생성된 제안서 초안이 여기에 표시됩니다.</p></div>
-                    `;
-                } else {
-                    htmlContent += `<p>"${workspaceType}" 워크스페이스의 보고서 및 산출물 목록입니다.</p>`;
-                }
-                reportsContent.innerHTML = htmlContent;
-            }
+            aiArtifactsList.innerHTML = itemsHtml || `<p class="text-xs text-gray-400 p-2">AI 산출물 없음</p>`;
         }
         
-        function getTabDisplayName(tabId) {
-            const names = {
-                'overviewContent': '개요', 'dataContent': '데이터 & 자료', 'discussionContent': '논의 & Q&A',
-                'tasksContent': '작업 관리', 'analysisContent': 'AI 분석 & 시각화', 'reportsContent': '보고서 & 산출물'
-            };
-            return names[tabId] || tabId.replace('Content', '');
-        }
-        
-        function getWorkspaceDisplayName(workspaceType) {
-             const names = {
-                'market_research': '시장 조사: 스마트홈 경쟁 분석', 
-                'new_business': '신규 사업: AI 코칭 서비스', 
-                'mna_dataroom': 'M&A: 베타 솔루션 인수',
-                'customer_proposal': '고객 제안: 빅테크 Corp',
-                'meeting_management': '회의: 3분기 전략 워크샵',
-                'reporting': '보고서: 월간 마케팅 성과',
-                'legal_review': '법률 검토: 개인정보보호법',
-                'investment_portfolio': '투자 포트폴리오: 글로벌 ESG'
-            };
-            return names[workspaceType] || workspaceType;
-        }
-
-
-        function sendWorkspaceDiscussionMessage() {
-            const inputElement = document.getElementById('workspaceDiscussionInput');
-            const messageText = inputElement.value.trim();
-            if (messageText === "") return;
-
-            const userBubble = document.createElement('div');
-            userBubble.className = 'chat-bubble chat-bubble-user';
-            userBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5">김팀장 (나)</p><p>${messageText}</p>`;
-            workspaceDiscussionChatArea.appendChild(userBubble);
-            inputElement.value = ""; 
-
-            setTimeout(() => {
-                const aiBubble = document.createElement('div');
-                aiBubble.className = 'chat-bubble chat-bubble-ai';
-                let aiResponseText = `워크스페이스 AI의 답변입니다: "${messageText}"에 대한 응답입니다. (목업)`;
-                if(currentWorkspaceType === 'market_research' && messageText.includes('경쟁사 C의 강점')){
-                    aiResponseText = `경쟁사 C의 강점은 강력한 브랜드 인지도와 유통망입니다. 다만, 최근 기술 혁신 속도가 다소 느리다는 평가가 있습니다. 관련하여 상세 분석 자료를 드릴까요?`;
-                }
-                aiBubble.innerHTML = `<p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-indigo-500"></i> 워크스페이스 AI</p><p>${aiResponseText}</p>`;
-                workspaceDiscussionChatArea.appendChild(aiBubble);
-                workspaceDiscussionChatArea.scrollTop = workspaceDiscussionChatArea.scrollHeight;
-            }, 1000);
-            workspaceDiscussionChatArea.scrollTop = workspaceDiscussionChatArea.scrollHeight;
-        }
-
-        function loadAiSuggestionsForWorkspace(workspaceType) {
+        function loadAiSuggestionsForWorkspace(workspaceType) { // Target div is suggestionListInWorkspace
             let suggestionsHtml = '';
             if (workspaceType === 'market_research') {
-                suggestionsHtml = `
-                    <div class="p-3 bg-cyan-50 border border-cyan-200 rounded-md">
-                        <p class="font-medium text-cyan-700"><i class="fas fa-lightbulb mr-1"></i> 시장 조사 AI 제안:</p>
-                        <p class="text-cyan-600 text-xs">"경쟁사 D의 최신 특허 출원 동향을 분석하여 기술적 위협을 평가해 보세요."</p>
-                        <button class="text-xs mt-1 text-cyan-500 hover:underline">AI 특허 분석 요청</button>
-                    </div>`;
-            } else if (workspaceType === 'mna_dataroom') {
-                 suggestionsHtml = `
-                    <div class="p-3 bg-red-50 border border-red-200 rounded-md">
-                        <p class="font-medium text-red-700"><i class="fas fa-lightbulb mr-1"></i> M&A AI 제안:</p>
-                        <p class="text-red-600 text-xs">"실사 문서들 간의 주요 용어 정의 일관성을 AI로 검토하세요."</p>
-                        <button class="text-xs mt-1 text-red-500 hover:underline">AI 용어 일관성 검토</button>
-                    </div>`;
+                suggestionsHtml = `<div class="p-3 bg-cyan-50 border border-cyan-200 rounded-md"><p class="font-medium text-cyan-700"><i class="fas fa-lightbulb mr-1"></i> 시장 조사 AI 제안:</p><p class="text-cyan-600 text-xs">"경쟁사 D의 최신 특허 출원 동향을 분석하여 기술적 위협을 평가해 보세요."</p><button class="text-xs mt-1 text-cyan-500 hover:underline">AI 특허 분석 요청</button></div>`;
             } else if (workspaceType === 'investment_portfolio') {
-                 suggestionsHtml = `
-                    <div class="p-3 bg-teal-50 border border-teal-200 rounded-md">
-                        <p class="font-medium text-teal-700"><i class="fas fa-lightbulb mr-1"></i> 투자 AI 제안:</p>
-                        <p class="text-teal-600 text-xs">"현재 포트폴리오의 ESG 스코어 변동 시나리오별 수익률 변화를 시뮬레이션 해보세요."</p>
-                        <button class="text-xs mt-1 text-teal-500 hover:underline">AI 시나리오 분석</button>
-                    </div>`;
+                 suggestionsHtml = `<div class="p-3 bg-teal-50 border border-teal-200 rounded-md"><p class="font-medium text-teal-700"><i class="fas fa-lightbulb mr-1"></i> 투자 AI 제안:</p><p class="text-teal-600 text-xs">"현재 포트폴리오의 ESG 스코어 변동 시나리오별 수익률 변화를 시뮬레이션 해보세요."</p><button class="text-xs mt-1 text-teal-500 hover:underline">AI 시나리오 분석</button></div>`;
             } else {
                 suggestionsHtml = `<p class="text-xs text-gray-500">현재 워크스페이스에 대한 AI 제안이 없습니다.</p>`;
             }
-            suggestionList.innerHTML = suggestionsHtml;
+            suggestionListInWorkspace.innerHTML = suggestionsHtml;
+        }
+
+        function loadWorkspaceTeamMembersRight(workspaceType) {
+            // Mock members for the right panel (can be different from header for more detail)
+            let membersHtml = `
+                <div class="flex items-center space-x-2"><img src="https://placehold.co/24x24/E2E8F0/333?text=김" class="w-6 h-6 rounded-full"><span class="text-xs">김팀장 (PM)</span> <i class="fas fa-circle text-green-500 text-xxs ml-auto" title="온라인"></i></div>
+                <div class="flex items-center space-x-2"><img src="https://placehold.co/24x24/A7F3D0/1C64F2?text=이" class="w-6 h-6 rounded-full"><span class="text-xs">이애널리스트</span> <i class="fas fa-circle text-green-500 text-xxs ml-auto" title="온라인"></i></div>`;
+            if (workspaceType === 'investment_portfolio' || workspaceType === 'mna_dataroom') {
+                 membersHtml += `<div class="flex items-center space-x-2"><img src="https://placehold.co/24x24/FBCFE8/701A75?text=박" class="w-6 h-6 rounded-full"><span class="text-xs">박퀀트</span> <i class="far fa-circle text-gray-400 text-xxs ml-auto" title="오프라인"></i></div>`;
+            }
+            workspaceTeamMembersListRightElement.innerHTML = membersHtml;
+        }
+
+
+        function sendMainWorkspaceChatMessage() {
+            const inputElement = document.getElementById('mainWorkspaceChatInput');
+            const messageText = inputElement.value.trim();
+            if (messageText === "") return;
+
+            addChatMessage(mainWorkspaceChatArea, '김팀장 (나)', messageText, true);
+            inputElement.value = ""; 
+
+            // Simulate AI response based on workspace type and message
+            setTimeout(() => {
+                let aiResponse = `"${messageText}"에 대한 AI의 일반적인 답변입니다. (목업)`;
+                let artifact = null;
+
+                if (currentWorkspaceType === 'market_research' && messageText.toLowerCase().includes('경쟁사 분석')) {
+                    aiResponse = `스마트홈 시장의 주요 경쟁사 A, B, C에 대한 분석을 시작합니다. 어떤 부분을 중점적으로 분석할까요? (예: 가격, 기능, 마케팅)`;
+                    artifact = { title: '경쟁사 분석 시작됨', summary: '경쟁사 A, B, C 대상 분석 진행 중. 세부 항목 지정 필요.', icon: 'fa-magnifying-glass-chart' };
+                    addAiArtifact("AI가 경쟁사 분석 시작함 (" + new Date().toLocaleTimeString() + ")");
+                } else if (currentWorkspaceType === 'investment_portfolio' && messageText.toLowerCase().includes('백테스팅')) {
+                    aiResponse = `글로벌 ESG 포트폴리오에 대한 백테스팅을 요청하셨습니다. 기간과 전략을 설정해주세요.`;
+                    artifact = { title: '백테스팅 준비', summary: '기간, 전략 등 파라미터 설정 후 실행 가능합니다.', icon: 'fa-history', action: {label: '백테스팅 설정하기', func: 'alert', param: '백테스팅 설정 UI 목업'} };
+                     addAiArtifact("AI 백테스팅 준비 완료 (" + new Date().toLocaleTimeString() + ")");
+                } else if (messageText.toLowerCase().includes('요약해줘') && relatedMaterialsList.children.length > 0 && relatedMaterialsList.children[0].textContent !== '관련 자료가 여기에 표시됩니다.') {
+                    const firstMaterial = relatedMaterialsList.children[0].textContent;
+                    aiResponse = `'${firstMaterial}' 문서를 요약해 드리겠습니다. 잠시만 기다려주세요... (AI 요약 진행중)`;
+                     artifact = { title: `문서 요약: ${firstMaterial}`, summary: 'AI가 문서를 분석하고 핵심 내용을 요약합니다...', icon: 'fa-file-lines' };
+                     addAiArtifact(`AI가 '${firstMaterial}' 요약 시작 (${new Date().toLocaleTimeString()})`);
+                }
+
+
+                addChatMessage(mainWorkspaceChatArea, '워크스페이스 AI', aiResponse, false, false, artifact);
+            }, 1000);
         }
         
-        function runGeneralizedBacktesting(canvasId, summaryId) {
-            const resultSummary = document.getElementById(summaryId);
-            resultSummary.innerHTML = `<p class="text-sm text-gray-500"><i class="fas fa-spinner fa-spin mr-1"></i> 백테스팅 시뮬레이션 실행 중...</p>`;
+        function aiSuggestMaterial() { // Mock function for AI suggesting material
+            const newMaterialName = `AI 추천자료_${Math.floor(Math.random() * 100)}.pdf`;
+            const item = document.createElement('div');
+            item.className = 'document-item';
+            item.innerHTML = `<i class="fas fa-file-alt text-purple-500"></i><span>${newMaterialName} (AI 제안)</span>`;
+            item.onclick = () => alert(`'${newMaterialName}' 열기 (목업)`);
             
-            const canvasElement = document.getElementById(canvasId);
-            if (!canvasElement) {
-                console.error("Backtesting chart canvas element not found:", canvasId);
-                resultSummary.innerHTML = `<p class="text-sm text-red-500">백테스팅 차트 요소를 찾을 수 없습니다.</p>`;
-                return;
+            if (relatedMaterialsList.firstChild && relatedMaterialsList.firstChild.textContent.includes('자료가 여기에 표시됩니다')) {
+                relatedMaterialsList.innerHTML = ''; // Clear placeholder
             }
-            const ctx = canvasElement.getContext('2d');
-
-            if (window[canvasId + '_instance']) { // Store chart instance globally or scoped to avoid conflict
-                window[canvasId + '_instance'].destroy();
-            }
-
-            setTimeout(() => {
-                resultSummary.innerHTML = `
-                    <h4 class="text-md font-semibold text-gray-700 mb-1">백테스팅 결과 요약 (목업)</h4>
-                    <p class="text-sm"><strong>누적 수익률:</strong> +120.50%</p>
-                    <p class="text-sm"><strong>연 복리 수익률 (CAGR):</strong> 18.20%</p>
-                    <p class="text-sm"><strong>최대 낙폭 (MDD):</strong> -22.10%</p>
-                `;
-                window[canvasId + '_instance'] = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
-                        datasets: [{
-                            label: '선택 전략 포트폴리오',
-                            data: [100, 115, 140, 125, 160, 220.50], 
-                            borderColor: 'rgb(22, 163, 74)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false } } }
-                });
-            }, 2500);
+            relatedMaterialsList.appendChild(item);
+            addChatMessage(mainWorkspaceChatArea, '워크스페이스 AI', `현재 논의와 관련하여 "${newMaterialName}" 자료를 제안합니다. '관련 자료' 목록에 추가했습니다.`, false);
+            addAiArtifact(`AI가 '${newMaterialName}' 자료 제안 (${new Date().toLocaleTimeString()})`);
         }
 
+        function addAiArtifact(logMessage) {
+            const item = document.createElement('div');
+            item.className = 'document-item text-xs py-1'; // Smaller text for log
+            item.innerHTML = `<i class="fas fa-check-circle text-green-500"></i><span>${logMessage}</span>`;
+            
+             if (aiArtifactsList.firstChild && aiArtifactsList.firstChild.textContent.includes('AI 작업 결과가 여기에 기록됩니다')) {
+                aiArtifactsList.innerHTML = ''; // Clear placeholder
+            }
+            aiArtifactsList.insertBefore(item, aiArtifactsList.firstChild); // Add to top
+        }
 
-        // --- Document Thread Functions (for M&A or similar data-centric workspaces) ---
-        // These are simplified and would be part of the 'dataContent' tab's specific implementation for 'mna_dataroom' type
-        // For true data-centric view, the M&A structure was better, but for generalization, we embed this logic.
-        // The M&A data room view is now simulated within the generalized view when workspaceType is 'mna_dataroom'.
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             showPersonalAssistant(); 
-            const firstGeneralizedTabButton = document.querySelector('#generalizedWorkspaceView .tab-button');
-            if (firstGeneralizedTabButton) {
-                 openWorkspaceTab(null, 'overviewContent', firstGeneralizedTabButton);
-            }
         });
     </script>
 </body>
