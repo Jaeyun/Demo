@@ -43,7 +43,7 @@
         .sidebar-item:hover {
             background-color: #e5e7eb; /* Lighter gray on hover */
         }
-        .active-workspace {
+        .active-item { /* Renamed from active-workspace for broader use */
             background-color: #d1d5db; /* Slightly darker gray for active */
             font-weight: 600;
         }
@@ -63,6 +63,20 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a1a1a1;
         }
+        .news-item {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .news-item:hover {
+            background-color: #f0f0f0;
+        }
+        .news-detail-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: white;
+            margin-top: 16px;
+        }
     </style>
 </head>
 <body class="flex h-screen antialiased text-gray-800">
@@ -77,7 +91,7 @@
         <!-- User Profile -->
         <div class="p-3 bg-white rounded-lg shadow">
             <div class="flex items-center space-x-3">
-                <img src="https://placehold.co/40x40/E2E8F0/333?text=User" alt="사용자 프로필 사진" class="w-10 h-10 rounded-full">
+                <img src="https://placehold.co/40x40/E2E8F0/333?text=김" alt="사용자 프로필 사진" class="w-10 h-10 rounded-full">
                 <div>
                     <p class="font-semibold text-gray-700">김팀장</p>
                     <p class="text-xs text-gray-500">팀 A / 관리자</p>
@@ -87,30 +101,42 @@
                 <i class="fas fa-sign-out-alt mr-1"></i> 로그아웃
             </button>
         </div>
+        
+        <!-- Personal Home / Assistant Link -->
+        <div>
+            <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-1">개인 메뉴</h2>
+            <nav>
+                 <a href="#personal-assistant" onclick="showPersonalAssistant(event)" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item active-item">
+                    <i class="fas fa-user-astronaut w-5 h-5 text-purple-500"></i>
+                    <span>개인 어시스턴트</span>
+                </a>
+            </nav>
+        </div>
+
 
         <!-- Workspace Navigation -->
         <div>
-            <div class="flex justify-between items-center mb-2">
+            <div class="flex justify-between items-center mb-1 mt-3">
                 <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide">워크스페이스</h2>
-                <button class="text-blue-500 hover:text-blue-700 text-sm" title="새 워크스페이스 만들기">
+                <button class="text-blue-500 hover:text-blue-700 text-sm" title="새 워크스페이스 만들기" onclick="showWorkspaceView(event, '새 워크스페이스')">
                     <i class="fas fa-plus-circle"></i> 새로 만들기
                 </button>
             </div>
             <nav class="space-y-1">
-                <a href="#" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item active-workspace">
+                <a href="#workspace-customer-a" onclick="showWorkspaceView(event, '고객사 A 미팅 준비')" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
                     <i class="fas fa-comments w-5 h-5 text-blue-500"></i>
                     <span>고객사 A 미팅 준비</span>
                     <span class="ml-auto inline-block px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-600 rounded-full">3</span>
                 </a>
-                <a href="#" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
+                <a href="#workspace-q2-report" onclick="showWorkspaceView(event, '2분기 실적 분석')" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
                     <i class="fas fa-chart-line w-5 h-5 text-green-500"></i>
                     <span>2분기 실적 분석</span>
                 </a>
-                <a href="#" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
+                <a href="#workspace-news" onclick="showWorkspaceView(event, '최신 산업 뉴스 공유')" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
                     <i class="fas fa-newspaper w-5 h-5 text-yellow-500"></i>
                     <span>최신 산업 뉴스 공유</span>
                 </a>
-                 <a href="#" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
+                 <a href="#workspace-ideas" onclick="showWorkspaceView(event, '신규 서비스 아이디어')" class="flex items-center space-x-2 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 sidebar-item">
                     <i class="fas fa-lightbulb w-5 h-5 text-purple-500"></i>
                     <span>신규 서비스 아이디어</span>
                 </a>
@@ -119,7 +145,7 @@
 
         <!-- Content Sources -->
         <div>
-            <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">콘텐츠 소스</h2>
+            <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2 mt-3">콘텐츠 소스</h2>
             <div class="space-y-1">
                 <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 sidebar-item">
                     <i class="fas fa-globe w-5 h-5 text-gray-500"></i>
@@ -148,106 +174,173 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col bg-white overflow-hidden">
-        <!-- Workspace Header -->
-        <header class="bg-gray-50 border-b border-gray-200 p-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-gray-800">고객사 A 미팅 준비</h2>
-                <div class="flex items-center space-x-3">
-                    <button class="text-gray-500 hover:text-gray-700" title="워크스페이스 설정">
-                        <i class="fas fa-cog fa-lg"></i>
-                    </button>
-                    <button class="text-gray-500 hover:text-gray-700" title="알림">
-                        <i class="fas fa-bell fa-lg"></i>
-                    </button>
-                     <div class="flex -space-x-2 overflow-hidden">
-                        <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" alt="이대리">
-                        <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/FBCFE8/701A75?text=박" alt="박사원">
-                        <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/BFDBFE/1E40AF?text=최" alt="최주임">
-                        <a class="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-300" href="#">+2</a>
+        <!-- This will be dynamically filled by JS based on sidebar selection -->
+        <div id="mainContentArea" class="flex-1 flex flex-col">
+            <!-- Personal Assistant View (Default) -->
+            <div id="personalAssistantView" class="flex-1 flex flex-col p-6 overflow-y-auto">
+                <header class="mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800">반갑습니다, 김팀장님!</h2>
+                    <p class="text-gray-600">오늘 업무를 시작해 볼까요? <i class="fas fa-rocket text-purple-500"></i></p>
+                </header>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">오늘 김팀장님이 챙겨볼 만한 주요 뉴스입니다:</h3>
+                    <div class="space-y-4">
+                        <!-- News Item 1 (Clickable) -->
+                        <div class="news-item bg-white p-4 rounded-lg shadow hover:shadow-md" onclick="toggleNewsDetail('newsDetail1')">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold text-blue-600">글로벌 AI 시장, 연평균 30% 성장 전망</h4>
+                                <span class="text-xs text-gray-500">ABC 뉴스 - 1시간 전</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">최신 보고서에 따르면, 글로벌 인공지능(AI) 시장이 향후 5년간 연평균 30%의 높은 성장률을 기록할 것으로 예상됩니다...</p>
+                        </div>
+                        <!-- News Detail 1 (Hidden by default) -->
+                        <div id="newsDetail1" class="hidden news-detail-card">
+                            <h5 class="text-md font-semibold text-gray-800 mb-2">글로벌 AI 시장, 연평균 30% 성장 전망</h5>
+                            <p class="text-xs text-gray-500 mb-2">출처: ABC 뉴스 | 발행일: 2025년 6월 4일</p>
+                            <div class="mb-3">
+                                <h6 class="font-semibold text-sm text-gray-700">요약 정보:</h6>
+                                <p class="text-sm text-gray-600">본 보고서는 생성형 AI, AI 반도체, 자율주행 기술 등이 시장 성장을 주도할 것이라고 분석했습니다. 특히 B2B AI 솔루션 도입이 가속화될 것으로 예측됩니다.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="font-semibold text-sm text-gray-700">나에게 어떤 의미?:</h6>
+                                <p class="text-sm text-gray-600">우리 회사가 주력하는 B2B AI 솔루션 시장의 성장 가능성을 재확인할 수 있는 긍정적인 소식입니다. 신규 서비스 기획 시 시장 확대 전략을 고려해볼 수 있습니다.</p>
+                            </div>
+                            <div>
+                                <h6 class="font-semibold text-sm text-gray-700">AI 분석 <i class="fas fa-cogs text-blue-500"></i>:</h6>
+                                <div class="mt-1 p-3 bg-blue-50 rounded-md">
+                                    <p class="text-sm text-blue-700"><i class="fas fa-robot mr-1"></i> 이 뉴스는 현재 진행 중인 '신규 서비스 아이디어' 워크스페이스의 논의와 관련성이 높습니다. 특히, 경쟁사 대비 우리 기술의 차별점을 부각할 필요가 있으며, 아시아 시장 진출 전략 수립에 참고할 수 있습니다. 관련하여 추가적인 시장 경쟁 환경 분석을 진행하시겠습니까?</p>
+                                    <button class="text-xs mt-2 bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-md transition duration-150">AI 추가 분석 요청</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- News Item 2 -->
+                        <div class="news-item bg-white p-4 rounded-lg shadow hover:shadow-md" onclick="toggleNewsDetail('newsDetail2')">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold text-blue-600">국내 기업들, ESG 경영 강화 추세</h4>
+                                <span class="text-xs text-gray-500">대한경제 - 3시간 전</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">환경, 사회, 지배구조(ESG)가 기업 평가의 주요 기준으로 자리 잡으면서 국내 주요 기업들이 ESG 경영을 강화하고 있습니다...</p>
+                        </div>
+                        <!-- News Detail 2 (Hidden by default) -->
+                        <div id="newsDetail2" class="hidden news-detail-card">
+                             <h5 class="text-md font-semibold text-gray-800 mb-2">국내 기업들, ESG 경영 강화 추세</h5>
+                            <p class="text-xs text-gray-500 mb-2">출처: 대한경제 | 발행일: 2025년 6월 4일</p>
+                            <div class="mb-3">
+                                <h6 class="font-semibold text-sm text-gray-700">요약 정보:</h6>
+                                <p class="text-sm text-gray-600">투자 유치 및 기업 이미지 제고를 위해 ESG 관련 공시를 확대하고, 친환경 사업 포트폴리오를 구축하는 기업이 늘고 있습니다.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="font-semibold text-sm text-gray-700">나에게 어떤 의미?:</h6>
+                                <p class="text-sm text-gray-600">고객사들이 ESG 경영에 대한 관심이 높아지고 있으므로, 우리 솔루션이 고객사의 ESG 목표 달성에 어떻게 기여할 수 있는지 어필할 필요가 있습니다.</p>
+                            </div>
+                            <div>
+                                <h6 class="font-semibold text-sm text-gray-700">AI 분석 <i class="fas fa-cogs text-blue-500"></i>:</h6>
+                                <div class="mt-1 p-3 bg-blue-50 rounded-md">
+                                     <p class="text-sm text-blue-700"><i class="fas fa-robot mr-1"></i> '고객사 A 미팅 준비' 워크스페이스에서 논의된 제안서 내용에 ESG 관련 기여 부분을 추가하는 것을 고려해볼 수 있습니다. 관련 성공 사례 리서치를 지원해 드릴까요?</p>
+                                    <button class="text-xs mt-2 bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-md transition duration-150">AI 리서치 요청</button>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- News Item 3 -->
+                        <div class="news-item bg-white p-4 rounded-lg shadow hover:shadow-md" onclick="toggleNewsDetail('newsDetail3')">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold text-blue-600">정부, 데이터 산업 육성 위한 규제 완화 검토</h4>
+                                <span class="text-xs text-gray-500">테크데일리 - 어제</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">정부가 데이터 경제 활성화를 위해 개인정보보호 관련 규제를 합리적으로 개선하고, 데이터 활용을 촉진하는 방안을 검토 중입니다...</p>
+                        </div>
+                        <!-- News Detail 3 (Hidden by default) -->
+                        <div id="newsDetail3" class="hidden news-detail-card">
+                             <h5 class="text-md font-semibold text-gray-800 mb-2">정부, 데이터 산업 육성 위한 규제 완화 검토</h5>
+                            <p class="text-xs text-gray-500 mb-2">출처: 테크데일리 | 발행일: 2025년 6월 3일</p>
+                            <div class="mb-3">
+                                <h6 class="font-semibold text-sm text-gray-700">요약 정보:</h6>
+                                <p class="text-sm text-gray-600">가명정보 활용 확대, 마이데이터 사업 범위 확장 등이 주요 내용으로 논의되고 있으며, 관련 법안 개정이 추진될 가능성이 있습니다.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="font-semibold text-sm text-gray-700">나에게 어떤 의미?:</h6>
+                                <p class="text-sm text-gray-600">우리 플랫폼은 다양한 데이터를 활용하므로 규제 완화는 서비스 확장에 긍정적인 영향을 줄 수 있습니다. 법률 변경 사항을 지속적으로 모니터링해야 합니다.</p>
+                            </div>
+                            <div>
+                                <h6 class="font-semibold text-sm text-gray-700">AI 분석 <i class="fas fa-cogs text-blue-500"></i>:</h6>
+                                <div class="mt-1 p-3 bg-blue-50 rounded-md">
+                                     <p class="text-sm text-blue-700"><i class="fas fa-robot mr-1"></i> 이 뉴스는 플랫폼의 데이터 보안 및 규정 준수 정책에 영향을 미칠 수 있습니다. 법무팀과 관련 내용을 공유하고, 필요시 서비스 약관 업데이트를 검토하는 것이 좋겠습니다.</p>
+                                    <button class="text-xs mt-2 bg-gray-500 hover:bg-gray-600 text-white py-1 px-2 rounded-md transition duration-150">내부 공유</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <!-- Chat Area -->
-        <div class="flex-1 p-6 space-y-4 overflow-y-auto" id="chatArea">
-            <!-- System Message -->
-            <div class="chat-bubble-system"><span>오늘, 2025년 6월 4일</span></div>
+            <!-- Workspace Chat View (Initially hidden, shown by JS) -->
+            <div id="workspaceChatView" class="hidden flex-1 flex flex-col">
+                <!-- Workspace Header -->
+                <header class="bg-gray-50 border-b border-gray-200 p-4">
+                    <div class="flex items-center justify-between">
+                        <h2 id="workspaceTitle" class="text-xl font-semibold text-gray-800">워크스페이스 제목</h2>
+                        <div class="flex items-center space-x-3">
+                            <button class="text-gray-500 hover:text-gray-700" title="워크스페이스 설정">
+                                <i class="fas fa-cog fa-lg"></i>
+                            </button>
+                            <button class="text-gray-500 hover:text-gray-700" title="알림">
+                                <i class="fas fa-bell fa-lg"></i>
+                            </button>
+                             <div class="flex -space-x-2 overflow-hidden">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" alt="이대리">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/FBCFE8/701A75?text=박" alt="박사원">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://placehold.co/32x32/BFDBFE/1E40AF?text=최" alt="최주임">
+                                <a class="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-300" href="#">+2</a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
 
-            <!-- User Message -->
-            <div class="chat-bubble chat-bubble-user">
-                <p class="font-semibold text-sm mb-0.5">김팀장 (나)</p>
-                안녕하세요. 고객사 A 미팅 준비를 시작해봅시다. 최근 경쟁사 B의 동향이 어떤지 AI에게 물어볼까요?
-            </div>
-
-            <!-- AI Message -->
-            <div class="chat-bubble chat-bubble-ai">
-                <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-blue-500"></i> AI 어시스턴트</p>
-                안녕하세요, 김팀장님. 좋습니다. 경쟁사 B의 최근 3개월간 주요 뉴스 및 시장 반응을 분석하여 요약해 드리겠습니다. 잠시만 기다려주세요.
-                <div class="mt-2 p-2 bg-gray-200 rounded-md text-xs">
-                    <i class="fas fa-spinner fa-spin mr-1"></i> 정보 검색 및 분석 중...
+                <!-- Chat Area -->
+                <div class="flex-1 p-6 space-y-4 overflow-y-auto" id="chatArea">
+                    <!-- System Message -->
+                    <div class="chat-bubble-system"><span>오늘, 2025년 6월 4일</span></div>
+                     <!-- User Message -->
+                    <div class="chat-bubble chat-bubble-user">
+                        <p class="font-semibold text-sm mb-0.5">김팀장 (나)</p>
+                        안녕하세요. [워크스페이스 제목] 관련 논의를 시작해봅시다.
+                    </div>
+                     <!-- AI Message -->
+                    <div class="chat-bubble chat-bubble-ai">
+                        <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-blue-500"></i> AI 어시스턴트</p>
+                        네, 김팀장님. 무엇을 도와드릴까요?
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Another User Message -->
-            <div class="flex items-start space-x-3">
-                <img src="https://placehold.co/32x32/A7F3D0/1C64F2?text=이" alt="이대리 프로필 사진" class="w-8 h-8 rounded-full mt-1">
-                <div class="chat-bubble chat-bubble-ai"> <!-- AI/Other style for team members -->
-                    <p class="font-semibold text-sm mb-0.5 text-green-600">이대리</p>
-                    네, 팀장님. AI가 분석하는 동안 저는 지난번 미팅 자료를 다시 한번 검토하고 있겠습니다. 특히 가격 정책 관련해서요.
+
+                <!-- Chat Input -->
+                <div class="bg-gray-50 p-4 border-t border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <button class="text-gray-500 hover:text-gray-700" title="파일 첨부">
+                            <i class="fas fa-paperclip fa-lg"></i>
+                        </button>
+                        <input type="text" placeholder="메시지를 입력하거나 AI에게 질문하세요..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-150">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-150" title="전송">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-blue-600" title="AI에게 직접 질문">
+                            <i class="fas fa-microphone fa-lg"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-            <!-- AI Response with Data -->
-             <div class="chat-bubble chat-bubble-ai">
-                <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-blue-500"></i> AI 어시스턴트</p>
-                경쟁사 B의 최근 동향 분석 결과입니다:
-                <ul class="list-disc list-inside mt-1 text-sm space-y-1">
-                    <li>신규 AI 기반 자동화 솔루션 출시 (시장 반응 긍정적)</li>
-                    <li>아시아 시장 확장 발표 (주가 5% 상승)</li>
-                    <li>주요 기술 컨퍼런스에서 차세대 기술 로드맵 공개</li>
-                </ul>
-                <div class="mt-2">
-                    <button class="text-xs bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-md transition duration-150">
-                        <i class="fas fa-file-alt mr-1"></i> 상세 보고서 보기
-                    </button>
-                     <button class="text-xs bg-gray-500 hover:bg-gray-600 text-white py-1 px-2 rounded-md transition duration-150 ml-1">
-                        <i class="fas fa-share-alt mr-1"></i> 결과 공유
-                    </button>
-                </div>
-            </div>
-             <div class="chat-bubble chat-bubble-user">
-                <p class="font-semibold text-sm mb-0.5">김팀장 (나)</p>
-                좋은 정보네요. 이대리님, 이 내용 참고해서 우리 제안서에 경쟁사 대비 강점을 더 부각할 부분을 찾아봅시다. AI, 관련해서 우리 제품의 강점과 연관지어 설명해줄 수 있니?
-            </div>
-
-        </div>
-
-        <!-- Chat Input -->
-        <div class="bg-gray-50 p-4 border-t border-gray-200">
-            <div class="flex items-center space-x-3">
-                <button class="text-gray-500 hover:text-gray-700" title="파일 첨부">
-                    <i class="fas fa-paperclip fa-lg"></i>
-                </button>
-                <input type="text" placeholder="메시지를 입력하거나 AI에게 질문하세요..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-150">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-150" title="전송">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-                <button class="text-gray-500 hover:text-blue-600" title="AI에게 직접 질문">
-                    <i class="fas fa-microphone fa-lg"></i>
-                </button>
             </div>
         </div>
     </main>
 
     <!-- Right Sidebar: Contextual Information -->
     <aside class="w-80 bg-gray-50 border-l border-gray-200 p-6 space-y-6 overflow-y-auto">
-        <!-- Team Members -->
+        <!-- Team Members (Contextual to Workspace or General) -->
         <div>
             <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">팀 멤버 (4)</h3>
             <div class="space-y-3">
                 <div class="flex items-center space-x-3">
-                    <img src="https://placehold.co/40x40/E2E8F0/333?text=User" alt="김팀장 프로필 사진" class="w-10 h-10 rounded-full">
+                    <img src="https://placehold.co/40x40/E2E8F0/333?text=김" alt="김팀장 프로필 사진" class="w-10 h-10 rounded-full">
                     <div>
                         <p class="font-medium text-gray-800">김팀장 (나)</p>
                         <p class="text-xs text-green-500"><i class="fas fa-circle text-xs mr-1"></i> 온라인</p>
@@ -280,61 +373,118 @@
             </div>
         </div>
 
-        <!-- Attached Files -->
-        <div>
-            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">첨부 파일 (3)</h3>
-            <div class="space-y-2 text-sm">
-                <a href="#" class="block p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow duration-150">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-file-pdf text-red-500 fa-lg"></i>
-                        <span class="text-gray-700 font-medium">고객사A_미팅_제안서_v1.2.pdf</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-1">1.2MB - 어제, 이대리</p>
-                </a>
-                <a href="#" class="block p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow duration-150">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-file-excel text-green-500 fa-lg"></i>
-                        <span class="text-gray-700 font-medium">경쟁사_분석_데이터.xlsx</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-1">780KB - 3일 전, 박사원</p>
-                </a>
-                <a href="#" class="block p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow duration-150">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-file-image text-blue-500 fa-lg"></i>
-                        <span class="text-gray-700 font-medium">제품_소개_이미지.png</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-1">250KB - 1시간 전, 김팀장</p>
-                </a>
-                 <button class="w-full mt-2 text-sm text-gray-600 hover:text-gray-800 py-1.5 px-3 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-150">
-                    <i class="fas fa-upload mr-1"></i> 파일 더보기/업로드
-                </button>
+        <!-- Attached Files (Contextual) -->
+        <div id="attachedFilesSection">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">첨부 파일 (0)</h3>
+            <div class="space-y-2 text-sm" id="fileList">
+                <p class="text-xs text-gray-500">선택된 워크스페이스의 파일이 여기에 표시됩니다.</p>
             </div>
+             <button class="w-full mt-2 text-sm text-gray-600 hover:text-gray-800 py-1.5 px-3 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-150">
+                <i class="fas fa-upload mr-1"></i> 파일 더보기/업로드
+            </button>
         </div>
 
-        <!-- AI Suggestions -->
-        <div>
+        <!-- AI Suggestions (Contextual) -->
+        <div id="aiSuggestionsSection">
             <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">AI 제안 <i class="fas fa-lightbulb text-yellow-400"></i></h3>
-            <div class="space-y-2 text-sm">
-                <div class="p-3 bg-blue-50 border border-blue-200 rounded-md">
-                    <p class="font-medium text-blue-700">💡 다음 논의 주제 제안:</p>
-                    <p class="text-blue-600 text-xs">"경쟁사 B의 신규 솔루션에 대한 우리 제품의 차별화 전략은 무엇일까요?"</p>
-                    <button class="text-xs mt-1 text-blue-500 hover:underline">AI에게 질문하기</button>
-                </div>
-                <div class="p-3 bg-green-50 border border-green-200 rounded-md">
-                    <p class="font-medium text-green-700">📄 관련 자료 추천:</p>
-                    <p class="text-green-600 text-xs">"내부 자료 > '차세대_솔루션_기획안.docx' 문서를 참고하세요."</p>
-                     <button class="text-xs mt-1 text-green-500 hover:underline">문서 바로가기</button>
-                </div>
+            <div class="space-y-2 text-sm" id="suggestionList">
+                 <p class="text-xs text-gray-500">관련 AI 제안이 여기에 표시됩니다.</p>
             </div>
         </div>
 
     </aside>
     <script>
-        // Auto scroll to bottom of chat
-        const chatArea = document.getElementById('chatArea');
-        if (chatArea) {
-            chatArea.scrollTop = chatArea.scrollHeight;
+        const personalAssistantView = document.getElementById('personalAssistantView');
+        const workspaceChatView = document.getElementById('workspaceChatView');
+        const workspaceTitleElement = document.getElementById('workspaceTitle');
+        const mainContentArea = document.getElementById('mainContentArea');
+        
+        const sidebarLinks = document.querySelectorAll('.sidebar-item');
+
+        function setActiveLink(selectedLink) {
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active-item');
+            });
+            if (selectedLink) {
+                selectedLink.classList.add('active-item');
+            }
         }
+
+        function showPersonalAssistant(event) {
+            if(event) event.preventDefault();
+            personalAssistantView.classList.remove('hidden');
+            workspaceChatView.classList.add('hidden');
+            setActiveLink(document.querySelector('a[href="#personal-assistant"]'));
+            // Potentially update right sidebar for personal assistant context
+            document.getElementById('attachedFilesSection').classList.add('hidden'); // Hide files for personal view
+            document.getElementById('aiSuggestionsSection').classList.remove('hidden'); // Show general suggestions
+        }
+
+        function showWorkspaceView(event, workspaceName) {
+            if(event) event.preventDefault();
+            personalAssistantView.classList.add('hidden');
+            workspaceChatView.classList.remove('hidden');
+            workspaceChatView.classList.add('flex', 'flex-col'); // Ensure flex properties are re-applied
+            workspaceTitleElement.textContent = workspaceName;
+            
+            if(event) setActiveLink(event.currentTarget);
+
+            // Simulate loading chat for the workspace
+            const chatArea = document.getElementById('chatArea');
+            chatArea.innerHTML = `
+                <div class="chat-bubble-system"><span>오늘, 2025년 6월 4일</span></div>
+                <div class="chat-bubble chat-bubble-user">
+                    <p class="font-semibold text-sm mb-0.5">김팀장 (나)</p>
+                    안녕하세요. ${workspaceName} 관련 논의를 시작해봅시다.
+                </div>
+                <div class="chat-bubble chat-bubble-ai">
+                    <p class="font-semibold text-sm mb-0.5"><i class="fas fa-robot mr-1 text-blue-500"></i> AI 어시스턴트</p>
+                    네, 김팀장님. ${workspaceName}에 대해 무엇을 도와드릴까요? 예를 들어, 관련 자료를 요약해 드리거나, 아이디어 발상을 도와드릴 수 있습니다.
+                </div>
+            `;
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            // Update right sidebar for workspace context
+            document.getElementById('attachedFilesSection').classList.remove('hidden');
+            document.getElementById('aiSuggestionsSection').classList.remove('hidden'); 
+            // Mockup: update file list and suggestions for the workspace
+            if (workspaceName === '고객사 A 미팅 준비') {
+                document.getElementById('fileList').innerHTML = `
+                    <a href="#" class="block p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow duration-150">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-file-pdf text-red-500 fa-lg"></i>
+                            <span class="text-gray-700 font-medium">고객사A_미팅_제안서_v1.2.pdf</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">1.2MB - 어제, 이대리</p>
+                    </a>`;
+                document.getElementById('suggestionList').innerHTML = `
+                    <div class="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                        <p class="font-medium text-blue-700">💡 다음 논의 주제 제안:</p>
+                        <p class="text-blue-600 text-xs">"경쟁사 B의 신규 솔루션에 대한 우리 제품의 차별화 전략은 무엇일까요?"</p>
+                        <button class="text-xs mt-1 text-blue-500 hover:underline">AI에게 질문하기</button>
+                    </div>`;
+            } else {
+                 document.getElementById('fileList').innerHTML = `<p class="text-xs text-gray-500">${workspaceName} 관련 파일이 여기에 표시됩니다.</p>`;
+                 document.getElementById('suggestionList').innerHTML = `<p class="text-xs text-gray-500">${workspaceName} 관련 AI 제안이 여기에 표시됩니다.</p>`;
+            }
+        }
+
+        function toggleNewsDetail(detailId) {
+            const detailElement = document.getElementById(detailId);
+            if (detailElement) {
+                detailElement.classList.toggle('hidden');
+            }
+        }
+
+        // Initial setup: Show personal assistant view by default
+        document.addEventListener('DOMContentLoaded', () => {
+            showPersonalAssistant();
+             // Auto scroll to bottom of chat if chatArea is visible and populated
+            const chatArea = document.getElementById('chatArea');
+            if (chatArea && !workspaceChatView.classList.contains('hidden')) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        });
     </script>
 </body>
 </html>
