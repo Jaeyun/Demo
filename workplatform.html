@@ -86,6 +86,19 @@
             background-color: #f9fafb; 
             margin-top: 8px;
         }
+        .news-category-button {
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .news-category-button.active {
+            background-color: #4f46e5; /* Indigo-600 */
+            color: white;
+        }
+        .news-list-item {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .news-list-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body class="flex h-screen antialiased text-gray-800">
@@ -146,7 +159,7 @@
         <div>
             <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2 mt-3">콘텐츠 소스</h2>
             <div class="space-y-1">
-                <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 sidebar-item"><i class="fas fa-globe w-5 h-5 text-gray-500"></i><span>뉴스 (무료)</span></a>
+                <a href="#news-feed" onclick="showNewsFeedView(event)" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 sidebar-item"><i class="fas fa-globe w-5 h-5 text-gray-500"></i><span>뉴스 (무료)</span></a>
                 <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 sidebar-item"><i class="fas fa-folder-open w-5 h-5 text-gray-500"></i><span>내부 자료 (무료)</span></a>
                 <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 sidebar-item"><i class="fas fa-database w-5 h-5 text-indigo-500"></i><span>기업 정보 (유료)</span><i class="fas fa-lock text-xs text-gray-400 ml-auto" title="유료 구독 필요"></i></a>
                 <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 sidebar-item"><i class="fas fa-dollar-sign w-5 h-5 text-teal-500"></i><span>금융 정보 (유료)</span><i class="fas fa-lock text-xs text-gray-400 ml-auto" title="유료 구독 필요"></i></a>
@@ -157,10 +170,10 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col bg-white overflow-hidden">
-        <div id="mainContentArea" class="flex-1 flex flex-col overflow-hidden"> <!-- Added overflow-hidden here as well for safety -->
+        <div id="mainContentArea" class="flex-1 flex flex-col overflow-hidden"> 
             <!-- Personal Assistant View -->
-            <div id="personalAssistantView" class="hidden flex-1 flex-col overflow-hidden"> <!-- Added overflow-hidden -->
-                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0"> <!-- Added shrink-0 -->
+            <div id="personalAssistantView" class="hidden flex-1 flex-col overflow-hidden"> 
+                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0"> 
                     <div class="flex items-center justify-between">
                         <h2 class="text-xl font-semibold text-gray-800 flex items-center">
                             <i class="fas fa-user-astronaut text-purple-500 mr-2"></i> 개인 어시스턴트
@@ -175,7 +188,7 @@
                     <!-- Chat messages for personal assistant will be appended here by JS -->
                 </div>
 
-                <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0"> <!-- Added shrink-0 -->
+                <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0"> 
                     <div class="flex items-center space-x-3">
                         <button class="text-gray-500 hover:text-gray-700" title="파일 첨부">
                             <i class="fas fa-paperclip fa-lg"></i>
@@ -189,8 +202,8 @@
             </div>
 
             <!-- Workspace Chat View -->
-            <div id="workspaceChatView" class="hidden flex-1 flex-col overflow-hidden"> <!-- Added overflow-hidden -->
-                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0"> <!-- Added shrink-0 -->
+            <div id="workspaceChatView" class="hidden flex-1 flex-col overflow-hidden"> 
+                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0"> 
                     <div class="flex items-center justify-between">
                         <h2 id="workspaceTitle" class="text-xl font-semibold text-gray-800">워크스페이스 제목</h2>
                         <div class="flex items-center space-x-3">
@@ -208,7 +221,7 @@
                 <div id="chatArea" class="flex-1 min-h-0 p-6 space-y-4 overflow-y-auto">
                     <!-- Workspace chat messages will be loaded here by JS -->
                 </div>
-                <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0"> <!-- Added shrink-0 -->
+                <div class="bg-gray-50 p-4 border-t border-gray-200 shrink-0"> 
                     <div class="flex items-center space-x-3">
                         <button class="text-gray-500 hover:text-gray-700" title="파일 첨부"><i class="fas fa-paperclip fa-lg"></i></button>
                         <input type="text" id="workspaceChatInput" placeholder="메시지를 입력하거나 AI에게 질문하세요..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-150">
@@ -219,6 +232,38 @@
                     </div>
                 </div>
             </div>
+
+            <!-- News Feed View -->
+            <div id="newsFeedView" class="hidden flex-1 flex-col overflow-hidden">
+                <header class="bg-gray-50 border-b border-gray-200 p-4 shrink-0">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-newspaper text-orange-500 mr-2"></i> 뉴스 피드
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" placeholder="뉴스 검색..." class="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            <button class="text-gray-500 hover:text-orange-600" title="필터">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+                <div class="p-4 shrink-0 border-b border-gray-200">
+                    <div class="flex space-x-2 overflow-x-auto pb-2">
+                        <button onclick="showNewsCategory('my-feed', this)" class="news-category-button active px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">내 피드</button>
+                        <button onclick="showNewsCategory('top-issues', this)" class="news-category-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">오늘의 주요 이슈</button>
+                        <button onclick="showNewsCategory('politics', this)" class="news-category-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">정치</button>
+                        <button onclick="showNewsCategory('economy', this)" class="news-category-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">경제</button>
+                        <button onclick="showNewsCategory('society', this)" class="news-category-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">사회</button>
+                        <button onclick="showNewsCategory('it-science', this)" class="news-category-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">IT/과학</button>
+                        <button onclick="showNewsCategory('world', this)" class="news-category-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md">국제</button>
+                    </div>
+                </div>
+                <div id="newsListArea" class="flex-1 min-h-0 p-6 overflow-y-auto">
+                    <!-- News articles will be loaded here by JS -->
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -248,9 +293,11 @@
     <script>
         const personalAssistantView = document.getElementById('personalAssistantView');
         const workspaceChatView = document.getElementById('workspaceChatView');
+        const newsFeedView = document.getElementById('newsFeedView'); // News Feed View
         const workspaceTitleElement = document.getElementById('workspaceTitle');
         const personalChatArea = document.getElementById('personalChatArea');
         const workspaceChatArea = document.getElementById('chatArea'); 
+        const newsListArea = document.getElementById('newsListArea'); // News List Area
         const sidebarLinks = document.querySelectorAll('.sidebar-item');
 
         const attachedFilesSection = document.getElementById('attachedFilesSection');
@@ -345,7 +392,6 @@
             `;
             personalChatArea.appendChild(news2Bubble);
 
-            // Add User Question and AI Answer example
             const userQuestionBubble = document.createElement('div');
             userQuestionBubble.className = 'chat-bubble chat-bubble-user';
             userQuestionBubble.innerHTML = `
@@ -386,6 +432,8 @@
             personalAssistantView.classList.add('flex', 'flex-col'); 
             workspaceChatView.classList.add('hidden');
             workspaceChatView.classList.remove('flex', 'flex-col'); 
+            newsFeedView.classList.add('hidden'); // Hide news feed
+            newsFeedView.classList.remove('flex', 'flex-col');
             setActiveLink(document.querySelector('a[href="#personal-assistant"]'));
 
             initializePersonalAssistantChat(); 
@@ -413,6 +461,8 @@
             personalAssistantView.classList.remove('flex', 'flex-col'); 
             workspaceChatView.classList.remove('hidden');
             workspaceChatView.classList.add('flex', 'flex-col'); 
+            newsFeedView.classList.add('hidden'); // Hide news feed
+            newsFeedView.classList.remove('flex', 'flex-col');
             workspaceTitleElement.textContent = workspaceName;
             
             setActiveLink(linkElement || (event ? event.currentTarget : null));
@@ -448,6 +498,96 @@
                  suggestionList.innerHTML = `<p class="text-xs text-gray-500">${workspaceName} 관련 AI 제안이 여기에 표시됩니다.</p>`;
             }
         }
+
+        function showNewsFeedView(event) {
+            if(event) event.preventDefault();
+            personalAssistantView.classList.add('hidden');
+            personalAssistantView.classList.remove('flex', 'flex-col');
+            workspaceChatView.classList.add('hidden');
+            workspaceChatView.classList.remove('flex', 'flex-col');
+            newsFeedView.classList.remove('hidden');
+            newsFeedView.classList.add('flex', 'flex-col');
+            setActiveLink(document.querySelector('a[href="#news-feed"]'));
+            
+            // Load default news category
+            showNewsCategory('my-feed', document.querySelector('.news-category-button')); 
+
+            attachedFilesSection.classList.add('hidden'); 
+            aiSuggestionsSection.classList.remove('hidden'); 
+            suggestionList.innerHTML = `
+                <div class="p-3 bg-orange-50 border border-orange-200 rounded-md">
+                    <p class="font-medium text-orange-700">📰 뉴스 필터링 팁:</p>
+                    <p class="text-orange-600 text-xs">"키워드 검색이나 필터 기능을 사용하여 원하는 뉴스를 빠르게 찾아보세요."</p>
+                </div>`;
+        }
+
+        function showNewsCategory(category, buttonElement) {
+            const buttons = document.querySelectorAll('.news-category-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if(buttonElement) buttonElement.classList.add('active');
+
+            newsListArea.innerHTML = ''; // Clear previous news
+            let articlesHtml = `<h3 class="text-lg font-semibold text-gray-700 mb-4">"${getCategoryDisplayName(category)}" 관련 뉴스</h3>`;
+            
+            // Mock news data - replace with actual data fetching
+            const mockNews = {
+                'my-feed': [
+                    { title: "내 피드 맞춤형 뉴스 1: AI가 추천하는 오늘의 주요 기술 동향", source: "TechCrunch", time: "30분 전", summary: "생성형 AI 모델의 새로운 발전과 산업 적용 사례 심층 분석...", link: "#" },
+                    { title: "내 피드 맞춤형 뉴스 2: 팔로우 중인 기업 'X사' 실적 발표", source: "Bloomberg", time: "1시간 전", summary: "X사의 2분기 실적이 시장 예상치를 상회하며 주가 상승...", link: "#" },
+                ],
+                'top-issues': [
+                    { title: "오늘의 주요 이슈 1: 글로벌 공급망 위기, 반도체 산업 영향은?", source: "Reuters", time: "2시간 전", summary: "지정학적 긴장과 물류 대란이 반도체 수급에 미치는 영향 분석...", link: "#" },
+                    { title: "오늘의 주요 이슈 2: 중앙은행 금리 인상 가능성 시사", source: "Wall Street Journal", time: "2시간 30분 전", summary: "인플레이션 압력 가중으로 추가 금리 인상 가능성 제기...", link: "#" },
+                ],
+                'politics': [
+                    { title: "정치 뉴스 1: 여야, 주요 법안 처리 두고 대립", source: "연합뉴스", time: "45분 전", summary: "국회 본회의를 앞두고 주요 쟁점 법안에 대한 여야 간 입장 차이 여전...", link: "#" },
+                ],
+                'economy': [
+                    { title: "경제 뉴스 1: 소비자 물가 지수 상승폭 확대", source: "한국경제", time: "1시간 전", summary: "지난달 소비자 물가 지수가 전년 동월 대비 X% 상승하며...", link: "#" },
+                ],
+                'society': [ { title: "사회 뉴스 1: 기후 변화 대응 위한 시민 참여 촉구", source: "YTN", time: "3시간 전", summary: "환경 단체, 정부와 기업의 적극적인 기후 변화 대응 정책 마련과 함께 시민들의 생활 속 실천 강조...", link: "#"} ],
+                'it-science': [ { title: "IT/과학 뉴스 1: 국내 연구진, 차세대 배터리 기술 개발 성공", source: "ZDNet Korea", time: "50분 전", summary: "기존 배터리보다 에너지 밀도와 안정성을 크게 향상시킨 새로운 배터리 기술 개발...", link: "#"} ],
+                'world': [ { title: "국제 뉴스 1: G7 정상회의, 주요 글로벌 현안 논의", source: "BBC News", time: "4시간 전", summary: "주요 7개국(G7) 정상들이 모여 기후 변화, 경제 회복, 국제 안보 등 주요 현안에 대해 논의...", link: "#"} ]
+            };
+
+            const articles = mockNews[category] || [{ title: "선택하신 카테고리에 대한 뉴스가 없습니다.", source: "", time: "", summary: "", link: "#"}];
+
+            articles.forEach(article => {
+                articlesHtml += `
+                    <div class="news-list-item py-4">
+                        <a href="${article.link}" target="_blank" class="hover:text-indigo-600">
+                            <h4 class="text-md font-semibold text-gray-800">${article.title}</h4>
+                        </a>
+                        <div class="text-xs text-gray-500 mt-1">
+                            <span>${article.source}</span>
+                            ${article.source && article.time ? '<span class="mx-1">|</span>' : ''}
+                            <span>${article.time}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">${article.summary}</p>
+                         <div class="mt-2">
+                            <button class="text-xs text-indigo-500 hover:underline">자세히 보기</button>
+                            <button class="text-xs text-gray-500 hover:underline ml-2">관련 워크스페이스에 공유</button>
+                        </div>
+                    </div>
+                `;
+            });
+            newsListArea.innerHTML = articlesHtml;
+            newsListArea.scrollTop = 0; // Scroll to top of news list
+        }
+
+        function getCategoryDisplayName(categoryKey) {
+            const names = {
+                'my-feed': '내 피드',
+                'top-issues': '오늘의 주요 이슈',
+                'politics': '정치',
+                'economy': '경제',
+                'society': '사회',
+                'it-science': 'IT/과학',
+                'world': '국제'
+            };
+            return names[categoryKey] || categoryKey;
+        }
+
 
         function toggleNewsDetail(detailId, clickableElement) {
             const detailElement = document.getElementById(detailId);
