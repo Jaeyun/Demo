@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next ETA 프로그램: 새마을금고 투자 제안</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (#FDFBF6, #3C3633, #7A9D54, #E0A75E) -->
+    <!-- Application Structure Plan: 본 SPA는 투자 제안을 위한 설득적 서사 구조로 설계되었습니다. 보고서의 순차적 나열 대신, '문제 제기 → 솔루션 제시 → 투자자 맞춤 시너지 분석 → 위험 관리 → 파트너십 제안'의 흐름으로 정보를 재구성했습니다. 이 구조는 잠재적 투자자(새마을금고)가 프로그램의 필요성, 작동 방식, 그리고 자신들과의 전략적 부합성을 직관적으로 이해하고, 최종적으로 투자를 긍정적으로 검토하도록 유도하는 것을 목표로 합니다. 각 섹션은 상호작용을 통해 사용자가 능동적으로 정보를 탐색하도록 설계되어, 내용에 대한 깊은 몰입과 이해를 돕습니다. -->
+    <!-- Visualization & Content Choices: 
+        - [문제 현황] -> 목표: 심각성 전달 -> 시각화: 도넛/막대 차트 (Chart.js/Canvas) -> 상호작용: 툴팁 정보 -> 정당성: 통계 데이터를 시각적으로 강조하여 문제의 규모를 즉각적으로 인지시킴.
+        - [프로그램 단계] -> 목표: 복잡한 프로세스 설명 -> 시각화: 인터랙티브 플로우차트 (HTML/CSS) -> 상호작용: 단계별 클릭 시 상세 내용 표시 -> 정당성: 다단계 프로그램을 시각적으로 단순화하고, 사용자가 단계별로 정보를 소화할 수 있도록 하여 이해도를 높임.
+        - [새마을금고와의 시너지] -> 목표: 맞춤형 가치 제안 -> 시각화: 탭 인터페이스 (HTML/CSS) -> 상호작용: 탭 클릭 시 관련 내용 전환 -> 정당성: 투자자의 핵심 관심사(설립목적, ESG, 네트워크)에 부합하는 내용을 명확히 분리하여 제시함으로써 제안의 설득력을 극대화함.
+        - [위험과 해결책] -> 목표: 신뢰성 확보 -> 시각화: 그리드 레이아웃 (HTML/CSS) -> 상호작용: 없음 (명확한 정보 전달에 집중) -> 정당성: 잠재적 우려사항을 선제적으로 제시하고 해결책을 병기하여 투명성과 신뢰도를 높임. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #FDFBF6; color: #3C3633; }
+        .chart-container { position: relative; width: 100%; max-width: 450px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; max-height: 400px; } }
+        .tab-button.active { border-color: #7A9D54; background-color: #7A9D54; color: #FDFBF6; }
+        .flow-step.active { background-color: #E0A75E; color: #FDFBF6; }
+        .flow-content {
+            transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .flow-content.visible { max-height: 1000px; opacity: 1; }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-[#FDFBF6]">
+
+    <header class="p-4 sticky top-0 bg-[#FDFBF6]/80 backdrop-blur-sm z-50 border-b border-[#E0A75E]/30">
+        <nav class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#7A9D54]">Next ETA 프로그램</h1>
+            <ul class="flex space-x-2 md:space-x-4 text-sm md:text-base">
+                <li><a href="#opportunity" class="hover:text-[#E0A75E] transition-colors">문제와 기회</a></li>
+                <li><a href="#solution" class="hover:text-[#E0A75E] transition-colors">솔루션</a></li>
+                <li><a href="#synergy" class="hover:text-[#E0A75E] transition-colors">시너지</a></li>
+                <li><a href="#partnership" class="hover:text-[#E0A75E] transition-colors">파트너십</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="hero" class="text-center py-16 md:py-24 section-fade-in">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+                지역 경제의 미래, <span class="text-[#7A9D54]">새로운 세대</span>에게
+            </h2>
+            <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+                소멸 위기에 처한 우량 중소기업과 열정 있는 청년 창업가를 연결하여, 지속가능한 성장의 선순환을 만듭니다. Next ETA 프로그램은 새마을금고와 함께 지역사회에 새로운 활력을 불어넣고자 합니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto my-12">
+                <div class="p-6 bg-white/50 rounded-lg shadow-md border border-gray-200">
+                    <p class="text-4xl font-bold text-[#E0A75E]" id="ceo-age-stat">33.5%</p>
+                    <p class="text-gray-600 mt-2">60세 이상 중소기업 CEO</p>
+                </div>
+                <div class="p-6 bg-white/50 rounded-lg shadow-md border border-gray-200">
+                    <p class="text-4xl font-bold text-[#E0A75E]" id="succession-stat">48.2%</p>
+                    <p class="text-gray-600 mt-2">후계자 부재 또는 매각 고려</p>
+                </div>
+                <div class="p-6 bg-white/50 rounded-lg shadow-md border border-gray-200">
+                    <p class="text-4xl font-bold text-[#E0A75E]" id="demand-stat">21만+</p>
+                    <p class="text-gray-600 mt-2">M&A형 사업승계 잠재 수요 기업</p>
+                </div>
+            </div>
+            <a href="#solution" class="bg-[#7A9D54] text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-[#688a4a] transition-all transform hover:scale-105">
+                프로그램 심층 분석 보기
+            </a>
+        </section>
+
+        <section id="opportunity" class="py-16 md:py-24 section-fade-in">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl md:text-4xl font-bold">침묵의 위기, 거대한 기회</h3>
+                <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">대한민국 경제의 근간인 중소기업이 흔들리고 있습니다. 경영자의 고령화와 후계자 부재는 수많은 우량 기업을 소멸 위기로 내몰고 있지만, 이는 동시에 새로운 세대에게는 검증된 사업을 인수하여 성공할 수 있는 절호의 기회입니다.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="p-4 md:p-8 bg-white/60 rounded-lg shadow-lg border border-gray-200">
+                    <h4 class="text-xl font-bold text-center mb-4">후계자 부재 현황</h4>
+                    <div class="chart-container">
+                        <canvas id="successionChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4 text-sm">절반에 가까운 기업들이 다음 세대로의 경영권 이전에 어려움을 겪고 있습니다.</p>
+                </div>
+                <div class="p-4 md:p-8 bg-white/60 rounded-lg shadow-lg border border-gray-200">
+                    <h4 class="text-xl font-bold text-center mb-4">고령 CEO 비중 증가</h4>
+                     <div class="chart-container">
+                        <canvas id="agingCeoChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4 text-sm">지난 10년간 60세 이상 CEO 비중이 2배 이상 증가하며 사업 승계 문제를 가속화하고 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-16 md:py-24 section-fade-in">
+             <div class="text-center mb-12">
+                <h3 class="text-3xl md:text-4xl font-bold">Next ETA: 준비된 성공을 향한 여정</h3>
+                <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">ETA(기업 인수 창업)는 제로베이스 창업의 불확실성을 줄이고, 이미 검증된 비즈니스를 기반으로 성공 가능성을 극대화하는 혁신적인 창업 모델입니다. Next ETA 프로그램은 이 여정의 모든 단계를 체계적으로 지원합니다.</p>
+            </div>
+            
+            <div id="flow-container" class="w-full max-w-5xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between mb-4 rounded-lg bg-gray-200/50 p-2">
+                    <button data-target="flow-1" class="flow-step flex-1 text-center font-semibold p-3 rounded-md transition-all duration-300">1단계: 모집 및 선발</button>
+                    <div class="self-center mx-2 text-[#E0A75E] text-2xl hidden md:block">&rarr;</div>
+                    <button data-target="flow-2" class="flow-step flex-1 text-center font-semibold p-3 rounded-md transition-all duration-300">2단계: 역량 강화 및 실행</button>
+                     <div class="self-center mx-2 text-[#E0A75E] text-2xl hidden md:block">&rarr;</div>
+                    <button data-target="flow-3" class="flow-step flex-1 text-center font-semibold p-3 rounded-md transition-all duration-300">3단계: PMI 및 성장 지원</button>
+                </div>
+
+                <div id="flow-content-container" class="mt-6">
+                    <div id="flow-1" class="flow-content bg-white/70 p-8 rounded-lg shadow-inner border border-gray-200">
+                        <h4 class="text-2xl font-bold text-[#7A9D54] mb-4">1단계: 잠재력 있는 인재 발굴</h4>
+                        <p class="mb-4">성공적인 기업가로 성장할 잠재력을 가진 예비 창업가를 발굴하고 선발합니다. 정량적 평가와 함께 성장 의지, 리더십, 문제 해결 능력 등 정성적 측면을 종합적으로 심사합니다.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">모집 대상:</span> 기업 인수를 통해 창업을 희망하는 모든 예비 창업가</li>
+                            <li><span class="font-semibold">모집 인원:</span> 기수별 100명 (연 2회 운영)</li>
+                            <li><span class="font-semibold">선발 기준:</span> 경영 역량, 산업 이해도, 성장 잠재력, 윤리성</li>
+                        </ul>
+                    </div>
+                    <div id="flow-2" class="flow-content bg-white/70 p-8 rounded-lg shadow-inner border border-gray-200">
+                        <h4 class="text-2xl font-bold text-[#7A9D54] mb-4">2단계: ETA 전문가로의 전환</h4>
+                        <p class="mb-4">M&A 및 기업 경영에 필요한 모든 것을 담은 체계적인 교육과 전문가 멘토링을 제공합니다. 실제 딜 소싱부터 실사, 가치평가, 계약 협상까지 전 과정을 밀착 지원하여 성공적인 인수를 돕습니다.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">핵심 교육:</span> M&A 전략, 재무 분석, 기업가치 평가, PMI 전략, DX 전략</li>
+                            <li><span class="font-semibold">실행 지원:</span> 우량 매물 발굴 및 매칭, 실사(DD) 지원, 투자유치계획서(IR) 작성</li>
+                            <li><span class="font-semibold">자금 조달:</span> 인수금융 연계, M&A 펀드를 통한 투자 유치 지원</li>
+                        </ul>
+                    </div>
+                     <div id="flow-3" class="flow-content bg-white/70 p-8 rounded-lg shadow-inner border border-gray-200">
+                        <h4 class="text-2xl font-bold text-[#7A9D54] mb-4">3단계: 인수를 넘어 지속 가능한 성장으로</h4>
+                        <p class="mb-4">M&A의 성공은 인수가 끝이 아닌 시작입니다. 인수 후 통합(PMI) 과정의 리스크를 최소화하고, 기업이 안정적으로 성장 궤도에 오를 수 있도록 장기적인 관점에서 지원을 이어갑니다.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">PMI 지원:</span> 조직 안정화, 사업 시너지 창출 전략, 운영 효율화 컨설팅</li>
+                            <li><span class="font-semibold">성장 지원:</span> 후속 투자 유치, 정부 R&D 사업 연계, 필요시 글로벌 진출 지원</li>
+                            <li><span class="font-semibold">네트워킹:</span> 선배 ETA 창업가 및 산업 전문가와의 지속적인 교류 기회 제공</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="synergy" class="py-16 md:py-24 section-fade-in">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl md:text-4xl font-bold">새마을금고와 ETA: 함께 만드는 상생의 가치</h3>
+                <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">ETA 프로그램은 새마을금고의 설립 이념과 전략적 방향에 완벽하게 부합합니다. 이는 단순한 투자를 넘어, 지역사회와 새마을금고가 함께 성장하는 새로운 모델을 제시합니다.</p>
+            </div>
+             <div class="w-full max-w-4xl mx-auto">
+                <div class="flex flex-wrap justify-center border-b-2 border-gray-300 mb-4">
+                    <button class="tab-button text-base md:text-lg font-medium py-3 px-6 border-b-4 border-transparent hover:border-[#E0A75E] transition-colors" data-target="tab-1">설립 목적 부합</button>
+                    <button class="tab-button text-base md:text-lg font-medium py-3 px-6 border-b-4 border-transparent hover:border-[#E0A75E] transition-colors" data-target="tab-2">ESG 경영 강화</button>
+                    <button class="tab-button text-base md:text-lg font-medium py-3 px-6 border-b-4 border-transparent hover:border-[#E0A75E] transition-colors" data-target="tab-3">네트워크 가치 극대화</button>
+                    <button class="tab-button text-base md:text-lg font-medium py-3 px-6 border-b-4 border-transparent hover:border-[#E0A75E] transition-colors" data-target="tab-4">미래 성장 동력 확보</button>
+                </div>
+                <div id="tab-content-container" class="p-4 md:p-6 bg-white/50 rounded-lg">
+                    <div id="tab-1" class="tab-content">
+                        <h4 class="text-xl font-bold mb-3 text-[#7A9D54]">지역 경제의 파수꾼, 중소기업의 동반자</h4>
+                        <p>ETA 프로그램은 소멸 위기 기업을 살려 지역의 일자리를 지키고 경제 기반을 안정시킵니다. 이는 '참여와 협동으로 풍요로운 생활공동체 창조'라는 새마을금고의 핵심 가치를 실현하는 가장 직접적인 방법입니다. 지역 중소기업의 존속은 곧 회원들의 삶의 안정과 직결됩니다.</p>
+                    </div>
+                    <div id="tab-2" class="tab-content hidden">
+                         <h4 class="text-xl font-bold mb-3 text-[#7A9D54]">가치를 행동으로, ESG 리더십 강화</h4>
+                        <p>일자리 보전, 지역 경제 활성화, 청년 기업가 육성은 새마을금고 ESG 경영의 사회적(Social) 가치를 실현하는 핵심적인 활동입니다. ETA 프로그램은 구체적이고 측정 가능한 ESG 성과를 창출하여, 새마을금고의 사회적 책임 이행을 대내외에 명확히 보여주는 강력한 사례가 될 것입니다.</p>
+                    </div>
+                    <div id="tab-3" class="tab-content hidden">
+                         <h4 class="text-xl font-bold mb-3 text-[#7A9D54]">전국 네트워크에 새로운 가치를 더하다</h4>
+                        <p>전국 1,295개 금고 네트워크는 ETA 프로그램의 성공을 위한 가장 강력한 자산입니다. 지역 금고는 M&A 대상 기업 및 예비 창업가 발굴의 최전선 기지가 될 수 있습니다. 이는 새마을금고가 단순한 금융기관을 넘어, 지역 산업 생태계의 핵심 코디네이터로 자리매김하는 기회입니다.</p>
+                    </div>
+                    <div id="tab-4" class="tab-content hidden">
+                         <h4 class="text-xl font-bold mb-3 text-[#7A9D54]">사회적 가치와 재무적 성과의 선순환</h4>
+                        <p>ETA 프로그램은 사회적 명분과 함께 재무적 지속가능성을 추구합니다. 성공적으로 성장한 인수 기업들은 새마을금고의 새로운 우량 고객이 됩니다. 또한 인수금융, M&A 펀드 투자 등을 통해 새로운 수익원을 창출하며 사회적 투자와 재무적 성과가 함께 성장하는 선순환 구조를 만들 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="risk" class="py-16 md:py-24 bg-[#7A9D54]/5 rounded-lg section-fade-in">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl md:text-4xl font-bold">예상되는 우려와 우리의 해결책</h3>
+                <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">새로운 도전에는 항상 위험이 따릅니다. 우리는 잠재적 위험을 명확히 인지하고 있으며, 이를 관리하기 위한 체계적인 해결책을 마련했습니다.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h4 class="text-lg font-bold mb-2">🚨 재무적 리스크</h4>
+                    <p class="text-gray-600 mb-4 text-sm">인수 기업의 성장 실패 또는 프로그램의 재정적 지속가능성 문제.</p>
+                    <div class="bg-green-100/50 p-4 rounded">
+                        <h5 class="font-semibold text-green-800">💡 해결책</h5>
+                        <p class="text-green-700 text-sm mt-1">안정적 현금흐름을 창출하는 기업을 엄선하고, 명확한 KPI 설정 및 단계별 성과 연동 인센티브를 통해 재무 건전성을 확보합니다.</p>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h4 class="text-lg font-bold mb-2">🚨 운영 리스크 (PMI 실패)</h4>
+                    <p class="text-gray-600 mb-4 text-sm">M&A의 가장 큰 실패 원인인 인수 후 통합 과정에서의 갈등과 비효율.</p>
+                     <div class="bg-green-100/50 p-4 rounded">
+                        <h5 class="font-semibold text-green-800">💡 해결책</h5>
+                        <p class="text-green-700 text-sm mt-1">PMI 특화 교육 및 전문가 컨설팅을 통해 조직 문화 통합과 운영 시너지를 극대화하는 체계적인 지원을 제공합니다.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h4 class="text-lg font-bold mb-2">🚨 평판 리스크</h4>
+                    <p class="text-gray-600 mb-4 text-sm">프로그램의 성과 부진이 투자 기관의 평판에 미칠 수 있는 부정적 영향.</p>
+                     <div class="bg-green-100/50 p-4 rounded">
+                        <h5 class="font-semibold text-green-800">💡 해결책</h5>
+                        <p class="text-green-700 text-sm mt-1">새마을금고가 참여하는 자문위원회를 구성하고, 투명한 성과 공개 및 공동 위기관리 전략을 통해 신뢰를 확보합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="partnership" class="py-16 md:py-24 section-fade-in">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl md:text-4xl font-bold">전략적 파트너십: 함께 그리는 미래</h3>
+                <p class="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">새마을금고는 단순한 투자자가 아닌, ETA 생태계를 함께 만들어갈 핵심 파트너입니다. 기관의 전략과 위험 선호도에 맞춰 다양한 방식으로 참여하실 수 있습니다.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="border-2 border-[#E0A75E]/50 p-6 rounded-lg hover:shadow-xl hover:border-[#E0A75E] transition-all">
+                    <h4 class="font-bold text-xl mb-2">재정적 기여자</h4>
+                    <p class="text-gray-600">프로그램 운영 자금을 지원하여 ETA 생태계의 기반을 마련합니다.</p>
+                </div>
+                <div class="border-2 border-[#E0A75E]/50 p-6 rounded-lg hover:shadow-xl hover:border-[#E0A75E] transition-all">
+                    <h4 class="font-bold text-xl mb-2">인수 금융 제공자</h4>
+                    <p class="text-gray-600">성공 가능성 높은 예비 창업가에게 인수 자금을 지원합니다.</p>
+                </div>
+                <div class="border-2 border-[#E0A75E]/50 p-6 rounded-lg hover:shadow-xl hover:border-[#E0A75E] transition-all">
+                    <h4 class="font-bold text-xl mb-2">M&A 펀드 투자자</h4>
+                    <p class="text-gray-600">ETA 특화 펀드에 LP로 참여하여 재무적 수익과 사회적 가치를 동시에 추구합니다.</p>
+                </div>
+                <div class="border-2 border-[#E0A75E]/50 p-6 rounded-lg hover:shadow-xl hover:border-[#E0A75E] transition-all">
+                    <h4 class="font-bold text-xl mb-2">네트워크 파트너</h4>
+                    <p class="text-gray-600">전국 지점망을 활용하여 딜 소싱 및 지역 창업가 발굴에 기여합니다.</p>
+                </div>
+                <div class="border-2 border-[#E0A75E]/50 p-6 rounded-lg hover:shadow-xl hover:border-[#E0A75E] transition-all">
+                    <h4 class="font-bold text-xl mb-2">멘토십 제공자</h4>
+                    <p class="text-gray-600">임직원 및 은퇴 회원의 풍부한 경험을 미래 세대에게 전수합니다.</p>
+                </div>
+                 <div class="border-2 border-[#7A9D54] bg-[#7A9D54]/10 p-6 rounded-lg hover:shadow-xl transition-all">
+                    <h4 class="font-bold text-xl mb-2">핵심 전략 파트너</h4>
+                    <p class="text-gray-600">자문위원회 참여 등을 통해 프로그램의 방향성을 함께 설정합니다.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#3C3633] text-[#FDFBF6] py-8">
+        <div class="container mx-auto text-center">
+            <p class="font-bold text-xl mb-2">Next Start-Up ETA Accelerating Program</p>
+            <p>대한민국 지역 경제의 지속 가능한 미래를 위해 함께하겠습니다.</p>
+            <p class="text-sm text-gray-400 mt-4">&copy; 2025 (주)스토리앤데이터. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const successionData = {
+                labels: ['후계자 있음', '후계자 부재 또는 매각 고려'],
+                datasets: [{
+                    label: '후계자 현황',
+                    data: [51.8, 48.2],
+                    backgroundColor: ['#7A9D54', '#E0A75E'],
+                    borderColor: '#FDFBF6',
+                    borderWidth: 2
+                }]
+            };
+
+            const agingCeoData = {
+                labels: ['2012년', '2022년'],
+                datasets: [{
+                    label: '60세 이상 CEO 비중 (%)',
+                    data: [14.1, 33.5],
+                    backgroundColor: ['#A8D08D', '#7A9D54'],
+                    borderColor: '#688a4a',
+                    borderWidth: 1,
+                    barThickness: 50,
+                }]
+            };
+
+            const chartOptions = (title) => ({
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#3C3633',
+                            font: { size: 12 }
+                        }
+                    },
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y + '%';
+                                } else if (context.parsed !== null) {
+                                    label = context.label + ': ' + context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('successionChart'), {
+                type: 'doughnut',
+                data: successionData,
+                options: chartOptions('후계자 현황'),
+            });
+            
+            new Chart(document.getElementById('agingCeoChart'), {
+                type: 'bar',
+                data: agingCeoData,
+                options: {
+                    ...chartOptions('고령 CEO 비중'),
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                color: '#3C3633'
+                            }
+                        },
+                        x: {
+                             ticks: { color: '#3C3633' }
+                        }
+                    }
+                }
+            });
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+            tabButtons[0].click();
+
+
+            const flowSteps = document.querySelectorAll('.flow-step');
+            const flowContents = document.querySelectorAll('.flow-content');
+
+            flowSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const targetId = step.dataset.target;
+                    const targetContent = document.getElementById(targetId);
+
+                    if (step.classList.contains('active')) {
+                        step.classList.remove('active');
+                        targetContent.classList.remove('visible');
+                    } else {
+                        flowSteps.forEach(s => s.classList.remove('active'));
+                        flowContents.forEach(c => c.classList.remove('visible'));
+                        step.classList.add('active');
+                        targetContent.classList.add('visible');
+                    }
+                });
+            });
+            flowSteps[0].click();
+            
+            const sections = document.querySelectorAll('.section-fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
