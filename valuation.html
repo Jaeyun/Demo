@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&A 기업가치 평가 시뮬레이터</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral with Subtle Professional Blue Accent -->
+    <!-- Application Structure Plan: The application is designed as an interactive valuation simulator, guiding the M&A manager through a logical workflow rather than mirroring the report's chapter structure. It starts with an overview, moves to a multi-part calculator for the three core value pillars (Income, Asset, Intangible), and culminates in a synthesis dashboard where values are weighted and scored. This task-oriented flow was chosen because it directly supports the manager's job of performing a valuation, making the complex report actionable and transforming it into a practical tool for client consultation. Key interactions include sliders for variables, real-time chart updates, and dynamic calculation displays, all designed for maximum usability. -->
+    <!-- Visualization & Content Choices: 
+        1. Income Value: Goal: Clarify normalization. Method: Bar chart for EBITDA breakdown. Interaction: Sliders for multiples, inputs for adjustments. Justification: Visually separates reported profit from normalized profit, making adjustments tangible. Library: Chart.js.
+        2. Value Composition: Goal: Show value mix. Method: Donut chart. Interaction: Sliders for weighting each value component update the chart in real time. Justification: Provides an immediate, intuitive understanding of what drives the company's total value. Library: Chart.js.
+        3. Scoring: Goal: Compare valuation to sale price. Method: Gauge-like display and text readouts. Interaction: Input for sale price triggers score calculation. Justification: Translates the report's critique of the old scoring system into a direct comparison with more intuitive metrics (ratio, premium/discount), empowering the manager's analysis. Method: HTML/CSS/JS.
+        All textual content is sourced from the report to provide necessary context within the tool's structured flow.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #F8F9FA; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); transition: all 0.3s ease; }
+        .card:hover { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); transform: translateY(-3px); }
+        .input-base { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; transition: border-color 0.2s, box-shadow 0.2s; }
+        .input-base:focus { outline: none; border-color: #3B82F6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4); }
+        .btn-primary { background-color: #2563EB; color: white; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 500; transition: background-color 0.3s; }
+        .btn-primary:hover { background-color: #1D4ED8; }
+        .section-title { font-size: 1.5rem; font-weight: 700; color: #1F2937; border-left: 4px solid #3B82F6; padding-left: 1rem; margin-bottom: 1.5rem; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        .tab-button { padding: 0.75rem 1rem; font-weight: 500; color: #4B5563; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
+        .tab-button.active { color: #3B82F6; border-bottom-color: #3B82F6; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .value-display { font-size: 2rem; font-weight: 700; color: #3B82F6; }
+        .sub-value { font-size: 1.25rem; font-weight: 600; color: #111827; }
+        .label-text { font-weight: 500; color: #374151; margin-bottom: 0.5rem; display: block; }
+        .slider-track { background: #E5E7EB; }
+        .slider-thumb { background: #3B82F6; }
+        .tooltip { position: relative; display: inline-block; cursor: pointer; }
+        .tooltip .tooltip-text { visibility: hidden; width: 250px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 0.8rem; font-weight: normal; }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .grade-badge { font-weight: 700; font-size: 1.25rem; padding: 0.25rem 0.75rem; border-radius: 0.375rem; color: white; }
+        .grade-a-plus { background-color: #059669; } /* Emerald 600 */
+        .grade-a { background-color: #10B981; } /* Emerald 500 */
+        .grade-b { background-color: #3B82F6; } /* Blue 500 */
+        .grade-c { background-color: #F97316; } /* Orange 500 */
+        .grade-d { background-color: #EF4444; } /* Red 500 */
+        .grade-f { background-color: #B91C1C; } /* Red 700 */
+        .grade-s { background-color: #8B5CF6; } /* Violet 500 */
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-2xl font-bold text-gray-900">📊 M&A 기업가치 평가 시뮬레이터</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section id="intro" class="mb-12">
+            <div class="card p-6 md:p-8">
+                <h2 class="section-title">시스템 개요</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    본 시뮬레이터는 M&A 중개 플랫폼 매니저를 위해 설계된 대화형 기업가치 평가 도구입니다. 보고서에서 제안된 개선된 평가 프레임워크에 기반하여, 기업의 가치를 보다 체계적이고 객관적으로 분석할 수 있도록 지원합니다. 수익가치, 자산가치, 기술/무형자산 가치의 3가지 핵심 요소를 종합적으로 평가하고, 이를 통해 산출된 기업가치를 희망 판매가와 비교하여 거래 매력도를 다각적으로 검토할 수 있습니다.
+                </p>
+            </div>
+        </section>
+        
+        <div id="calculator" class="card p-6 md:p-8 mb-12">
+            <h2 class="section-title">기업가치 계산기</h2>
+            
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="flex -mb-px space-x-4" aria-label="Tabs">
+                    <button id="tab-btn-income" class="tab-button active">1. 수익가치</button>
+                    <button id="tab-btn-asset" class="tab-button">2. 자산가치</button>
+                    <button id="tab-btn-intangible" class="tab-button">3. 기술/무형자산 가치</button>
+                </nav>
+            </div>
+
+            <div id="tab-content-income" class="tab-content active">
+                <p class="text-gray-600 mb-6">기업의 지속 가능한 현금흐름 창출 능력을 평가합니다. 보고된 영업이익을 기반으로 비경상적 항목들을 조정한 '정상화된 EBITDA'와 산업별 배수를 사용하여 수익가치를 산출합니다.</p>
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="operating-profit" class="label-text">최근 연간 영업이익 (억원)</label>
+                                <input type="number" id="operating-profit" class="input-base" placeholder="예: 10" value="10">
+                            </div>
+                            <div>
+                                <label for="depreciation" class="label-text">유/무형자산 상각비 (억원)</label>
+                                <input type="number" id="depreciation" class="input-base" placeholder="예: 2" value="2">
+                            </div>
+                            <div class="pt-2">
+                                <span class="label-text">정상화 조정 항목 (억원)
+                                    <span class="tooltip">ⓘ<span class="tooltip-text">소유주 관련 비용, 비경상적 손익 등 기업의 본질적 수익력과 무관한 항목을 조정하여 지속가능한 이익을 추정합니다.</span></span>
+                                </span>
+                                <div class="space-y-2 mt-2">
+                                     <div class="flex items-center justify-between">
+                                        <label for="owner-salary-adj">소유주 시장초과급여</label>
+                                        <input type="number" id="owner-salary-adj" class="input-base w-32 text-right" value="1">
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <label for="non-recurring-exp">비경상적 비용</label>
+                                        <input type="number" id="non-recurring-exp" class="input-base w-32 text-right" value="0.5">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-2">
+                                <label for="industry-multiple" class="label-text">산업별 EV/EBITDA 배수: <span id="multiple-value" class="font-bold text-blue-600">4.0</span>x</label>
+                                <input type="range" id="industry-multiple" min="1" max="10" step="0.1" value="4" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-track">
+                            </div>
+                        </div>
+                        <div class="mt-8 bg-blue-50 p-6 rounded-lg text-center">
+                            <span class="text-lg text-gray-700 block">산출된 수익가치</span>
+                            <p id="income-value-result" class="value-display">0.0 억원</p>
+                        </div>
+                    </div>
+                    <div class="h-full">
+                        <div class="chart-container">
+                            <canvas id="income-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-content-asset" class="tab-content">
+                 <p class="text-gray-600 mb-6">기업의 자산을 공정시장가치로 재평가하고 부채를 차감하여 순자산가치를 산출합니다 (ANAV). 이는 기업의 청산가치에 가까운 하방 가치를 제시합니다.</p>
+                 <div class="space-y-4">
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
+                        <h4 class="md:col-span-3 font-semibold text-lg text-gray-700 mb-2">자산 항목 (억원)</h4>
+                        <div>
+                            <label for="current-assets" class="label-text">유동자산 (장부가)</label>
+                            <input type="number" id="current-assets" class="input-base" value="50">
+                        </div>
+                        <div>
+                            <label for="current-assets-adj" class="label-text">유동자산 조정액
+                                <span class="tooltip">ⓘ<span class="tooltip-text">매출채권 대손, 재고자산 진부화 등을 반영한 조정 금액입니다. (감액 시 음수 입력)</span></span>
+                            </label>
+                            <input type="number" id="current-assets-adj" class="input-base" value="-5">
+                        </div>
+                        <div class="self-end pb-2 font-bold text-lg">= <span id="current-assets-fmv">45.0</span></div>
+                        
+                        <div>
+                            <label for="non-current-assets" class="label-text">비유동자산 (장부가)</label>
+                            <input type="number" id="non-current-assets" class="input-base" value="100">
+                        </div>
+                        <div>
+                           <label for="non-current-assets-adj" class="label-text">비유동자산 조정액
+                                <span class="tooltip">ⓘ<span class="tooltip-text">부동산, 설비 등의 공정시장가치와 장부가의 차이를 반영합니다.</span></span>
+                           </label>
+                           <input type="number" id="non-current-assets-adj" class="input-base" value="20">
+                        </div>
+                        <div class="self-end pb-2 font-bold text-lg">= <span id="non-current-assets-fmv">120.0</span></div>
+                     </div>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
+                        <h4 class="md:col-span-3 font-semibold text-lg text-gray-700 mb-2">부채 항목 (억원)</h4>
+                        <div>
+                            <label for="total-liabilities" class="label-text">총부채 (장부가)</label>
+                            <input type="number" id="total-liabilities" class="input-base" value="80">
+                        </div>
+                        <div>
+                            <label for="liabilities-adj" class="label-text">부채 조정액
+                                <span class="tooltip">ⓘ<span class="tooltip-text">우발부채 등 장부에 기록되지 않은 부채를 반영합니다.</span></span>
+                            </label>
+                            <input type="number" id="liabilities-adj" class="input-base" value="10">
+                        </div>
+                         <div class="self-end pb-2 font-bold text-lg">= <span id="total-liabilities-fmv">90.0</span></div>
+                     </div>
+                     <div class="mt-8 bg-green-50 p-6 rounded-lg text-center">
+                        <span class="text-lg text-gray-700 block">조정 순자산가치 (ANAV)</span>
+                        <p id="asset-value-result" class="value-display">0.0 억원</p>
+                    </div>
+                 </div>
+            </div>
+
+            <div id="tab-content-intangible" class="tab-content">
+                <p class="text-gray-600 mb-6">수익으로 직접 표현되지 않는 무형자산(기술, 브랜드, 고객관계 등)의 가치를 평가합니다. 수익가치와 중복 계산되지 않도록 주의가 필요합니다.</p>
+                <div class="space-y-6">
+                    <div>
+                        <label for="tech-value" class="label-text">핵심 기술/특허 가치 (억원)
+                             <span class="tooltip">ⓘ<span class="tooltip-text">로열티 면제법(RRM) 등을 활용하여, 해당 기술이 창출하는 미래 경제적 효익을 추정합니다.</span></span>
+                        </label>
+                        <input type="number" id="tech-value" class="input-base" value="15">
+                    </div>
+                    <div>
+                        <label for="brand-value" class="label-text">브랜드/상표 가치 (억원)
+                            <span class="tooltip">ⓘ<span class="tooltip-text">브랜드 인지도가 초과이익에 기여하는 부분을 평가합니다. 수익가치에 이미 반영된 부분을 제외해야 합니다.</span></span>
+                        </label>
+                        <input type="number" id="brand-value" class="input-base" value="5">
+                    </div>
+                    <div>
+                        <label for="customer-value" class="label-text">고객 관계/데이터베이스 가치 (억원)
+                             <span class="tooltip">ⓘ<span class="tooltip-text">안정적인 고객 기반, 구독 모델 등에서 발생하는 가치를 평가합니다.</span></span>
+                        </label>
+                        <input type="number" id="customer-value" class="input-base" value="10">
+                    </div>
+                     <div class="mt-8 bg-yellow-50 p-6 rounded-lg text-center">
+                        <span class="text-lg text-gray-700 block">총 기술/무형자산 가치</span>
+                        <p id="intangible-value-result" class="value-display">0.0 억원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="synthesis" class="mb-12">
+            <div class="card p-6 md:p-8">
+                <h2 class="section-title">종합 기업가치 및 점수화</h2>
+                <p class="text-gray-600 mb-6">산출된 세 가지 가치를 종합하여 최종 기업가치를 도출하고, 희망 판매가와 비교하여 거래 매력도를 점수화합니다. 이제 종합 기업가치는 각 가치의 단순 합계로 계산됩니다.</p>
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div>
+                        <div class="bg-indigo-50 p-6 rounded-lg text-center mb-8">
+                            <span class="text-lg text-gray-700 block">종합 기업가치 (단순 합계)</span>
+                            <p id="total-value-result" class="value-display">0.0 억원</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="sale-price" class="label-text">희망 판매가 (억원)</label>
+                                <input type="number" id="sale-price" class="input-base" value="100">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-center p-4 border rounded-lg mt-4">
+                                <div>
+                                    <span class="block text-sm text-gray-500">가치/가격 비율</span>
+                                    <p id="value-price-ratio" class="sub-value">1.00</p>
+                                </div>
+                                <div>
+                                    <span class="block text-sm text-gray-500">프리미엄/할인율</span>
+                                    <p id="premium-discount" class="sub-value">0.0%</p>
+                                </div>
+                            </div>
+                             <div class="text-center p-4 border rounded-lg mt-4">
+                                <span class="block text-sm text-gray-500">거래 매력도 점수</span>
+                                <div class="flex items-center justify-center gap-4 mt-2">
+                                    <p id="deal-score" class="text-3xl font-bold text-gray-800">70.0</p>
+                                    <span id="deal-grade" class="grade-badge grade-b">B</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="h-full">
+                        <div class="chart-container">
+                             <canvas id="synthesis-chart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-gray-500 mt-2">기업가치 구성 비율</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-12 py-6">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm">© 2025 M&A Valuation Platform. All Rights Reserved.</p>
+            <p class="text-xs text-gray-400 mt-2">면책 조항: 본 시뮬레이터가 제공하는 결과는 입력된 정보와 일반적인 방법론에 기반한 추정치이며, 실제 거래 가격과 다를 수 있습니다. 투자 결정은 본 자료에만 의존해서는 안 됩니다.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const valuationData = {
+                income: {
+                    operatingProfit: 10,
+                    depreciation: 2,
+                    ownerSalaryAdj: 1,
+                    nonRecurringExp: 0.5,
+                    multiple: 4.0,
+                    normalizedEBITDA: 0,
+                    value: 0,
+                },
+                asset: {
+                    currentAssets: 50,
+                    currentAssetsAdj: -5,
+                    nonCurrentAssets: 100,
+                    nonCurrentAssetsAdj: 20,
+                    totalLiabilities: 80,
+                    liabilitiesAdj: 10,
+                    value: 0,
+                },
+                intangible: {
+                    tech: 15,
+                    brand: 5,
+                    customer: 10,
+                    value: 0,
+                },
+                synthesis: {
+                    totalValue: 0,
+                    salePrice: 100,
+                    score: 0,
+                    grade: 'N/A'
+                }
+            };
+
+            const formatCurrency = (value) => {
+                if (isNaN(value) || !isFinite(value)) return '0.0 억원';
+                return `${value.toFixed(1)} 억원`;
+            }
+
+            const getEl = (id) => document.getElementById(id);
+
+            let incomeChart, synthesisChart;
+
+            function setupEventListeners() {
+                const inputs = document.querySelectorAll('input[type="number"], input[type="range"]');
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        updateAll();
+                    });
+                });
+
+                const tabButtons = document.querySelectorAll('.tab-button');
+                const tabContents = document.querySelectorAll('.tab-content');
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        button.classList.add('active');
+                        getEl(`tab-content-${button.id.split('-')[2]}`).classList.add('active');
+                    });
+                });
+            }
+            
+            function updateAll() {
+                readInputs();
+                calculateValues();
+                updateUI();
+                updateCharts();
+            }
+
+            function readInputs() {
+                valuationData.income.operatingProfit = parseFloat(getEl('operating-profit').value) || 0;
+                valuationData.income.depreciation = parseFloat(getEl('depreciation').value) || 0;
+                valuationData.income.ownerSalaryAdj = parseFloat(getEl('owner-salary-adj').value) || 0;
+                valuationData.income.nonRecurringExp = parseFloat(getEl('non-recurring-exp').value) || 0;
+                valuationData.income.multiple = parseFloat(getEl('industry-multiple').value) || 0;
+                
+                valuationData.asset.currentAssets = parseFloat(getEl('current-assets').value) || 0;
+                valuationData.asset.currentAssetsAdj = parseFloat(getEl('current-assets-adj').value) || 0;
+                valuationData.asset.nonCurrentAssets = parseFloat(getEl('non-current-assets').value) || 0;
+                valuationData.asset.nonCurrentAssetsAdj = parseFloat(getEl('non-current-assets-adj').value) || 0;
+                valuationData.asset.totalLiabilities = parseFloat(getEl('total-liabilities').value) || 0;
+                valuationData.asset.liabilitiesAdj = parseFloat(getEl('liabilities-adj').value) || 0;
+
+                valuationData.intangible.tech = parseFloat(getEl('tech-value').value) || 0;
+                valuationData.intangible.brand = parseFloat(getEl('brand-value').value) || 0;
+                valuationData.intangible.customer = parseFloat(getEl('customer-value').value) || 0;
+                
+                valuationData.synthesis.salePrice = parseFloat(getEl('sale-price').value) || 0;
+            }
+
+            function calculateValues() {
+                const { income, asset, intangible, synthesis } = valuationData;
+                
+                income.normalizedEBITDA = income.operatingProfit + income.depreciation + income.ownerSalaryAdj + income.nonRecurringExp;
+                income.value = income.normalizedEBITDA * income.multiple;
+                
+                const totalAssetsFMV = (asset.currentAssets + asset.currentAssetsAdj) + (asset.nonCurrentAssets + asset.nonCurrentAssetsAdj);
+                const totalLiabilitiesFMV = asset.totalLiabilities + asset.liabilitiesAdj;
+                asset.value = Math.max(0, totalAssetsFMV - totalLiabilitiesFMV);
+                
+                intangible.value = Math.max(0, intangible.tech + intangible.brand + intangible.customer);
+                
+                income.value = Math.max(0, income.value);
+
+                synthesis.totalValue = income.value + asset.value + intangible.value;
+
+                // Calculate Score and Grade
+                if (synthesis.salePrice > 0) {
+                    synthesis.score = (synthesis.totalValue / synthesis.salePrice) * 70;
+                } else {
+                    synthesis.score = 0;
+                }
+
+                if (synthesis.score >= 100) synthesis.grade = 'S';
+                else if (synthesis.score >= 90) synthesis.grade = 'A';
+                else if (synthesis.score >= 70) synthesis.grade = 'B';
+                else if (synthesis.score >= 35) synthesis.grade = 'C';
+                else if (synthesis.score >= 10) synthesis.grade = 'D';
+                else synthesis.grade = 'F';
+
+                if (!isFinite(synthesis.score)) {
+                    synthesis.score = 0;
+                    synthesis.grade = 'N/A';
+                }
+            }
+
+            function updateUI() {
+                const { income, asset, intangible, synthesis } = valuationData;
+
+                getEl('multiple-value').textContent = income.multiple.toFixed(1);
+                getEl('income-value-result').textContent = formatCurrency(income.value);
+
+                getEl('current-assets-fmv').textContent = (asset.currentAssets + asset.currentAssetsAdj).toFixed(1);
+                getEl('non-current-assets-fmv').textContent = (asset.nonCurrentAssets + asset.nonCurrentAssetsAdj).toFixed(1);
+                getEl('total-liabilities-fmv').textContent = (asset.totalLiabilities + asset.liabilitiesAdj).toFixed(1);
+                getEl('asset-value-result').textContent = formatCurrency(asset.value);
+
+                getEl('intangible-value-result').textContent = formatCurrency(intangible.value);
+
+                getEl('total-value-result').textContent = formatCurrency(synthesis.totalValue);
+
+                const ratio = synthesis.salePrice > 0 ? (synthesis.totalValue / synthesis.salePrice) : 0;
+                const premium = synthesis.totalValue > 0 ? ((synthesis.salePrice - synthesis.totalValue) / synthesis.totalValue * 100) : 0;
+
+                getEl('value-price-ratio').textContent = isFinite(ratio) ? ratio.toFixed(2) : 'N/A';
+                getEl('premium-discount').textContent = isFinite(premium) ? `${premium.toFixed(1)}%` : 'N/A';
+
+                // Update Score and Grade UI
+                getEl('deal-score').textContent = synthesis.score.toFixed(1);
+                const gradeEl = getEl('deal-grade');
+                gradeEl.textContent = synthesis.grade;
+
+                gradeEl.className = 'grade-badge'; // Reset classes
+                switch(synthesis.grade) {
+                    case 'S': gradeEl.classList.add('grade-s'); break;
+                    case 'A': gradeEl.classList.add('grade-a'); break;
+                    case 'B': gradeEl.classList.add('grade-b'); break;
+                    case 'C': gradeEl.classList.add('grade-c'); break;
+                    case 'D': gradeEl.classList.add('grade-d'); break;
+                    case 'F': gradeEl.classList.add('grade-f'); break;
+                }
+            }
+
+            function createIncomeChart() {
+                const ctx = getEl('income-chart').getContext('2d');
+                incomeChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['영업이익', '상각비', '급여조정', '비용조정', '정상화 EBITDA'],
+                        datasets: [{
+                            label: '금액 (억원)',
+                            data: [],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(255, 159, 64, 0.6)',
+                                'rgba(255, 99, 132, 0.8)',
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 99, 132, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: '정상화 EBITDA 계산 과정', font: { size: 16 } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw.toFixed(1)} 억원`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: '금액 (억원)' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function createSynthesisChart() {
+                const ctx = getEl('synthesis-chart').getContext('2d');
+                synthesisChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['수익가치', '자산가치', '기술/무형자산 가치'],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: ['#3B82F6', '#10B981', '#F59E0B'],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.chart.getDatasetMeta(0).total;
+                                        const percentage = total > 0 ? (value / total * 100).toFixed(1) : 0;
+                                        return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function updateCharts() {
+                const { income, asset, intangible, synthesis } = valuationData;
+                
+                if (incomeChart) {
+                    incomeChart.data.datasets[0].data = [
+                        income.operatingProfit,
+                        income.depreciation,
+                        income.ownerSalaryAdj,
+                        income.nonRecurringExp,
+                        income.normalizedEBITDA
+                    ];
+                    incomeChart.update();
+                }
+
+                if (synthesisChart) {
+                    const totalValue = synthesis.totalValue;
+                     synthesisChart.data.datasets[0].data = totalValue > 0 ? [
+                        income.value,
+                        asset.value,
+                        intangible.value
+                    ] : [1, 1, 1];
+                    synthesisChart.update();
+                }
+            }
+            
+            createIncomeChart();
+            createSynthesisChart();
+            setupEventListeners();
+            updateAll();
+        });
+    </script>
+</body>
+</html>
