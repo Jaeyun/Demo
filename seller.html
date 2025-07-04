@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리스팅 서비스 매각 절차 안내</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* listing.co Brand Theme (Orange) */
+        :root {
+            --brand-primary: #FA541C; /* Signature Orange */
+            --brand-dark: #1F2937;    /* Dark Charcoal for text/headers */
+            --background-main: #F9FAFB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --border-color: #E5E7EB;
+        }
+
+        body { 
+            font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            background-color: var(--background-main); 
+            color: var(--text-primary);
+        }
+
+        .guide-card { 
+            background-color: white; 
+            border-radius: 0.75rem; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .guide-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -2px rgb(0 0 0 / 0.07); 
+        }
+
+        .step-header { 
+            border-bottom: 2px solid var(--brand-primary); 
+            padding-bottom: 1rem; 
+            margin-bottom: 1.5rem; 
+            display: flex; 
+            align-items: center; 
+        }
+        .step-title { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: var(--text-primary); 
+        }
+        .step-icon { 
+            font-size: 1.75rem; 
+            color: var(--brand-primary); 
+            margin-right: 1rem; 
+        }
+
+        .task-item { display: flex; align-items: flex-start; padding: 0.75rem 0; }
+        .task-item .icon { 
+            color: var(--text-secondary); 
+            width: 1.5rem; 
+            text-align: center; 
+            margin-top: 0.2rem; 
+            font-size: 1.1rem; 
+        }
+        .task-item .content { flex: 1; margin-left: 1rem; }
+        .task-item p { color: var(--text-secondary); }
+        .task-item .font-semibold { color: var(--text-primary); }
+
+        .action-button { 
+            display: inline-block;
+            background-color: var(--brand-primary); 
+            color: white; 
+            padding: 0.6rem 1.2rem; 
+            border-radius: 0.375rem; 
+            font-weight: 500; 
+            text-align: center;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 0.5rem;
+        }
+        .action-button:hover { 
+            background-color: #D94A17; /* Darker Orange */
+            transform: translateY(-2px);
+        }
+
+        .highlight-banner {
+            background-color: #FFF7ED; /* Light Orange */
+            border: 1px solid #FFDAB9; /* Lighter Orange */
+        }
+        .highlight-banner .icon {
+            color: var(--brand-primary);
+        }
+        .highlight-banner .title {
+            color: var(--brand-dark);
+        }
+        .highlight-banner .description {
+            color: var(--text-secondary);
+        }
+        .highlight { color: var(--brand-primary); font-weight: 600; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold" style="color: var(--text-primary);">대표님의 성공적인 매각을 위한 여정</h1>
+            <p class="mt-3 text-lg" style="color: var(--text-secondary);">'리스팅' 서비스 가입을 환영합니다! 지금부터 전문 매니저와 함께 투명하고 체계적인 매각 절차를 시작합니다.</p>
+        </header>
+
+        <div class="highlight-banner rounded-lg p-6 mb-12 text-center">
+             <div class="flex items-center justify-center">
+                 <i class="fa-brands fa-kickstarter-k fa-2x icon"></i>
+                <p class="ml-4 text-xl font-semibold title">
+                    모든 커뮤니케이션은 <span class="highlight">'리스팅' 카카오톡 채널</span>로 진행됩니다.
+                </p>
+            </div>
+            <p class="mt-2 description">중요 안내, 일정 조율, 자료 공유 외에도 담당 매니저와 자유롭게 채팅하며 궁금한 점을 해소할 수 있습니다.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- STEP 1: 상담 전 준비 -->
+            <div class="guide-card p-6 md:p-8">
+                <div class="step-header">
+                    <i class="fas fa-file-import step-icon"></i>
+                    <h2 class="step-title">STEP 1: 상담 전 준비</h2>
+                </div>
+                <p class="mb-4" style="color: var(--text-secondary);">성공적인 상담을 위해 아래 2가지를 준비해주세요. 이 단계가 완료되어야 다음으로 진행됩니다.</p>
+                <div class="space-y-2">
+                    <div class="task-item">
+                        <div class="icon"><i class="fas fa-pencil-alt"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">회사 핵심 정보 정리</p>
+                            <p class="text-sm">사업 모델, 경쟁력 등 회사의 강점과 비전을 담은 소개 자료를 자유롭게 정리합니다.</p>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <div class="icon"><i class="fas fa-folder-open"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">필수 자료 준비</p>
+                            <p class="text-sm">정확한 가치 평가를 위한 필수 자료(최근 3년 재무제표 등)를 미리 준비합니다. 목록은 카카오톡으로 안내됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: 심층 상담 미팅 -->
+            <div class="guide-card p-6 md:p-8">
+                <div class="step-header">
+                     <i class="fas fa-headset step-icon"></i>
+                    <h2 class="step-title">STEP 2: 심층 상담 미팅</h2>
+                </div>
+                <p class="mb-4" style="color: var(--text-secondary);">조율된 시간에 전문 매니저와 <span class="highlight">약 30분간 심층 상담</span>을 진행합니다. 상담은 화상 미팅 또는 전화로 이루어집니다.</p>
+                <div class="space-y-2">
+                     <div class="task-item">
+                        <div class="icon"><i class="fas fa-comments"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">회사 현황 및 비전 인터뷰</p>
+                            <p class="text-sm">준비해주신 자료를 바탕으로 회사의 강점과 성장 가능성에 대해 깊이 있는 대화를 나눕니다.</p>
+                            <a href="https://congenial-adventure-mrke7e5.pages.github.io/interview.html" target="_blank" class="action-button">인터뷰 질문 예시</a>
+                        </div>
+                    </div>
+                     <div class="task-item">
+                        <div class="icon"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">가치 평가 및 가격 협의</p>
+                            <p class="text-sm">객관적인 데이터에 기반한 기업가치 평가 범위를 공유하고, 대표님의 희망 매각 가격을 논의합니다.</p>
+                        </div>
+                    </div>
+                     <div class="task-item">
+                        <div class="icon"><i class="fas fa-file-signature"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">계약 절차 안내</p>
+                            <p class="text-sm">향후 절차 진행을 위한 플랫폼 이용 계약, 비밀유지계약(NDA), 독점 계약에 대해 안내합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: 매각 준비 및 실행 -->
+            <div class="guide-card p-6 md:p-8">
+                <div class="step-header">
+                    <i class="fas fa-rocket step-icon"></i>
+                    <h2 class="step-title">STEP 3: 매각 준비 및 실행</h2>
+                </div>
+                <p class="mb-4" style="color: var(--text-secondary);">상담과 계약이 완료되면, 담당 매니저가 회사의 매력을 극대화하여 본격적인 매각 절차를 시작합니다.</p>
+                <div class="space-y-2">
+                    <div class="task-item">
+                        <div class="icon"><i class="fas fa-file-invoice"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">투자설명서(티저) 제작</p>
+                            <p class="text-sm">회사의 핵심 매력을 담은 익명의 투자설명서(Teaser Page)가 제작됩니다.</p>
+                            <a href="https://congenial-adventure-mrke7e5.pages.github.io/teaser1.html" target="_blank" class="action-button">티저 예시 보기</a>
+                        </div>
+                    </div>
+                     <div class="task-item">
+                        <div class="icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">타겟 인수자 선정 및 티저 발송</p>
+                            <p class="text-sm">최상의 시너지를 낼 수 있는 잠재 인수 후보군을 선정하여 제작된 티저를 발송합니다.</p>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <div class="icon"><i class="fas fa-check-to-slot"></i></div>
+                        <div class="content">
+                            <p class="font-semibold">플랫폼 '리스팅' 등록</p>
+                            <p class="text-sm">모든 준비가 완료된 회사는 저희 플랫폼에 정식으로 등록되어 더 많은 기회를 찾게 됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
