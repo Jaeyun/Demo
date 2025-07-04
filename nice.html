@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Start-Up ETA 프로그램 파트너십 제안 | NICE평가정보</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 스크롤 동작 설정 */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            color: #374151; /* text-gray-700 */
+        }
+        /* 각 섹션을 전체 화면으로 설정 (레이아웃 깨짐 방지) */
+        .section {
+            min-height: 100vh;
+            height: auto; /* 내용이 많을 경우 섹션 높이가 늘어남 */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        /* 배경 패턴 */
+        .section-bg {
+            background-color: #f9fafb; /* bg-gray-50 */
+        }
+        /* 오른쪽 고정 네비게이션 */
+        .side-nav {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-dot.active {
+            background-color: #FA541C;
+            transform: scale(1.5);
+        }
+        /* 페이드인 애니메이션 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* 카드 스타일 (라이트 테마) */
+        .light-card {
+            background-color: white;
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+        .light-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        /* 메인 색상 정의 */
+        .text-main {
+            color: #FA541C;
+        }
+        .bg-main {
+            background-color: #FA541C;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 오른쪽 고정 네비게이션 -->
+    <nav class="side-nav">
+        <a href="#summary" class="nav-dot active" data-section="summary"></a>
+        <a href="#situation" class="nav-dot" data-section="situation"></a>
+        <a href="#what-is-eta" class="nav-dot" data-section="what-is-eta"></a>
+        <a href="#program-overview" class="nav-dot" data-section="program-overview"></a>
+        <a href="#program" class="nav-dot" data-section="program"></a>
+        <a href="#why-nice" class="nav-dot" data-section="why-nice"></a>
+        <a href="#role" class="nav-dot" data-section="role"></a>
+        <a href="#value" class="nav-dot" data-section="value"></a>
+    </nav>
+
+    <!-- 섹션 0: 헤더/소개 -->
+    <section id="summary" class="section">
+        <div class="text-center fade-in">
+            <p class="text-lg text-main font-semibold mb-2">NICE평가정보 파트너십 제안</p>
+            <h1 class="text-5xl md:text-7xl font-black text-gray-900 mb-6 leading-tight">
+                데이터를 넘어,<br>
+                <span class="text-main">미래 산업 생태계를 설계하는</span><br>
+                전략적 파트너십
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-600">
+                'Next Start-Up ETA 프로그램'은 대한민국 중소기업의 위기를 기회로 전환하는 혁신적인 해법입니다. <br>NICE평가정보가 본 프로그램의 핵심 파트너로서 새로운 가치를 창출하고 시장을 선도할 방안을 제안합니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- 섹션 1: 전반적 상황 -->
+    <section id="situation" class="section section-bg">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">대한민국 중소기업의 <span class="text-main">조용한 위기</span>, 그리고 <span class="text-main">거대한 기회</span></h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">경영자의 급격한 <span class="font-bold">노령화</span>와 후계자 부재는 수십만 우량 중소기업을 <span class="font-bold">폐업 위기</span>로 내몰고 있습니다.<br>이는 위기이자 새로운 성장의 기회입니다.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="light-card p-8">
+                    <div class="text-6xl font-black text-main mb-4">21만+</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">기업승계 수요</h3>
+                    <p class="text-gray-600">당장 M&A를 통한 승계가 필요한 국내 중소기업의 수</p>
+                </div>
+                <div class="light-card p-8">
+                    <div class="text-6xl font-black text-main mb-4">794조원</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">예상 매출 손실</h3>
+                    <p class="text-gray-600">원활한 승계 실패 시, 중소벤처기업연구원이 예측한 손실액</p>
+                </div>
+                <div class="light-card p-8">
+                    <div class="text-6xl font-black text-main mb-4">>75%</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">ETA 창업 성공률</h3>
+                    <p class="text-gray-600">검증된 기업 인수를 통해 전통 창업 대비 압도적으로 높은 성공 가능성</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 섹션 2: ETA란 무엇인가? -->
+    <section id="what-is-eta" class="section">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">ETA(인수를 통한 창업)란 무엇인가?</h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">새로운 창업의 길, <span class="text-main font-semibold">리스크는 낮추고 성공은 앞당깁니다.</span></p>
+            <div class="grid md:grid-cols-2 gap-8 text-left items-center">
+                <div class="light-card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">전통적 창업 (Start-up)</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✗</span><span>아이디어만으로 시작, 높은 불확실성</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✗</span><span>제품/서비스 개발부터 시장 개척까지 모든 것을 직접 해결</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✗</span><span>수익 발생까지 긴 시간 소요 (평균 5~6년)</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✗</span><span>높은 실패율 (초기 3~5년 내 70~90%)</span></li>
+                    </ul>
+                </div>
+                <div class="light-card p-8 border-2 border-main shadow-2xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">인수를 통한 창업 (ETA)</span></h3>
+                     <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✔</span><span>검증된 사업 모델, 안정적 현금흐름을 가진 기업 인수</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✔</span><span>기존 고객, 인력, 운영 노하우를 즉시 확보</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✔</span><span>인수 즉시 수익 실현, 생존이 아닌 성장에 집중</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-green-500 font-bold">✔</span><span>압도적으로 높은 성공 가능성 (75% 이상)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 3: 프로그램 개요 -->
+    <section id="program-overview" class="section section-bg">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">프로그램 개요: <span class="text-main">사회 문제 해결을 위한 새로운 창업 모델</span></h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">Next Start-Up ETA 프로그램은 <span class="font-bold">경영자의 노령화로 소멸 위기에 처한 우량 기업</span>을 <span class="font-bold">패기 넘치는 청년 창업가</span>와 연결하여,<br>대한민국의 세대 간 기술과 경험을 잇는 새로운 다리를 놓습니다. 본 프로그램은 성공적인 기업 인수에 필요한<br>딜(Deal), 교육, 자금을 통합적으로 지원함으로써 <span class="font-semibold">사회 문제를 해결하고 지속 가능한 성장을 만드는 창업자 육성 프로그램</span>입니다.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="light-card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">검증된 M&A 딜</span></h3>
+                    <p class="text-gray-600">AI 기반 M&A 플랫폼 '리스팅'을 통해 발굴된 1,000여 개의 우량 중소기업 인수 기회를 제공하여, 창업가가 가장 많은 시간을 쏟는 딜 소싱의 어려움을 해결합니다.</p>
+                </div>
+                <div class="light-card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">체계적인 교육</span></h3>
+                    <p class="text-gray-600">기업가치 평가부터 인수 후 통합(PMI) 전략까지, ETA 전 과정에 필요한 실무 중심의 집중 교육과 업계 최고 전문가들의 1:1 멘토링을 제공합니다.</p>
+                </div>
+                <div class="light-card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">성공을 위한 자금</span></h3>
+                    <p class="text-gray-600">인수금융 연계, M&A 펀드 투자 유치, 정부 지원 사업 연계 등 다각적인 금융 지원을 통해 창업가의 자기자본 부담을 최소화하고 성공적인 인수를 돕습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 4: 솔루션 및 프로그램 소개 -->
+    <section id="program" class="section">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">프로그램 상세: <span class="text-main">완전한 성공 생태계</span></h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">단순 교육을 넘어, 창업가 발굴부터 딜 실행, 인수 후 성장까지 전 과정을 지원하는 새로운 솔루션입니다.</p>
+            <div class="grid md:grid-cols-4 gap-6 text-left">
+                <div class="light-card p-8 col-span-1">
+                    <div class="text-main font-bold text-xl mb-2">STEP 1</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">모집 및 선발</h3>
+                    <p class="text-gray-600">잠재력 높은 예비 창업가를 선발합니다. NICE의 데이터는 최적의 후보를 찾는 데 핵심적인 역할을 할 수 있습니다.</p>
+                </div>
+                <div class="light-card p-8 col-span-1">
+                    <div class="text-main font-bold text-xl mb-2">STEP 2</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">교육 및 육성</h3>
+                    <p class="text-gray-600">18주간 ETA 특화 커리큘럼을 제공합니다. NICE 전문가들이 멘토로 참여하여 실전 지식을 전수합니다.</p>
+                </div>
+                <div class="light-card p-8 col-span-1">
+                    <div class="text-main font-bold text-xl mb-2">STEP 3</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">딜 실행 및 금융</h3>
+                    <p class="text-gray-600">AI 기반 M&A 플랫폼 '리스팅'의 1,000+개 딜을 활용하고, 인수금융 연계 및 M&A 펀드 투자를 지원합니다.</p>
+                </div>
+                <div class="light-card p-8 col-span-1">
+                    <div class="text-main font-bold text-xl mb-2">STEP 4</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">인수 후 성장 지원</h3>
+                    <p class="text-gray-600">성공적인 PMI를 돕고, 정부 R&D 사업 연계를 통해 후속 성장 자금을 확보하도록 지원합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 5: 왜 NICE인가? -->
+    <section id="why-nice" class="section section-bg">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">왜 NICE여야 하는가? <span class="text-main">왜 지금인가?</span></h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">이 거대한 시장의 기회 앞에서, NICE는 대체 불가능한 파트너입니다.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="light-card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">독보적 포지션</span></h3>
+                    <p class="text-gray-600">개인과 기업, 기술과 ESG를 아우르는 방대한 데이터와 국내 최고 수준의 평가 역량을 동시에 보유한 기업은 NICE가 유일합니다. 이는 ETA 생태계의 신뢰를 담보할 핵심 자산입니다.</p>
+                </div>
+                <div class="light-card p-8 border-2 border-main">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">선점하지 않으면 놓치는 기회</span></h3>
+                    <p class="text-gray-600">정부 정책 지원과 시장 수요가 폭발하는 지금이 바로 ETA 시장의 표준을 선점할 <span class="font-bold">골든타임</span>입니다. 만약 NICE가 주저한다면, 대형 회계법인, 경쟁 신용평가사, 심지어 빅테크 기업까지 이 시장의 잠재력을 보고 진입할 것입니다. 지금 시장의 규칙을 만드는 'First Mover'가 되어야 합니다.</p>
+                </div>
+                <div class="light-card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3"><span class="text-main">완벽한 전략적 정합성</span></h3>
+                    <p class="text-gray-600">본 프로그램은 NICE의 자본시장 진출 및 투자 자문업 확장 전략을 실현할 가장 이상적인 실행의 장입니다. 리스크는 낮추고, 그룹사 시너지를 극대화하며 신사업을 테스트할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 6: NICE의 역할 -->
+    <section id="role" class="section">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">NICE의 역할: <span class="text-main">ETA 생태계의 핵심 동력</span></h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">NICE의 독보적인 자산과 전문성을 프로그램 전반에 통합하는 구체적인 협력 방안입니다.</p>
+            <div class="space-y-4 w-full">
+                <div class="light-card p-6 flex items-center justify-between hover:scale-105 transition-transform">
+                    <div class="text-left">
+                        <div class="text-main font-bold">창업가 심사</div>
+                        <div class="text-xl font-bold text-gray-800">ETA 창업가 적합도 평가 모델 공동 개발 및 심사</div>
+                    </div>
+                    <div class="text-right text-gray-500 hidden md:block">개인 CB, 빅데이터 분석, 신용평가 모델링</div>
+                </div>
+                <div class="light-card p-6 flex items-center justify-between hover:scale-105 transition-transform">
+                    <div class="text-left">
+                        <div class="text-main font-bold">딜 평가</div>
+                        <div class="text-xl font-bold text-gray-800">'통합 ETA 딜 스코어' 제공을 통한 360도 기업 평가</div>
+                    </div>
+                    <div class="text-right text-gray-500 hidden md:block">KISLINE, TCB, ESG 평가</div>
+                </div>
+                <div class="light-card p-6 flex items-center justify-between hover:scale-105 transition-transform">
+                    <div class="text-left">
+                        <div class="text-main font-bold">교육 및 육성</div>
+                        <div class="text-xl font-bold text-gray-800">전문 분야 멘토 및 강사진 참여</div>
+                    </div>
+                    <div class="text-right text-gray-500 hidden md:block">전문 애널리스트, 평가위원, 컨설턴트 인력 풀</div>
+                </div>
+                <div class="light-card p-6 flex items-center justify-between hover:scale-105 transition-transform">
+                    <div class="text-left">
+                        <div class="text-main font-bold">금융 및 투자</div>
+                        <div class="text-xl font-bold text-gray-800">인수금융 상품 공동 개발 및 공동 투자 참여</div>
+                    </div>
+                    <div class="text-right text-gray-500 hidden md:block">나이스인베스팅, 금융 네트워크, 리스크 데이터</div>
+                </div>
+                <div class="light-card p-6 flex items-center justify-between hover:scale-105 transition-transform">
+                    <div class="text-left">
+                        <div class="text-main font-bold">인수 후 관리</div>
+                        <div class="text-xl font-bold text-gray-800">성장성 정기 모니터링 서비스</div>
+                    </div>
+                    <div class="text-right text-gray-500 hidden md:block">기업신용정보, 재무 데이터 분석, 리스크 관리 솔루션</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 7: NICE를 위한 가치 제안 -->
+    <section id="value" class="section section-bg">
+        <div class="text-center w-full max-w-6xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">서비스 제공자를 넘어, <span class="text-main">시장의 설계자로</span></h2>
+            <p class="mt-4 text-lg text-gray-500 mb-12">본 파트너십은 NICE의 미래 성장동력을 확보하고, 시장 리더십을 공고히 하는 결정적 기회입니다.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="light-card p-8 text-center">
+                    <div class="p-4 bg-orange-100 rounded-full w-20 h-20 flex items-center justify-center mb-4 mx-auto"><svg class="w-10 h-10 text-main" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">전략적 신시장 진출</h3>
+                    <p class="text-gray-600">ETA/서치펀드 블루오션을 선점하고, NICE의 자본시장 신사업 전략을 가속화합니다.</p>
+                </div>
+                <div class="light-card p-8 text-center border-2 border-main">
+                     <div class="p-4 bg-orange-100 rounded-full w-20 h-20 flex items-center justify-center mb-4 mx-auto"><svg class="w-10 h-10 text-main" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-12v4m-2-2h4m6 4v4m-2-2h4M17 3h4m-4 5v4m4-4h-4"></path></svg></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">구체적 데이터 상품 개발</h3>
+                    <p class="text-gray-600">'ETA 창업가 적합도 지수', '통합 딜 스코어' 등 새로운 데이터 상품을 개발하고, 건당 리포트 판매 또는 구독형 서비스로 확실한 신규 수익을 창출합니다.</p>
+                </div>
+                <div class="light-card p-8 text-center">
+                    <div class="p-4 bg-orange-100 rounded-full w-20 h-20 flex items-center justify-center mb-4 mx-auto"><svg class="w-10 h-10 text-main" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">미래 우량고객 선점</h3>
+                    <p class="text-gray-600">차세대 중견기업을 초기부터 '평생 파트너'로 확보하여 LTV를 극대화합니다.</p>
+                </div>
+                <div class="light-card p-8 text-center">
+                    <div class="p-4 bg-orange-100 rounded-full w-20 h-20 flex items-center justify-center mb-4 mx-auto"><svg class="w-10 h-10 text-main" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">'One NICE' 시너지</h3>
+                    <p class="text-gray-600">CB, TCB, 빅데이터, 투자 등 그룹사 역량을 결집하는 이상적인 프로젝트입니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full bg-gray-100 border-t border-gray-200">
+        <div class="max-w-6xl mx-auto py-8 px-4 text-center text-gray-500">
+            <h3 class="text-lg font-semibold text-gray-800">Next Start-Up ETA Accelerating Program</h3>
+            <p class="mt-2 text-sm">대한민국 지역 경제의 지속 가능한 미래를 위해 함께하겠습니다.</p>
+            <p class="mt-4 text-xs">&copy; 2025 (주)딥서치. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            const navDots = document.querySelectorAll('.nav-dot');
+
+            // IntersectionObserver for animations and active nav dot
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5 // 50% of the section is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Update nav dot
+                        const sectionId = entry.target.id;
+                        navDots.forEach(dot => {
+                            dot.classList.toggle('active', dot.getAttribute('href') === `#${sectionId}`);
+                        });
+
+                        // Trigger fade-in animation
+                        const fadeInChild = entry.target.querySelector('.fade-in');
+                        if(fadeInChild) {
+                            fadeInChild.classList.add('visible');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Initial fade-in for the first section
+            const firstFadeIn = document.querySelector('#summary .fade-in');
+            if(firstFadeIn) {
+                setTimeout(() => firstFadeIn.classList.add('visible'), 100);
+            }
+        });
+    </script>
+</body>
+</html>
