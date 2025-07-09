@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>심층 상담 준비 가이드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* listing.co Brand Theme (Orange) */
+        :root {
+            --brand-primary: #FA541C; /* Signature Orange */
+            --brand-dark: #1F2937;    /* Dark Charcoal for text/headers */
+            --background-main: #F9FAFB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --border-color: #E5E7EB;
+        }
+
+        body { 
+            font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            background-color: var(--background-main); 
+        }
+
+        .accordion-item:first-child { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+        .accordion-item:last-child { border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+        .accordion-header {
+            cursor: pointer;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+            background-color: white;
+        }
+        .accordion-item:first-child .accordion-header { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+        .accordion-header:hover { background-color: #FFF7ED; }
+
+        .accordion-content {
+            display: none;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: white;
+        }
+        .accordion-item.active .accordion-content { display: block; }
+        .accordion-item.active .accordion-header { background-color: #FFF7ED; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+        .accordion-icon { transition: transform 0.3s; color: var(--text-secondary); }
+
+        .question-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.25rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .question-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .question-item:first-child { padding-top: 0; }
+
+        .question-item .icon {
+            color: var(--brand-primary);
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .question-item p.question-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .question-item p.question-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold" style="color: var(--brand-dark);">심층 상담 준비 가이드</h1>
+            <p class="mt-3 text-lg" style="color: var(--text-secondary);">대표님 회사의 가치를 정확히 파악하기 위해, 상담 시 아래와 같은 대화를 나누게 됩니다.</p>
+        </header>
+
+        <div id="accordion-container" class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+            <!-- 1. 회사의 비전과 여정 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="flex items-center">
+                        <i class="fas fa-flag fa-fw text-2xl" style="color: var(--brand-primary);"></i>
+                        <span class="text-xl font-semibold text-gray-800 ml-4">1. 회사의 비전과 여정</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="question-item">
+                        <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                        <div>
+                            <p class="question-title">창업 스토리와 비전</p>
+                            <p class="question-desc">어떤 계기로 사업을 시작하게 되셨나요? 회사의 궁극적인 비전과 철학을 들려주세요.</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="icon"><i class="fas fa-chart-line"></i></div>
+                        <div>
+                            <p class="question-title">성장의 순간들</p>
+                            <p class="question-desc">회사를 운영하며 가장 기억에 남는 성장 또는 위기의 순간은 언제였나요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="icon"><i class="fas fa-users"></i></div>
+                        <div>
+                            <p class="question-title">주주 구성</p>
+                            <p class="question-desc">현재 주주 구성과 각 주주의 역할, 그리고 대표님의 지분율이 궁금합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. 우리 사업의 핵심 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="flex items-center">
+                        <i class="fas fa-cogs fa-fw text-2xl" style="color: var(--brand-primary);"></i>
+                        <span class="text-xl font-semibold text-gray-800 ml-4">2. 우리 사업의 핵심</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="question-item">
+                        <i class="fas fa-box-open icon"></i>
+                        <div>
+                            <p class="question-title">핵심 제품/서비스</p>
+                            <p class="question-desc">우리 회사가 고객에게 제공하는 핵심 가치는 무엇이며, 어떤 문제를 해결해주고 있나요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-rocket icon"></i>
+                        <div>
+                            <p class="question-title">독보적인 경쟁력</p>
+                            <p class="question-desc">경쟁사가 쉽게 따라 할 수 없는 우리 회사만의 기술, 특허, 브랜드, 노하우 등은 무엇인가요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-dollar-sign icon"></i>
+                        <div>
+                            <p class="question-title">수익 모델</p>
+                            <p class="question-desc">주된 수익원은 무엇이며, 어떤 방식으로 수익을 창출하고 계신가요?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 정확한 가치 평가를 위한 정보 -->
+            <div class="accordion-item">
+                <div class="accordion-header" style="background-color: #FFF7ED;">
+                    <div class="flex items-center">
+                        <i class="fas fa-gem fa-fw text-2xl" style="color: var(--brand-primary);"></i>
+                        <span class="text-xl font-semibold ml-4" style="color: var(--brand-dark);">3. 정확한 가치 평가를 위한 정보</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <p class="text-sm text-gray-600 mb-4">회사의 실질적인 가치를 정확히 파악하기 위해 아래와 같은 추가 정보를 여쭙게 됩니다.</p>
+                    <div class="question-item">
+                        <i class="fas fa-sync-alt icon"></i>
+                        <div>
+                            <p class="question-title">일회성 손익 파악하기</p>
+                            <p class="question-desc">최근 3년간 일시적으로 발생한 큰 수익이나 비용이 있었나요? (예: 자산 매각, 정부 지원금, 소송 비용 등)</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-user-tie icon"></i>
+                        <div>
+                            <p class="question-title">소유주 관련 비용 확인</p>
+                            <p class="question-desc">대표님과 가족의 급여 수준, 회사 명의 자산의 개인적 사용 여부 등을 파악하여 기업의 순수한 이익을 계산합니다.</p>
+                        </div>
+                    </div>
+                     <div class="question-item">
+                        <i class="fas fa-home icon"></i>
+                        <div>
+                            <p class="question-title">자산의 실제 가치</p>
+                            <p class="question-desc">보유하신 부동산, 설비, 재고 등의 장부 가격과 현재 시장 가격에 차이가 있을까요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-file-excel icon"></i>
+                        <div>
+                            <p class="question-title">숨겨진 부채 확인</p>
+                            <p class="question-desc">장부에 기록되지 않았지만, 미래에 발생할 수 있는 소송, 보증 등의 잠재적 부채가 있는지 확인합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 사람과 조직 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="flex items-center">
+                        <i class="fas fa-sitemap fa-fw text-2xl" style="color: var(--brand-primary);"></i>
+                        <span class="text-xl font-semibold text-gray-800 ml-4">4. 사람과 조직</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="question-item">
+                        <i class="fas fa-user-astronaut icon"></i>
+                        <div>
+                            <p class="question-title">핵심 인력</p>
+                            <p class="question-desc">대표님을 제외하고, 이 사람이 없으면 회사가 흔들릴 수 있다고 생각하는 핵심 직원이 있나요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-street-view icon"></i>
+                        <div>
+                            <p class="question-title">대표님의 역할과 의존도</p>
+                            <p class="question-desc">현재 회사 운영에서 대표님의 역할은 무엇이며, 대표님이 없어도 운영될 수 있는 시스템이 갖추어져 있나요?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 매각에 대한 생각 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="flex items-center">
+                        <i class="fas fa-bullseye fa-fw text-2xl" style="color: var(--brand-primary);"></i>
+                        <span class="text-xl font-semibold text-gray-800 ml-4">5. 매각에 대한 생각</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                     <div class="question-item">
+                        <i class="fas fa-question-circle icon"></i>
+                        <div>
+                            <p class="question-title">매각을 결심한 이유</p>
+                            <p class="question-desc">회사를 매각하기로 결정하신 가장 큰 이유는 무엇인가요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-star icon"></i>
+                        <div>
+                            <p class="question-title">이상적인 인수자</p>
+                            <p class="question-desc">어떤 인수자가 우리 회사의 비전을 이어가고 더 크게 성장시켜 줄 것이라 생각하시나요?</p>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <i class="fas fa-hand-holding-usd icon"></i>
+                        <div>
+                            <p class="question-title">희망 매각 가격</p>
+                            <p class="question-desc">희망하시는 매각 가격 범위와 그 근거에 대해 편하게 말씀해주세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <footer class="text-center mt-12">
+            <p class="text-gray-600">위 내용들을 미리 생각해보시면 더욱 깊이 있고 효율적인 상담이 가능합니다.</p>
+            <p class="text-gray-500 text-sm mt-2">궁금한 점은 언제든 '리스팅' 카카오톡 채널로 담당 매니저에게 문의해주세요.</p>
+        </footer>
+    </div>
+
+    <script>
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Optional: Close all other accordions when one is opened
+                // accordionItems.forEach(i => i.classList.remove('active'));
+
+                if (!isActive) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
