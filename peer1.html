@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is designed as a single-page interactive report for a business presentation. It starts with a clear title and an introductory paragraph to set the context. The core of the application is a detailed comparison table, designed to be the central piece of information. This table directly compares DeepSearch's 'Listing' service against specified competitors across key business and technology dimensions. DeepSearch's column is highlighted to visually guide the audience. Following the table, a radar chart provides a high-level visual summary of the competitive landscape, plotting key strengths like AI integration and efficiency. This visual reinforcement helps in making the core message stick. The page concludes with a summary section of key differentiators, explicitly stating the value proposition (AI efficiency, integrated services). This top-down structure (Intro -> Detailed Comparison -> Visual Summary -> Key Takeaways) is chosen to logically guide the audience through the analysis, making the complex information digestible and persuasive, which is ideal for a presentation context. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Competitive landscape of M&A services. Goal: Compare DeepSearch to competitors. Viz/Presentation: A detailed HTML table. Interaction: DeepSearch's column is visually highlighted. Hover effects on rows improve readability. On mobile, the table is horizontally scrollable to preserve its structure. Justification: A table is the most direct and clear way to present a multi-attribute comparison. The highlight focuses attention on the protagonist, DeepSearch. Library/Method: HTML/Tailwind CSS.
+        2. Report Info: High-level competitive positioning. Goal: Visually summarize strengths. Viz/Presentation: Radar Chart. Interaction: The chart is dynamic with tooltips on hover, showing scores for each competitor type. Justification: A radar chart is excellent for showing multi-dimensional strengths and weaknesses in a single, compact graphic, making competitive gaps immediately obvious. Library/Method: Chart.js (Canvas).
+        3. Report Info: DeepSearch's key value propositions (AI efficiency, integrated services). Goal: Conclude with strong, memorable points. Viz/Presentation: Titled summary cards (styled divs). Interaction: Static, but uses icons and strong typography for emphasis. Justification: This provides a clear, concise summary of the "why it matters" for the audience, acting as a final persuasive statement. Library/Method: HTML/Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <title>DeepSearch M&A 플랫폼 경쟁력 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .highlight-col {
+            background-color: #eef2ff;
+        }
+        .table-header-sticky {
+            position: sticky;
+            left: 0;
+            background-color: #ffffff;
+            z-index: 10;
+        }
+        @media (min-width: 1024px) {
+            .table-header-sticky {
+                background-color: #f1f5f9;
+            }
+        }
+        .check-mark {
+            color: #22c55e;
+            font-weight: 700;
+        }
+        .x-mark {
+            color: #ef4444;
+            font-weight: 700;
+        }
+        .neutral-mark {
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">DeepSearch '리스팅' 서비스 경쟁력 분석</h1>
+            <p class="mt-4 text-md md:text-lg text-gray-600 max-w-3xl mx-auto">
+                딥서치의 AI 기반 M&A 플랫폼 '리스팅'이 전통적인 M&A 자문 서비스 및 온라인 플랫폼과 어떻게 차별화되는지, 그리고 어떤 독보적인 경쟁 우위를 갖추고 있는지 심층적으로 비교 분석합니다.
+            </p>
+        </header>
+
+        <main>
+            <section id="comparison-table" class="mb-16">
+                <h2 class="text-2xl font-semibold text-center mb-6">주요 M&A 플레이어 비교</h2>
+                <div class="overflow-x-auto bg-white rounded-lg shadow-md border border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm md:text-base">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="table-header-sticky px-4 py-4 text-left text-sm font-bold text-gray-700 w-32 md:w-40">구분</th>
+                                <th scope="col" class="px-4 py-4 text-center text-sm font-bold text-blue-700 w-48 highlight-col">DeepSearch 리스팅</th>
+                                <th scope="col" class="px-4 py-4 text-center text-sm font-bold text-gray-700 w-48">일본 M&A 자문사<br><span class="font-normal text-xs">(니혼M&A, M&A캐피탈 등)</span></th>
+                                <th scope="col" class="px-4 py-4 text-center text-sm font-bold text-gray-700 w-48">M&A 종합연구소 (일본)</th>
+                                <th scope="col" class="px-4 py-4 text-center text-sm font-bold text-gray-700 w-48">Acquire.com (미국)</th>
+                                <th scope="col" class="px-4 py-4 text-center text-sm font-bold text-gray-700 w-48">국내 Big 4 회계법인<br><span class="font-normal text-xs">(삼일, 삼정 등)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">핵심 모델</td>
+                                <td class="px-4 py-4 text-center highlight-col"><span class="font-bold">AI 기반</span> M&A 중개 플랫폼</td>
+                                <td class="px-4 py-4 text-center"><span class="font-bold">인력 중심</span>의 전통적 자문</td>
+                                <td class="px-4 py-4 text-center"><span class="font-bold">AI 활용</span> M&A 중개/자문</td>
+                                <td class="px-4 py-4 text-center">스타트업 M&A <span class="font-bold">온라인 마켓플레이스</span></td>
+                                <td class="px-4 py-4 text-center"><span class="font-bold">전문가 그룹</span> 기반의 종합 자문</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">프로세스 자동화</td>
+                                <td class="px-4 py-4 text-center highlight-col"><span class="font-bold">Full-Process Automation</span><br><span class="text-xs">(가치평가, 매칭, 실사 지원)</span></td>
+                                <td class="px-4 py-4 text-center">부분적/제한적<br><span class="text-xs">(수작업 기반)</span></td>
+                                <td class="px-4 py-4 text-center">매칭 프로세스 중심 자동화</td>
+                                <td class="px-4 py-4 text-center">플랫폼 기반 셀프서비스</td>
+                                <td class="px-4 py-4 text-center">자동화 거의 없음</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">매니저 효율성</td>
+                                <td class="px-4 py-4 text-center highlight-col font-bold">소수가 다수의 딜 동시 관리<br><span class="font-normal text-xs">(압도적 효율)</span></td>
+                                <td class="px-4 py-4 text-center">매니저당 소수 딜 집중<br><span class="text-xs">(고비용 구조)</span></td>
+                                <td class="px-4 py-4 text-center">높은 편<br><span class="text-xs">(AI 통한 효율화)</span></td>
+                                <td class="px-4 py-4 text-center">매니저 개입 최소화</td>
+                                <td class="px-4 py-4 text-center">딜별 대규모 팀 투입<br><span class="text-xs">(최고비용 구조)</span></td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">핵심 기술</td>
+                                <td class="px-4 py-4 text-center highlight-col font-bold">금융 특화 LLM &<br>기업 분석/평가 엔진</td>
+                                <td class="px-4 py-4 text-center">내부 DB, 인적 네트워크</td>
+                                <td class="px-4 py-4 text-center">매칭 알고리즘 AI</td>
+                                <td class="px-4 py-4 text-center">웹 플랫폼 기술</td>
+                                <td class="px-4 py-4 text-center">내부 데이터베이스, 전문가 지식</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">연계 서비스</td>
+                                <td class="px-4 py-4 text-center highlight-col font-bold">평가/인수금융/창업자 육성<br><span class="font-normal text-xs">(One-Stop Solution)</span></td>
+                                <td class="px-4 py-4 text-center">제한적<br><span class="text-xs">(주로 중개에 집중)</span></td>
+                                <td class="px-4 py-4 text-center">제한적</td>
+                                <td class="px-4 py-4 text-center">법률 자문 등 일부 연계</td>
+                                <td class="px-4 py-4 text-center">회계/세무/컨설팅<br><span class="text-xs">(자사 서비스 연계)</span></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">주요 타겟</td>
+                                <td class="px-4 py-4 text-center highlight-col">기술 기반 스타트업, 중소/중견기업(SME)</td>
+                                <td class="px-4 py-4 text-center">중소/중견기업 (가업 승계)</td>
+                                <td class="px-4 py-4 text-center">중소/중견기업</td>
+                                <td class="px-4 py-4 text-center">테크/SaaS 스타트업</td>
+                                <td class="px-4 py-4 text-center">대기업, 중견기업, PE</td>
+                            </tr>
+                             <tr class="hover:bg-gray-50">
+                                <td class="table-header-sticky px-4 py-4 font-semibold bg-white lg:bg-transparent">수수료 구조</td>
+                                <td class="px-4 py-4 text-center highlight-col">합리적 성공보수</td>
+                                <td class="px-4 py-4 text-center">높은 성공보수</td>
+                                <td class="px-4 py-4 text-center">성공보수 기반</td>
+                                <td class="px-4 py-4 text-center">플랫폼 구독료 +<br>낮은 성공보수</td>
+                                <td class="px-4 py-4 text-center">착수금 + 높은 성공보수<br>(Time Charge)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="positioning-map" class="mb-16">
+                <h2 class="text-2xl font-semibold text-center mb-6">경쟁 포지셔닝 맵</h2>
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
+                    <p class="text-center text-gray-600 mb-4">각 플레이어들의 핵심 역량을 다각도로 분석하여 시장 내 포지셔닝을 시각화했습니다.</p>
+                    <div class="chart-container relative w-full max-w-2xl mx-auto h-80 md:h-96 lg:h-[450px]">
+                        <canvas id="competitorRadarChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="key-differentiators">
+                <h2 class="text-2xl font-semibold text-center mb-8">딥서치만의 압도적 경쟁 우위</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-xl transition-shadow">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">⚡️</span>
+                            <h3 class="text-lg font-bold">AI 기반 압도적 효율성</h3>
+                        </div>
+                        <p class="text-gray-600">
+                            소수의 전문가가 AI의 도움으로 다수의 M&A 딜을 동시에 처리합니다. AI가 가치평가, 매칭, 실사 지원까지 전 과정에 개입하여 M&A에 소요되는 시간과 비용을 획기적으로 절감합니다.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-xl transition-shadow">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">🔗</span>
+                             <h3 class="text-lg font-bold">One-Stop 통합 금융 솔루션</h3>
+                        </div>
+                        <p class="text-gray-600">
+                            기업가치평가, 인수금융 연계, 법률 자문, 그리고 창업자 성장 지원 프로그램까지. M&A와 성장에 필요한 모든 서비스를 단일 플랫폼에서 원스톱으로 제공하여 고객 편의성을 극대화합니다.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-xl transition-shadow md:col-span-2 lg:col-span-1">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">📊</span>
+                            <h3 class="text-lg font-bold">데이터 기반 의사결정</h3>
+                        </div>
+                        <p class="text-gray-600">
+                            국내 최대 규모의 기업/산업/특허 데이터를 기반으로 객관적이고 정밀한 의사결정을 지원합니다. 주관적 판단을 배제하고 데이터에 근거하여 M&A 성공 확률을 높입니다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 py-6 border-t">
+            <p class="text-sm text-gray-500">&copy; 2025 DeepSearch Inc. All Rights Reserved. Confidential.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('competitorRadarChart').getContext('2d');
+            const competitorRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'AI/기술력', 
+                        '프로세스 효율성', 
+                        '통합 서비스', 
+                        '비용 합리성', 
+                        '인적 전문성', 
+                        '브랜드/신뢰도'
+                    ],
+                    datasets: [{
+                        label: 'DeepSearch 리스팅',
+                        data: [9, 9, 8, 8, 6, 7],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                    }, {
+                        label: '전통 M&A 자문 (Big 4, 일본 자문사)',
+                        data: [2, 3, 5, 2, 9, 9],
+                        backgroundColor: 'rgba(107, 114, 128, 0.2)',
+                        borderColor: 'rgba(107, 114, 128, 1)',
+                        pointBackgroundColor: 'rgba(107, 114, 128, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(107, 114, 128, 1)'
+                    },
+                    {
+                        label: '온라인 플랫폼 (Acquire.com)',
+                        data: [6, 7, 3, 9, 2, 4],
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += context.parsed.r;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            pointLabels: {
+                                font: {
+                                    size: 13,
+                                    weight: '500'
+                                }
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                stepSize: 2
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
