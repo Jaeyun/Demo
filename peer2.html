@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finorma 엔진 경쟁력 비교 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: The application is designed as a single-page vertical report. It starts with an introduction, followed by a detailed comparison table with core technologies broken down into specific capabilities as requested. This provides a granular, feature-by-feature view. It concludes with a summarizing radar chart for a high-level visual takeaway. This structure (Intro -> Granular Comparison -> Visual Summary) is effective for technical presentations. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Competitive analysis of DeepSearch's Finorma engine. Goal: Demonstrate Finorma's superiority with a more technical breakdown. Viz/Presentation Method: A single, detailed HTML table. The "Core Technology" row is replaced with multiple, more specific rows like "Searchable Vector DB" and "Financial Data Analysis AI". Interaction: Subtle row hover effects. Justification: This new table structure directly addresses the user's request for a more granular comparison, making technical differentiators immediately obvious. Library/Method: HTML/Tailwind CSS.
+        2. Report Info: Summarized competitive standing. Goal: Provide a quick, memorable visual summary. Viz/Presentation Method: A radar chart. Interaction: Interactive tooltips and clickable legend. Justification: The radar chart remains a powerful tool for summarizing the granular details from the main table into a high-level strategic view. Library/Method: Chart.js on a Canvas element.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FDFBF8; /* Warm Neutral Background */
+        }
+        .highlight-deepsearch {
+            background-color: #F0F9F4; /* Lighter Green for DeepSearch */
+        }
+        .accent-text {
+            color: #2A543D; /* Dark Green Accent */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .table-header-sticky {
+            position: sticky;
+            top: 0;
+            background-color: #F8F9FA;
+            z-index: 10;
+        }
+        .rating-excellent { color: #16a34a; font-weight: 700; }
+        .rating-good { color: #0ea5e9; font-weight: 500; }
+        .rating-moderate { color: #f97316; font-weight: 500; }
+        .rating-lacking { color: #ef4444; font-weight: 500; }
+        
+        .tech-yes { color: #16a34a; font-weight: 700; }
+        .tech-no { color: #ef4444; font-weight: 700; }
+        .tech-partial { color: #f97316; font-weight: 500; }
+        .tech-custom { color: #16a34a; font-weight: 700; }
+
+        .tab-button {
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-button.active {
+            border-bottom-color: #2A543D;
+            color: #2A543D;
+            font-weight: 700;
+        }
+        .subheader {
+            background-color: #F9FAFB;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold accent-text mb-2">DeepSearch Finorma 엔진</h1>
+            <h2 class="text-xl sm:text-2xl font-light text-gray-600">핵심 기술 경쟁력 비교 분석</h2>
+        </header>
+
+        <main>
+            <div class="card p-6 sm:p-8 mb-10">
+                <p class="text-lg text-center text-gray-700 leading-relaxed">
+                    본 자료는 딥서치의 독자적인 금융 AI 엔진 'Finorma'의 기술적 위상과 경쟁력을 명확히 보여주기 위해 작성되었습니다. Finorma는 금융 데이터에 대한 깊은 이해를 바탕으로, 기존의 범용 AI나 데이터 분석 솔루션이 제공하지 못하는 차별화된 가치와 높은 비용 효율성을 제공합니다. 아래 비교는 글로벌 및 국내 주요 기업들과의 다각적인 분석을 통해 Finorma가 금융 AI 시장에서 왜 독보적인 선택지인지를 설명합니다.
+                </p>
+            </div>
+
+            <!-- Tabs for Navigation -->
+            <div class="mb-8 border-b border-gray-200">
+                <nav class="flex space-x-4" aria-label="Tabs">
+                    <button id="tab-comparison" class="tab-button active py-4 px-1 text-lg">경쟁사 상세 비교</button>
+                    <button id="tab-chart" class="tab-button py-4 px-1 text-lg text-gray-500">종합 역량 분석 (차트)</button>
+                </nav>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="content-comparison" class="tab-content">
+                 <div class="card overflow-x-auto">
+                    <table class="w-full text-sm sm:text-base text-left">
+                        <thead class="text-gray-700 uppercase">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 font-bold text-gray-800 table-header-sticky">구분</th>
+                                <th scope="col" class="px-6 py-4 font-bold accent-text table-header-sticky highlight-deepsearch">DeepSearch (Finorma)</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-blue-800 table-header-sticky">Rockset</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-blue-800 table-header-sticky">Ravenpack</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-blue-800 table-header-sticky">Kensho</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-teal-800 table-header-sticky">와이즈넛</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-teal-800 table-header-sticky">솔트룩스</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="subheader">
+                                <td colspan="7" class="px-6 py-3 font-semibold text-gray-600">핵심 기술 역량</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4 font-semibold">검색 가능한 벡터 DB</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="tech-custom">자체구축 (O)</span></td>
+                                <td class="px-6 py-4"><span class="tech-custom">자체구축 (O)</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (내부용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <td class="px-6 py-4 font-semibold">금융 데이터 분석 AI</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4 font-semibold">금융 특화 LLM</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (제한적)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <td class="px-6 py-4 font-semibold">생성형 AI 심층분석</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (제한적)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O (범용)</span></td>
+                            </tr>
+
+                            <tr class="subheader">
+                                <td colspan="7" class="px-6 py-3 font-semibold text-gray-600">솔루션 및 서비스</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4 font-semibold">금융 특화 수준</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="rating-excellent">최상</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">없음</span></td>
+                                <td class="px-6 py-4"><span class="rating-good">높음</span></td>
+                                <td class="px-6 py-4"><span class="rating-excellent">최상</span></td>
+                                <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
+                                <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <td class="px-6 py-4 font-semibold">End-to-End 자동화</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="rating-excellent">지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-good">부분 지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4 font-semibold">제공 형태</td>
+                                <td class="px-6 py-4 highlight-deepsearch">통합 플랫폼 (FAaaS)</td>
+                                <td class="px-6 py-4">인프라 (DBaaS)</td>
+                                <td class="px-6 py-4">데이터 (DaaS)</td>
+                                <td class="px-6 py-4">솔루션 (S&P 연계)</td>
+                                <td class="px-6 py-4">솔루션 (구축형)</td>
+                                <td class="px-6 py-4">솔루션 (구축형)</td>
+                            </tr>
+                             <tr class="bg-gray-50">
+                                <td class="px-6 py-4 font-semibold">비용 효율성</td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="rating-excellent">높음</span></td>
+                                <td class="px-6 py-4"><span class="rating-moderate">중간</span></td>
+                                <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">매우 낮음</span></td>
+                                <td class="px-6 py-4"><span class="rating-good">높음</span></td>
+                                <td class="px-6 py-4"><span class="rating-good">높음</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="content-chart" class="tab-content hidden">
+                <div class="card p-6 sm:p-8">
+                     <p class="text-center text-gray-600 mb-6">각 사의 핵심 역량을 5가지 주요 지표로 시각화하여 비교합니다. Finorma는 모든 지표에서 높은 균형을 보이며, 특히 '금융 전문성'과 '비용 효율성'에서 압도적인 경쟁 우위를 나타냅니다.</p>
+                    <div class="chart-container relative mx-auto" style="height: 50vh; max-width: 700px;">
+                        <canvas id="competitorRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const tabs = {
+            comparison: document.getElementById('tab-comparison'),
+            chart: document.getElementById('tab-chart'),
+        };
+        const contents = {
+            comparison: document.getElementById('content-comparison'),
+            chart: document.getElementById('content-chart'),
+        };
+
+        let radarChart = null;
+
+        function switchTab(tabName) {
+            Object.values(tabs).forEach(tab => tab.classList.remove('active', 'text-gray-500'));
+            Object.values(contents).forEach(content => content.classList.add('hidden'));
+            
+            tabs[tabName].classList.add('active');
+            contents[tabName].classList.remove('hidden');
+
+            if (tabName === 'chart') {
+                renderRadarChart();
+            }
+        }
+
+        tabs.comparison.addEventListener('click', () => switchTab('comparison'));
+        tabs.chart.addEventListener('click', () => switchTab('chart'));
+
+        const radarChartData = {
+            labels: ['금융 전문성', '기술 혁신성', '실시간성', '분석 깊이', '비용 효율성'],
+            datasets: [
+                {
+                    label: 'DeepSearch (Finorma)',
+                    data: [5, 4.5, 4, 4.5, 5],
+                    backgroundColor: 'rgba(42, 84, 61, 0.2)',
+                    borderColor: 'rgba(42, 84, 61, 1)',
+                    pointBackgroundColor: 'rgba(42, 84, 61, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(42, 84, 61, 1)'
+                },
+                {
+                    label: '글로벌 경쟁사 평균',
+                    data: [4, 3.5, 4, 3.5, 2.5],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                },
+                {
+                    label: '국내 경쟁사 평균',
+                    data: [2, 3, 3, 3.5, 4],
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    pointBackgroundColor: 'rgba(255, 159, 64, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(255, 159, 64, 1)'
+                }
+            ]
+        };
+
+        const chartConfig = {
+            type: 'radar',
+            data: radarChartData,
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true,
+                            color: '#e2e8f0'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 5,
+                        grid: {
+                            color: '#e2e8f0'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 14,
+                                family: "'Noto Sans KR', sans-serif"
+                            },
+                            color: '#4a5568'
+                        },
+                        ticks: {
+                            backdropColor: 'rgba(255, 255, 255, 0.75)',
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: "'Noto Sans KR', sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.r !== null) {
+                                    label += context.parsed.r.toFixed(1);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        function renderRadarChart() {
+            if (radarChart) {
+                radarChart.destroy();
+            }
+            const ctx = document.getElementById('competitorRadarChart').getContext('2d');
+            radarChart = new Chart(ctx, chartConfig);
+        }
+
+    </script>
+</body>
+</html>
