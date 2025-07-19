@@ -8,10 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutral Harmony -->
-    <!-- Application Structure Plan: The application is designed as a single-page vertical report. It starts with an introduction, followed by a detailed comparison table with core technologies broken down into specific capabilities as requested. This provides a granular, feature-by-feature view. It concludes with a summarizing radar chart for a high-level visual takeaway. This structure (Intro -> Granular Comparison -> Visual Summary) is effective for technical presentations. -->
+    <!-- Application Structure Plan: The application is a single-page vertical report. An introduction is followed by a detailed comparison table including Newen AI, with core technologies broken down into specific capabilities. This provides a granular, feature-by-feature view. It concludes with a summarizing radar chart, updated to reflect the new competitor, for a high-level visual takeaway. This structure (Intro -> Granular Comparison -> Visual Summary) is effective for technical presentations. -->
     <!-- Visualization & Content Choices: 
-        1. Report Info: Competitive analysis of DeepSearch's Finorma engine. Goal: Demonstrate Finorma's superiority with a more technical breakdown. Viz/Presentation Method: A single, detailed HTML table. The "Core Technology" row is replaced with multiple, more specific rows like "Searchable Vector DB" and "Financial Data Analysis AI". Interaction: Subtle row hover effects. Justification: This new table structure directly addresses the user's request for a more granular comparison, making technical differentiators immediately obvious. Library/Method: HTML/Tailwind CSS.
-        2. Report Info: Summarized competitive standing. Goal: Provide a quick, memorable visual summary. Viz/Presentation Method: A radar chart. Interaction: Interactive tooltips and clickable legend. Justification: The radar chart remains a powerful tool for summarizing the granular details from the main table into a high-level strategic view. Library/Method: Chart.js on a Canvas element.
+        1. Report Info: Competitive analysis of DeepSearch's Finorma engine vs. an expanded competitor set. Goal: Demonstrate Finorma's superiority with a technical breakdown. Viz/Presentation Method: A single, detailed HTML table with an added column for Newen AI. Interaction: Subtle row hover effects. Justification: Expanding the table maintains the requested granular comparison format and shows how Finorma stands against a wider range of domestic AI companies. Library/Method: HTML/Tailwind CSS.
+        2. Report Info: Summarized competitive standing. Goal: Provide a quick, memorable visual summary. Viz/Presentation Method: A radar chart. Interaction: Interactive tooltips and clickable legend. Justification: The radar chart's "Domestic Competitor Average" data has been recalculated to include Newen AI, providing a more accurate, aggregated view of the competitive landscape. Library/Method: Chart.js on a Canvas element.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -97,11 +97,13 @@
                                 <th scope="col" class="px-6 py-4 font-bold text-blue-800 table-header-sticky">Kensho</th>
                                 <th scope="col" class="px-6 py-4 font-bold text-teal-800 table-header-sticky">와이즈넛</th>
                                 <th scope="col" class="px-6 py-4 font-bold text-teal-800 table-header-sticky">솔트룩스</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-teal-800 table-header-sticky">코난테크놀로지</th>
+                                <th scope="col" class="px-6 py-4 font-bold text-teal-800 table-header-sticky">뉴엔AI</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="subheader">
-                                <td colspan="7" class="px-6 py-3 font-semibold text-gray-600">핵심 기술 역량</td>
+                                <td colspan="9" class="px-6 py-3 font-semibold text-gray-600">핵심 기술 역량</td>
                             </tr>
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4 font-semibold">검색 가능한 벡터 DB</td>
@@ -111,6 +113,8 @@
                                 <td class="px-6 py-4"><span class="tech-partial">△ (내부용)</span></td>
                                 <td class="px-6 py-4"><span class="tech-no">X</span></td>
                                 <td class="px-6 py-4"><span class="tech-no">X</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (내부용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (내부용)</span></td>
                             </tr>
                             <tr class="bg-gray-50 border-b">
                                 <td class="px-6 py-4 font-semibold">금융 데이터 분석 AI</td>
@@ -118,6 +122,8 @@
                                 <td class="px-6 py-4"><span class="tech-no">X</span></td>
                                 <td class="px-6 py-4"><span class="tech-yes">O</span></td>
                                 <td class="px-6 py-4"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
                                 <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
                                 <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
                             </tr>
@@ -129,19 +135,23 @@
                                 <td class="px-6 py-4"><span class="tech-yes">O</span></td>
                                 <td class="px-6 py-4"><span class="tech-no">X</span></td>
                                 <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
                             </tr>
                             <tr class="bg-gray-50 border-b">
                                 <td class="px-6 py-4 font-semibold">생성형 AI 심층분석</td>
-                                <td class="px-6 py-4 highlight-deepsearch"><span class="tech-yes">O</span></td>
+                                <td class="px-6 py-4 highlight-deepsearch"><span class="tech-yes">O (특화)</span></td>
                                 <td class="px-6 py-4"><span class="tech-no">X</span></td>
                                 <td class="px-6 py-4"><span class="tech-partial">△ (제한적)</span></td>
-                                <td class="px-6 py-4"><span class="tech-yes">O</span></td>
-                                <td class="px-6 py-4"><span class="tech-partial">△ (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O (특화)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O (범용)</span></td>
+                                <td class="px-6 py-4"><span class="tech-yes">O (범용)</span></td>
                                 <td class="px-6 py-4"><span class="tech-yes">O (범용)</span></td>
                             </tr>
 
                             <tr class="subheader">
-                                <td colspan="7" class="px-6 py-3 font-semibold text-gray-600">솔루션 및 서비스</td>
+                                <td colspan="9" class="px-6 py-3 font-semibold text-gray-600">솔루션 및 서비스</td>
                             </tr>
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4 font-semibold">금융 특화 수준</td>
@@ -149,6 +159,8 @@
                                 <td class="px-6 py-4"><span class="rating-lacking">없음</span></td>
                                 <td class="px-6 py-4"><span class="rating-good">높음</span></td>
                                 <td class="px-6 py-4"><span class="rating-excellent">최상</span></td>
+                                <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
+                                <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
                                 <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
                                 <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
                             </tr>
@@ -160,6 +172,8 @@
                                 <td class="px-6 py-4"><span class="rating-good">부분 지원</span></td>
                                 <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
                                 <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
+                                <td class="px-6 py-4"><span class="rating-lacking">미지원</span></td>
                             </tr>
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4 font-semibold">제공 형태</td>
@@ -169,6 +183,8 @@
                                 <td class="px-6 py-4">솔루션 (S&P 연계)</td>
                                 <td class="px-6 py-4">솔루션 (구축형)</td>
                                 <td class="px-6 py-4">솔루션 (구축형)</td>
+                                <td class="px-6 py-4">솔루션 (구축형)</td>
+                                <td class="px-6 py-4">솔루션 (구독형)</td>
                             </tr>
                              <tr class="bg-gray-50">
                                 <td class="px-6 py-4 font-semibold">비용 효율성</td>
@@ -176,6 +192,8 @@
                                 <td class="px-6 py-4"><span class="rating-moderate">중간</span></td>
                                 <td class="px-6 py-4"><span class="rating-moderate">낮음</span></td>
                                 <td class="px-6 py-4"><span class="rating-lacking">매우 낮음</span></td>
+                                <td class="px-6 py-4"><span class="rating-good">높음</span></td>
+                                <td class="px-6 py-4"><span class="rating-good">높음</span></td>
                                 <td class="px-6 py-4"><span class="rating-good">높음</span></td>
                                 <td class="px-6 py-4"><span class="rating-good">높음</span></td>
                             </tr>
@@ -248,7 +266,7 @@
                 },
                 {
                     label: '국내 경쟁사 평균',
-                    data: [2, 3, 3, 3.5, 4],
+                    data: [2.0, 3.25, 3.0, 3.5, 4.0], // Updated average for 4 domestic companies
                     backgroundColor: 'rgba(255, 159, 64, 0.2)',
                     borderColor: 'rgba(255, 159, 64, 1)',
                     pointBackgroundColor: 'rgba(255, 159, 64, 1)',
