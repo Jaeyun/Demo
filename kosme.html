@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOSME 제안: M&A를 통한 혁신 창업 생태계 구축</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chosen Palette: Warm Neutrals with a Subtle Blue Accent -->
+    <!-- Application Structure Plan: A single-page dashboard application with a sticky navigation bar for non-linear exploration. The structure is designed to first present the problem, then introduce the comprehensive 4-pillar solution, followed by compelling data visualizations to prove the model's effectiveness, and finally, outline the collaborative partnership model. This flow guides the user from understanding the 'why' to the 'what', 'how', and 'who', making the proposal logical and persuasive. -->
+    <!-- Visualization & Content Choices: Key metrics are presented as animated KPI cards for immediate impact. Chart.js is used for interactive bar and doughnut charts to visualize platform data (listing distribution, deal pipeline), making complex data easily digestible. The 4-pillar ecosystem is represented by a clean, interactive grid layout using HTML/CSS, allowing users to explore each component without being overwhelmed. This approach avoids a static, text-heavy report in favor of an engaging, data-driven narrative, confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa; color: #343a40; scroll-behavior: smooth; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .nav-link { transition: color 0.3s ease, border-bottom-color 0.3s ease; }
+        .nav-link:hover, .nav-link.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .kpi-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .pillar-card { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+        .pillar-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); border-color: #2563eb; }
+        .fade-in { animation: fadeIn 1s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        section { scroll-margin-top: 80px; }
+        .timeline-item::before { content: ''; position: absolute; left: 11px; top: 12px; bottom: -12px; width: 2px; background-color: #e2e8f0; }
+        .timeline-item:last-child::before { display: none; }
+        .timeline-dot { position: absolute; left: 0; top: 12px; width: 24px; height: 24px; }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-600">LISTING</span>
+                    <span class="ml-4 text-xl font-semibold text-slate-700">x KOSME</span>
+                </div>
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="#problem" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">당면 과제</a>
+                    <a href="#precedent" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">글로벌 성공사례</a>
+                    <a href="#solution" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">4-Pillar 해법</a>
+                    <a href="#program" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">프로그램 심층분석</a>
+                    <a href="#data" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">데이터 성과</a>
+                    <a href="#funding" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">금융 생태계</a>
+                    <a href="#partnership" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">민관협력</a>
+                </div>
+                <div class="lg:hidden">
+                    <button id="mobile-menu-button" class="text-slate-600 hover:text-blue-600 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden">
+            <a href="#problem" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">당면 과제</a>
+            <a href="#precedent" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">글로벌 성공사례</a>
+            <a href="#solution" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">4-Pillar 해법</a>
+            <a href="#program" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">프로그램 심층분석</a>
+            <a href="#data" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">데이터 성과</a>
+            <a href="#funding" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">금융 생태계</a>
+            <a href="#partnership" class="block py-2 px-4 text-sm text-slate-600 hover:bg-blue-50">민관협력</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 leading-tight fade-in">
+                    M&A를 통한 <span class="text-blue-600">혁신 창업 생태계</span> 구축,
+                </h1>
+                <h2 class="mt-4 text-4xl md:text-6xl font-extrabold text-slate-800 leading-tight fade-in" style="animation-delay: 0.2s;">
+                    중소벤처기업진흥공단과 함께 만들겠습니다.
+                </h2>
+                <p class="mt-8 max-w-3xl mx-auto text-lg md:text-xl text-slate-600 fade-in" style="animation-delay: 0.4s;">
+                    가속화되는 고령화로 소멸 위기에 처한 중소기업과 활력을 잃어가는 지역 경제. 이 두 가지 국가적 난제를 해결할 검증된 해법, '기업인수창업(ETA)' 생태계를 제안합니다.
+                </p>
+                <div class="mt-12 fade-in" style="animation-delay: 0.6s;">
+                    <a href="#solution" class="bg-blue-600 text-white font-bold py-4 px-8 rounded-lg text-lg hover:bg-blue-700 transition-colors">
+                        핵심 제안 보기
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="problem" class="py-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">대한민국의 위기: 고령화와 지역 경제 소멸</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">가속화되는 인구 고령화는 숙련된 기술을 보유한 중소기업의 소멸로, 이는 다시 지역 경제의 붕괴로 이어지는 악순환을 만들고 있습니다.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-200">
+                        <div class="flex items-center">
+                            <i class="fas fa-user-clock text-4xl text-amber-500"></i>
+                            <h3 class="ml-4 text-2xl font-bold text-slate-800">가속화되는 고령화와 후계자 부재</h3>
+                        </div>
+                        <p class="mt-4 text-slate-600">고령화로 인해 수십 년의 기술과 노하우를 가진 건실한 기업들이 후계자 부재로 사라질 위기에 처해있습니다.</p>
+                        <div class="mt-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold">60대 이상 중소기업 대표</span>
+                                <span class="text-2xl font-bold text-amber-600">40% 이상</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold">후계자 승계 비율</span>
+                                <span class="text-2xl font-bold text-amber-600">50% 이하</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-200">
+                        <div class="flex items-center">
+                            <i class="fas fa-store-slash text-4xl text-red-500"></i>
+                            <h3 class="ml-4 text-2xl font-bold text-slate-800">지역 경제 소멸과 산업 기반 붕괴</h3>
+                        </div>
+                        <p class="mt-4 text-slate-600">후계자를 찾지 못한 중소기업의 폐업은 곧 지역의 일자리 감소와 세수 기반 약화로 직결됩니다. 이는 지역 공동체의 소멸을 가속화하고 국가 산업 생태계의 근간을 흔드는 심각한 문제입니다.</p>
+                        <div class="mt-6 space-y-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-arrow-down text-red-500 mt-1 mr-3"></i>
+                                <span>지역 내 양질의 일자리 소멸</span>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-arrow-down text-red-500 mt-1 mr-3"></i>
+                                <span>지역 경제 활력 저하 및 인구 유출 심화</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="precedent" class="py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">세계가 인정한 해법: ETA의 압도적인 성공률</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">ETA는 단순한 이론이 아닌, 지난 40년간 북미와 유럽에서 검증된 고수익 성장 모델입니다. 스탠퍼드 경영대학원의 연구는 이를 명확히 증명합니다.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 text-center">
+                    <div class="kpi-card bg-blue-50 p-8 rounded-xl">
+                        <p class="text-lg font-semibold text-blue-800">총 내부수익률 (IRR)</p>
+                        <p class="text-6xl font-extrabold text-blue-600 mt-2">35.1%</p>
+                    </div>
+                    <div class="kpi-card bg-green-50 p-8 rounded-xl">
+                        <p class="text-lg font-semibold text-green-800">총 투자수익률 (ROI)</p>
+                        <p class="text-6xl font-extrabold text-green-600 mt-2">4.5x</p>
+                    </div>
+                </div>
+                <div class="mt-12 bg-slate-100 p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold text-slate-800 text-center">글로벌 성공 사례: Asurion</h3>
+                    <p class="mt-4 text-slate-600 max-w-4xl mx-auto text-center">1995년, 스탠퍼드 졸업생들이 약 110억 원에 인수한 작은 긴급 차량 구조 회사는 ETA 모델을 통해 변신을 거듭했습니다. 보험과 디바이스 관리로 사업을 확장하고 혁신을 거듭한 결과, 25년 만에 1조 원 이상의 가치를 지닌 글로벌 리더 '아슈리온'으로 성장했습니다. 이는 안정된 사업을 기반으로 한 혁신이 얼마나 큰 가치를 창출하는지 보여주는 대표적인 사례입니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">과거의 실패를 넘어선 통합적 해법: 4-Pillar ETA Ecosystem</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">과거의 단편적 지원과 달리, 저희는 딜 소싱, 인재 육성, 자금 조달, 객관적 평가가 유기적으로 결합된 완성형 생태계를 제안합니다. 이는 과거 창업진흥원의 실패 요인이었던 '딜 소싱 부재'와 '신뢰 부족' 문제를 근본적으로 해결합니다.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="pillar-card bg-white p-6 rounded-xl border-2 border-transparent text-center">
+                        <i class="fas fa-cogs text-5xl text-blue-600"></i>
+                        <h3 class="mt-5 text-xl font-bold text-slate-800">Pillar 1: 리스팅 플랫폼</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">딜 소싱의 엔진</p>
+                        <p class="mt-3 text-sm text-slate-500">이미 활성화된 국내 최대 M&A 플랫폼을 통해, 과거 정부 사업의 실패 원인이었던 '거래 가능한 매물 부재' 문제를 해결합니다.</p>
+                    </div>
+                    <div class="pillar-card bg-white p-6 rounded-xl border-2 border-transparent text-center">
+                        <i class="fas fa-users-gear text-5xl text-green-600"></i>
+                        <h3 class="mt-5 text-xl font-bold text-slate-800">Pillar 2: ETA 액셀러레이터</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">인재 육성 시스템</p>
+                        <p class="mt-3 text-sm text-slate-500">세계적 수준의 커리큘럼으로 준비된 인수 창업가를 양성하여, 성공적인 기업 인수 및 가치 제고(Value-up)를 보장합니다.</p>
+                    </div>
+                    <div class="pillar-card bg-white p-6 rounded-xl border-2 border-transparent text-center">
+                        <i class="fas fa-coins text-5xl text-yellow-500"></i>
+                        <h3 class="mt-5 text-xl font-bold text-slate-800">Pillar 3: 인수금융 펀드</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">성장의 동력</p>
+                        <p class="mt-3 text-sm text-slate-500">민간 주도의 전문 펀드를 통해 인수 과정의 금융 장벽을 낮추고, 지속가능한 시장 중심의 금융 구조를 완성합니다.</p>
+                    </div>
+                    <div class="pillar-card bg-white p-6 rounded-xl border-2 border-transparent text-center">
+                        <i class="fas fa-stamp text-5xl text-purple-600"></i>
+                        <h3 class="mt-5 text-xl font-bold text-slate-800">Pillar 4: 객관적 기업평가</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">신뢰의 안전장치</p>
+                        <p class="mt-3 text-sm text-slate-500">공신력 있는 제3자 기업평가(신용/기술)를 통해 정보 비대칭을 해소하고, 거래의 투명성과 안정성을 확보합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="program" class="py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">프로그램 심층분석: 성공을 위한 18주간의 여정</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">단순한 교육을 넘어, 실제 M&A 성공을 위한 체계적인 훈련과 인프라를 제공합니다.</p>
+                </div>
+                <div class="relative max-w-2xl mx-auto">
+                    <div class="timeline-item relative pl-12 pb-12">
+                        <div class="timeline-dot bg-blue-500 border-4 border-white rounded-full flex items-center justify-center"><i class="fas fa-search text-white text-xs"></i></div>
+                        <h4 class="text-xl font-bold text-slate-800">Phase 1: 탐색 및 분석 (1-6주)</h4>
+                        <p class="mt-2 text-slate-600">딜 소싱 전략, 산업 분석, 재무 모델링 및 기업 가치 평가(Valuation) 기법을 집중적으로 학습합니다.</p>
+                    </div>
+                    <div class="timeline-item relative pl-12 pb-12">
+                        <div class="timeline-dot bg-green-500 border-4 border-white rounded-full flex items-center justify-center"><i class="fas fa-handshake text-white text-xs"></i></div>
+                        <h4 class="text-xl font-bold text-slate-800">Phase 2: 실사 및 협상 (7-12주)</h4>
+                        <p class="mt-2 text-slate-600">인수 의향서(LOI) 작성, 법률 및 회계 실사(Due Diligence) 수행, 인수금융 구조화 및 협상 전략을 훈련합니다.</p>
+                    </div>
+                    <div class="timeline-item relative pl-12 pb-12">
+                        <div class="timeline-dot bg-purple-500 border-4 border-white rounded-full flex items-center justify-center"><i class="fas fa-rocket text-white text-xs"></i></div>
+                        <h4 class="text-xl font-bold text-slate-800">Phase 3: 인수 후 통합 및 성장 (13-18주)</h4>
+                        <p class="mt-2 text-slate-600">인수 후 100일 계획(PMI), 디지털 전환(DX)을 통한 운영 효율화, 성장 전략 수립 및 실행에 집중합니다.</p>
+                    </div>
+                </div>
+                 <div class="mt-8 text-center bg-slate-50 p-6 rounded-lg">
+                    <p class="text-slate-700"><strong class="font-semibold text-blue-600">M&A 바우처 지원:</strong> 선발된 창업가에게는 기업 실사에 필요한 법률, 회계 자문 비용 등을 지원하여 초기 부담을 경감시킵니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="data" class="py-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">데이터로 증명된 시장의 움직임</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">'리스팅'은 단순한 정보망이 아닌, 실제 거래가 활발히 일어나는 살아있는 시장입니다.</p>
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-16">
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <p class="text-slate-500 font-semibold">총 누적 회원</p>
+                        <p class="text-4xl font-extrabold text-blue-600 mt-2" data-target="5493">0</p>
+                    </div>
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <p class="text-slate-500 font-semibold">총 성사된 딜</p>
+                        <p class="text-4xl font-extrabold text-green-600 mt-2" data-target="8">0</p>
+                    </div>
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <p class="text-slate-500 font-semibold">매칭 중 매물</p>
+                        <p class="text-4xl font-extrabold text-amber-500 mt-2" data-target="677">0</p>
+                    </div>
+                    <div class="kpi-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <p class="text-slate-500 font-semibold">주 평균 등록 회원</p>
+                        <p class="text-4xl font-extrabold text-slate-700 mt-2" data-target="133">0</p>
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4 text-center">매칭 중 매물 규모 분포</h3>
+                        <div class="chart-container">
+                            <canvas id="listingsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4 text-center">딜 파이프라인 현황 (25.07.15 기준)</h3>
+                        <div class="chart-container">
+                            <canvas id="pipelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="funding" class="py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">성장의 동력: 지속가능한 인수금융 생태계</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">정부 재원에만 의존하지 않는 민간 주도의 전문 펀드를 통해 시장 중심의 선순환 구조를 만듭니다.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center bg-slate-50 p-8 md:p-12 rounded-xl">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800">중소형 M&A 인수금융 펀드</h3>
+                        <p class="mt-4 text-slate-600">본 생태계의 핵심 축인 인수금융 펀드는 전통적 금융기관이 간과해 온 중소형 M&A 시장에 필수적인 유동성을 공급합니다. 이는 단순한 대출이 아닌, 성공 가능성이 높은 딜을 선별하여 지분 투자와 대출을 병행하는 전문적인 투자 활동입니다.</p>
+                    </div>
+                    <div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span><strong class="font-semibold">민첩성 및 전문성:</strong> 시장 변화에 빠르게 대응하고, 전문 운용 인력의 경험을 바탕으로 우량 딜을 선별하여 투자의 성공 확률을 높입니다.</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span><strong class="font-semibold">지속가능성:</strong> 정부 예산에 의존하지 않고 민간 자본을 유치하여, 장기적이고 안정적인 금융 지원 체계를 구축합니다.</span></li>
+                             <li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span><strong class="font-semibold">이해관계 일치:</strong> 펀드의 성공이 곧 인수 기업의 성공과 직결되므로, 모든 참여자가 기업 성장을 위해 협력하는 구조를 만듭니다.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="partnership" class="py-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-slate-800">상생의 민관협력(PPP) 모델</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">각자의 강점을 바탕으로 시너지를 창출하여, 대한민국 창업 생태계의 새로운 미래를 열겠습니다.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                    <div class="bg-blue-50 p-8 rounded-xl border-2 border-blue-200">
+                        <h3 class="text-2xl font-bold text-blue-800">LISTING 컨소시엄 (민간)</h3>
+                        <p class="mt-2 text-blue-700">시장에서 검증된 실행력과 전문성 제공</p>
+                        <ul class="mt-6 space-y-4 text-slate-700">
+                            <li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span><strong class="font-semibold">실행 인프라 제공:</strong> 리스팅 플랫폼, ETA 액셀러레이터, 인수금융 펀드, 객관적 기업평가 연계 등</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span><strong class="font-semibold">민첩한 운영:</strong> 시장 변화에 빠르게 대응하는 프로그램 설계 및 운영</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span><strong class="font-semibold">성과 중심:</strong> 실제 M&A 성공 및 인수 기업 성장에 집중</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-8 rounded-xl border-2 border-green-200">
+                        <h3 class="text-2xl font-bold text-green-800">중소벤처기업진흥공단 (공공)</h3>
+                        <p class="mt-2 text-green-700">국가적 확산을 위한 공신력과 네트워크 제공</p>
+                        <ul class="mt-6 space-y-4 text-slate-700">
+                            <li class="flex items-start"><i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i><span><strong class="font-semibold">공신력 확보:</strong> 프로그램의 대외 신뢰도 제고 및 참여 유인 확대</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i><span><strong class="font-semibold">전국적 확산:</strong> 전국 지부 네트워크를 통한 프로그램 홍보 및 참여자 모집</span></li>
+                            <li class="flex items-start"><i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i><span><strong class="font-semibold">정책 연계:</strong> 인수 완료 기업 대상 R&D, 수출, 보증 등 후속 성장 지원</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+            <h2 class="text-3xl font-bold">위대한 변화를 위한 여정, 함께 해주시길 바랍니다.</h2>
+            <p class="mt-4 max-w-2xl mx-auto text-slate-300">본 제안의 구체적인 실행 방안 논의를 위한 후속 미팅을 정중히 요청합니다. 이 파트너십은 대한민국 경제의 새로운 성장 동력을 만드는 결정적 이정표가 될 것입니다.</p>
+            <div class="mt-8">
+                <button class="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-slate-100 transition-colors">
+                    후속 미팅 요청
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link, #mobile-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = e.currentTarget.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            const sections = document.querySelectorAll('section');
+            const mainNavLinks = document.querySelectorAll('header .nav-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-80px 0px -50% 0px',
+                threshold: 0
+            };
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const targetId = '#' + entry.target.id;
+                        mainNavLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === targetId) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+            
+            function animateCounters() {
+                const counters = document.querySelectorAll('[data-target]');
+                const speed = 200;
+
+                counters.forEach(counter => {
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText.replace(/,/g, '');
+                        const inc = Math.ceil(target / speed);
+
+                        if (count < target) {
+                            counter.innerText = Math.min(count + inc, target).toLocaleString();
+                            setTimeout(updateCount, 10);
+                        } else {
+                            counter.innerText = target.toLocaleString();
+                        }
+                    };
+                    updateCount();
+                });
+            }
+
+            const dataSection = document.querySelector('#data');
+            let animated = false;
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !animated) {
+                        animateCounters();
+                        animated = true;
+                    }
+                });
+            }, { threshold: 0.5 });
+            if(dataSection) counterObserver.observe(dataSection);
+
+            const listingsData = {
+                labels: ['10억 이하', '10억 ~ 50억', '50억 ~ 300억', '300억 이상'],
+                datasets: [{
+                    label: '매물 수',
+                    data: [305, 244, 118, 10],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(34, 197, 94, 0.7)',
+                        'rgba(245, 158, 11, 0.7)',
+                        'rgba(139, 92, 246, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(34, 197, 94, 1)',
+                        'rgba(245, 158, 11, 1)',
+                        'rgba(139, 92, 246, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const listingsCtx = document.getElementById('listingsChart')?.getContext('2d');
+            if(listingsCtx) {
+                new Chart(listingsCtx, {
+                    type: 'bar',
+                    data: listingsData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw.toLocaleString()}건`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '매물 수 (건)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const pipelineData = {
+                labels: ['딜 클로즈', '클로즈 임박', 'Termsheet/LOI 진행', '인수의사 전달'],
+                datasets: [{
+                    label: '딜 수',
+                    data: [8, 4, 3, 1],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.7)',
+                        'rgba(251, 191, 36, 0.7)',
+                        'rgba(249, 115, 22, 0.7)',
+                        'rgba(99, 102, 241, 0.7)',
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+
+            const pipelineCtx = document.getElementById('pipelineChart')?.getContext('2d');
+            if(pipelineCtx){
+                new Chart(pipelineCtx, {
+                    type: 'doughnut',
+                    data: pipelineData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw.toLocaleString()}건`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
