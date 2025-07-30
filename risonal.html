@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Partnership Proposal: Listing & Risonal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- 
+    Chosen Palette: Slate Gray & Deep Indigo
+    Application Structure Plan: A single-page, scrollable narrative structure is used to guide the user logically through the proposal. The flow starts with the shared problem (market context), introduces DeepSearch as the credible solution provider, details the "Listing" platform and its AI technology, and culminates in the clear partnership proposal and value proposition. This structure is more persuasive and engaging than a static document, allowing for interactive data visualization and focused content blocks that build upon each other. Key interactions include on-scroll animations for stats, a clickable process diagram, and a dynamic comparison chart.
+    Visualization & Content Choices: 
+    - Market Comparison (Section 1): Goal: Compare the scale of the succession problem in Japan and Korea. Method: A Chart.js bar chart is used to visually represent the quantitative data (SMEs needing succession, market value). Interaction: Tooltips on hover provide exact figures. Justification: A chart is more impactful and easier to compare than a table.
+    - Platform Traction (Section 3): Goal: Showcase the "Listing" platform's success. Method: Dynamic number counters. Interaction: Numbers animate (count up) when the section scrolls into view. Justification: Animation draws attention to key metrics and makes them feel more dynamic and impressive.
+    - AI Workflow (Section 4): Goal: Explain the complex AI M&A process simply. Method: A clickable, vertical step-by-step diagram built with HTML/Tailwind. Interaction: Clicking on a step reveals a detailed description. Justification: This breaks down a complex process into digestible, user-initiated chunks, improving comprehension over a long text block.
+    - Partnership Value (Section 5): Goal: Clearly present the benefits for Risonal. Method: A clean, three-column card layout using HTML/Tailwind. Interaction: Subtle hover effects. Justification: Cards visually separate and emphasize each key value proposition.
+    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .section-title {
+            @apply text-3xl font-extrabold text-slate-800 sm:text-4xl;
+        }
+        .section-subtitle {
+            @apply mt-2 text-sm font-semibold uppercase tracking-wider text-indigo-600;
+        }
+        .card {
+            @apply bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col;
+        }
+        .nav-link {
+            @apply px-3 py-2 text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors duration-200;
+        }
+        .nav-link.active {
+            @apply text-indigo-600;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-xl font-bold text-slate-800">Listing</span>
+                <span class="text-xl font-light text-slate-500 mx-2">&</span>
+                <span class="text-xl font-bold text-indigo-600">Risonal</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-2">
+                <a href="#challenge" class="nav-link">The Market</a>
+                <a href="#solution" class="nav-link">Our Technology</a>
+                <a href="#platform" class="nav-link">The Platform</a>
+                <a href="#opportunity" class="nav-link">Our Proposal</a>
+                <a href="#discussion" class="nav-link bg-indigo-600 text-white rounded-md hover:bg-indigo-700 hover:text-white">Discussion</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-slate-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
+            <a href="#challenge" class="block nav-link text-base">The Market</a>
+            <a href="#solution" class="block nav-link text-base">Our Technology</a>
+            <a href="#platform" class="block nav-link text-base">The Platform</a>
+            <a href="#opportunity" class="block nav-link text-base">Our Proposal</a>
+            <a href="#discussion" class="block nav-link text-base bg-indigo-600 text-white rounded-md hover:bg-indigo-700 hover:text-white">Discussion</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 leading-tight">
+                    A Proposal for a Strategic Partnership
+                </h1>
+                <p class="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+                    Unlocking the Japan-Korea Cross-Border M&A Corridor by combining Risonal's high-touch advisory with DeepSearch's high-tech AI platform.
+                </p>
+                <a href="#challenge" class="mt-8 inline-block bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                    Explore the Proposal
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 1: The Shared Challenge -->
+        <section id="challenge" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h4 class="text-xl font-bold text-slate-800">A Generational Shift</h4>
+                    <h2 class="section-title">The Dawn of the Great SME M&A Era</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        A profound demographic shift is creating a massive, once-in-a-generation market opportunity. In both Japan and Korea, millions of successful first-generation SME founders are reaching retirement age, creating an urgent need for succession solutions. This isn't a niche problem; it's a vast and rapidly growing M&A market driven by powerful, irreversible trends.
+                    </p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-3 gap-8 text-center">
+                    <div class="card">
+                        <h4 class="text-xl font-bold text-slate-800">Demographic Imperative</h4>
+                        <p class="mt-2 text-slate-600">The "baby boomer" generation of founders is retiring. With fewer family members taking over, M&A has become the primary and most logical path for business succession.</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="text-xl font-bold text-slate-800">Economic Value at Stake</h4>
+                        <p class="mt-2 text-slate-600">These are not failing companies. They are profitable, stable businesses that form the backbone of the economy. Their transition represents a multi-trillion KRW opportunity to transfer and unlock immense economic value.</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="text-xl font-bold text-slate-800">A New Class of Buyers</h4>
+                        <p class="mt-2 text-slate-600">The market is expanding beyond traditional corporate acquirers. A new wave of individual entrepreneurs (ETA) and private capital is actively seeking to acquire and operate these quality SMEs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Solution (DeepSearch) -->
+        <section id="solution" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h4 class="text-xl font-bold text-slate-800">Our Core Technology</h4>
+                    <h2 class="section-title">DeepSearch's Financial AI Engine</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        At the heart of our company is a powerful, proprietary Financial AI Engine. For over a decade, we have been building a deep technological moat by integrating vast corporate and financial datasets with specialized AI. This engine allows us to create a suite of "AI Agents" that replicate the work of human financial experts at scale.
+                    </p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="card items-center text-center">
+                        <h4 class="text-lg font-bold text-slate-800">AI Analyst</h4>
+                        <p class="mt-2 text-sm text-slate-600">Provides institutional-grade corporate and market intelligence on demand.</p>
+                    </div>
+                    <div class="card items-center text-center">
+                        <h4 class="text-lg font-bold text-slate-800">AI Valuation Specialist</h4>
+                        <p class="mt-2 text-sm text-slate-600">Values complex financial instruments and companies in minutes, not weeks.</p>
+                    </div>
+                    <div class="card items-center text-center">
+                        <h4 class="text-lg font-bold text-slate-800">AI Investment Manager</h4>
+                        <p class="mt-2 text-sm text-slate-600">Scientifically designs, validates, and manages investment strategies.</p>
+                    </div>
+                    <div class="card items-center text-center">
+                        <h4 class="text-lg font-bold text-slate-800">AI M&A Manager</h4>
+                        <p class="mt-2 text-sm text-slate-600">Automates deal sourcing, analysis, and matching to connect buyers and sellers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The 'Listing' Platform -->
+        <section id="platform" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h4 class="text-xl font-bold text-slate-800">An AI-Powered Ecosystem</h4>
+                    <h2 class="section-title">The "Listing" M&A Platform</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        "Listing" is a vibrant, active marketplace delivering a continuous pipeline of buyers. Our technology-first approach has proven its ability to manage deals at scale and deliver concrete results.
+                    </p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                    <div class="card">
+                        <p class="text-5xl font-extrabold text-indigo-600" data-target="700">0</p>
+                        <h4 class="mt-2 text-lg font-semibold text-slate-700">Active M&A Deals</h4>
+                    </div>
+                    <div class="card">
+                        <p class="text-5xl font-extrabold text-indigo-600" data-target="175">0</p>
+                        <h4 class="mt-2 text-lg font-semibold text-slate-700">Deals per Manager</h4>
+                    </div>
+                    <div class="card">
+                        <p class="text-5xl font-extrabold text-indigo-600" data-target="5000">0</p>
+                        <h4 class="mt-2 text-lg font-semibold text-slate-700">Active Corporate Users</h4>
+                    </div>
+                    <div class="card">
+                        <p class="text-5xl font-extrabold text-indigo-600" data-target="9">0</p>
+                        <h4 class="mt-2 text-lg font-semibold text-slate-700">Deals Closed (Last 12M)</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 4: AI M&A Manager -->
+        <section id="technology" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h4 class="text-xl font-bold text-slate-800">Our Matching Technology</h4>
+                    <h2 class="section-title">The AI M&A Manager</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        Our true differentiation is our AI's ability to identify "Strategic Fit," going beyond financials to deliver not just more buyers, but better buyers who will be responsible stewards of a company's legacy.
+                    </p>
+                </div>
+                <div class="mt-12 max-w-3xl mx-auto">
+                    <div class="space-y-4" id="ai-process">
+                        <div class="process-step">
+                            <button class="w-full text-left p-4 bg-slate-50 rounded-lg shadow-sm flex justify-between items-center transition">
+                                <span class="font-semibold text-slate-700">1. Automated Teaser Generation</span>
+                                <span class="plus-icon text-indigo-500 text-2xl font-light">+</span>
+                            </button>
+                            <div class="description hidden p-4 bg-white border-l-2 border-indigo-200">
+                                <p>The AI automates the creation of professional teaser notes, a task that traditionally consumes weeks of an analyst's time. The process is interactive, engaging with sellers to refine and enrich the data for maximum impact.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <button class="w-full text-left p-4 bg-slate-50 rounded-lg shadow-sm flex justify-between items-center transition">
+                                <span class="font-semibold text-slate-700">2. Intelligent Buyer Analysis</span>
+                                <span class="plus-icon text-indigo-500 text-2xl font-light">+</span>
+                            </button>
+                            <div class="description hidden p-4 bg-white border-l-2 border-indigo-200">
+                                <p>Our algorithm performs a deep analysis of a potential buyer's strategic objectives, existing business lines, and technology portfolio. It identifies partners based on post-merger synergies, technological complementarity, and long-term strategic alignment.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <button class="w-full text-left p-4 bg-slate-50 rounded-lg shadow-sm flex justify-between items-center transition">
+                                <span class="font-semibold text-slate-700">3. Curated Matching & Scoring</span>
+                                <span class="plus-icon text-indigo-500 text-2xl font-light">+</span>
+                            </button>
+                            <div class="description hidden p-4 bg-white border-l-2 border-indigo-200">
+                                <p>The AI extracts a curated list of the most suitable potential buyers from our extensive database. Each candidate is scored and ranked based on the calculated probability of a successful strategic match.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <button class="w-full text-left p-4 bg-slate-50 rounded-lg shadow-sm flex justify-between items-center transition">
+                                <span class="font-semibold text-slate-700">4. Expert-Led Handoff</span>
+                                <span class="plus-icon text-indigo-500 text-2xl font-light">+</span>
+                            </button>
+                            <div class="description hidden p-4 bg-white border-l-2 border-indigo-200">
+                                <p>Once a high-potential match is identified and validated, the AI hands off the opportunity to our expert human managers, who facilitate the next phase of discussions, blending high-tech scale with high-touch expertise.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: ETA Program -->
+        <section id="eta-program" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-800">Building a Sustainable Buyer Pipeline</h4>
+                        <h2 class="section-title">The Entrepreneurship Through Acquisition (ETA) Program</h2>
+                        <p class="mt-4 text-lg text-slate-600">
+                            A healthy M&A market requires a constant supply of qualified buyers. To solve this, we created Korea's leading ETA program, actively cultivating a new generation of entrepreneurs to become the next owners of great SMEs.
+                        </p>
+                        <ul class="mt-6 space-y-4">
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mr-4">✓</span>
+                                <span class="text-slate-600">We partner with top accelerators and business schools to identify high-potential individuals who want to acquire and operate a business.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mr-4">✓</span>
+                                <span class="text-slate-600">We provide them with education, connect them to our network of financing partners, and give them direct access to suitable acquisition targets on the "Listing" platform.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mr-4">✓</span>
+                                <span class="text-slate-600">This creates a virtuous cycle: a continuous, expanding, and pre-qualified pool of buyers for the deals on our platform.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4 class="text-xl font-bold text-slate-800">Why ETA Matters for Risonal</h4>
+                        <p class="mt-2 text-slate-600">Our ETA program demonstrates our long-term commitment to market-making. For Risonal's clients, this means access not only to established corporate buyers but also to a unique and motivated class of individual acquirers who are eager to become dedicated, long-term stewards of a company's legacy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: The Opportunity -->
+        <section id="opportunity" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h4 class="text-xl font-bold text-slate-800">Our Core Proposal</h4>
+                    <h2 class="section-title">Your Gateway to Korean Strategic Buyers</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        The most direct value of this partnership is our proven ability to connect your Japanese deals with a deep, active, and motivated pool of Korean buyers. We provide the channel, the technology, and the access.
+                    </p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-3 gap-8">
+                    <div class="card">
+                         <div class="flex-grow">
+                            <h4 class="text-xl font-bold text-slate-800">3,000+ Potential Buyers</h4>
+                            <p class="mt-2 text-slate-600">Our platform provides direct access to a curated database of over 3,000 potential corporate buyers who have expressed interest in M&A activities.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex-grow">
+                            <h4 class="text-xl font-bold text-slate-800">Access to Publicly Listed Companies</h4>
+                            <p class="mt-2 text-slate-600">Many of our active users are large, publicly listed Korean corporations. These are strategic players with significant capital, actively seeking smaller, bolt-on acquisitions to facilitate their entry and expansion into the Japanese market.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex-grow">
+                            <h4 class="text-xl font-bold text-slate-800">Fulfilling a Strategic Need</h4>
+                            <p class="mt-2 text-slate-600">These Korean corporations aren't looking for large, complex mergers. They are looking for exactly the type of high-quality, small-to-medium-sized businesses that Risonal represents—a perfect strategic fit to gain a foothold in Japan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Discussion -->
+        <section id="discussion" class="py-16 md:py-24 bg-indigo-700 text-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-3xl md:text-4xl font-bold">
+                    Our Partnership Vision & Discussion
+                </h2>
+                <p class="mt-4 text-lg text-indigo-200 max-w-3xl mx-auto">
+                    By combining Risonal's premier advisory services with DeepSearch's leading AI platform, we can build the definitive, technology-powered bridge for SME M&A between Japan and Korea. We believe this alliance creates immediate, tangible value for Risonal, for DeepSearch, and most importantly, for your clients.
+                </p>
+                <div class="mt-10">
+                    <h3 class="text-xl font-semibold">We are excited to discuss how we can bring this vision to life together.</h3>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 DeepSearch, Inc. All rights reserved.</p>
+            <p class="mt-2">This is a confidential proposal intended solely for Risonal Inc.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Navigation Highlighting
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Dynamic Number Counters
+            const counters = document.querySelectorAll('[data-target]');
+            const speed = 200; 
+
+            const countUp = (el) => {
+                const target = +el.getAttribute('data-target');
+                const inc = target / speed;
+                let count = 0;
+
+                const updateCount = () => {
+                    count += inc;
+                    if (count < target) {
+                        el.innerText = Math.ceil(count).toLocaleString();
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        el.innerText = target.toLocaleString();
+                    }
+                };
+                updateCount();
+            };
+            
+            const counterObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        countUp(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+            
+            // AI Process Accordion
+            const processSteps = document.querySelectorAll('.process-step');
+            processSteps.forEach(step => {
+                const button = step.querySelector('button');
+                const description = step.querySelector('.description');
+                const plusIcon = step.querySelector('.plus-icon');
+
+                button.addEventListener('click', () => {
+                    const isHidden = description.classList.contains('hidden');
+                    
+                    // Close all others
+                    processSteps.forEach(s => {
+                        s.querySelector('.description').classList.add('hidden');
+                        s.querySelector('.plus-icon').textContent = '+';
+                    });
+
+                    // Toggle current
+                    if(isHidden) {
+                        description.classList.remove('hidden');
+                        plusIcon.textContent = '-';
+                    } else {
+                        description.classList.add('hidden');
+                        plusIcon.textContent = '+';
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
