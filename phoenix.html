@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로젝트 피닉스: 소상공인 활력도 지수 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral with Blue Accent -->
+    <!-- Application Structure Plan: A dashboard-centric, single-page application. The user starts with a high-level overview (the SME Vitality Index and its four pillars). They can then click on any pillar to "drill down" into detailed information, which dynamically updates the main content area. This structure avoids overwhelming the user with a long, scrolling document and encourages exploration by making complex information accessible through interaction. The flow is: 1. High-level summary dashboard. 2. Interactive drill-down into each of the four pillars. 3. A section explaining the role of AI with a mock generated report. 4. A section for policy implications and interactive stress testing. This non-linear, task-oriented structure is superior to a simple report-to-webpage conversion for user engagement and comprehension. -->
+    <!-- Visualization & Content Choices: 
+        - Goal: Inform (Overall Status) -> Viz: Donut Chart (Chart.js) for the main Vitality Index, Radar Chart (Chart.js) for the four pillars. Interaction: Hovering over pillar chart segments reveals tooltips. Justification: Provides an immediate, scannable summary of the business's overall health.
+        - Goal: Compare (Old vs. New Model) -> Viz: Styled HTML Table. Interaction: None. Justification: A direct and clear way to present the comparative data from the report's Table 1.1.
+        - Goal: Change (Real-time vs. Annual Data) -> Viz: Line Chart (Chart.js). Interaction: Click on Pillar 1 to view. Justification: Visually demonstrates the key advantage of the new model – its real-time nature.
+        - Goal: Organize (Pillar Details) -> Viz: HTML/CSS Cards and dynamic text blocks. Interaction: Clicking a pillar card updates the main view. Justification: Organizes detailed information logically, preventing cognitive overload.
+        - Goal: Relationships (Data Sources to Pillars) -> Viz: Interactive HTML grid. Interaction: Hovering over a data source highlights the pillars it feeds. Justification: Clearly illustrates the data architecture from Table 2.1.
+        - Goal: Demonstrate (AI's Role) -> Viz: Mock generated report (HTML text block) and interactive stress-test buttons. Interaction: Clicking buttons simulates economic scenarios. Justification: Makes the abstract concept of AI's contribution and resilience testing tangible and understandable.
+        - Library/Method: Chart.js for all charts, rendered on Canvas. Custom JS for all interactions and dynamic content updates.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F7F6; /* Warm Neutral Background */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #1E40AF; /* Darker Blue for active/hover */
+            border-bottom-color: #1E40AF;
+        }
+        .pillar-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .stress-btn.active {
+            background-color: #1E40AF;
+            color: white;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-blue-900">프로젝트 피닉스</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">대시보드</a>
+                        <a href="#framework" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">평가 프레임워크</a>
+                        <a href="#ai-role" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">AI의 역할</a>
+                        <a href="#policy" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">정책 연계</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app" class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <section id="dashboard" class="pt-16 -mt-16">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">소상공인 활력도 지수</h1>
+                <p class="text-lg text-gray-600">데이터 기반의 동적 평가로 소상공인의 현재와 미래를 진단합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <div class="lg:col-span-1 flex justify-center">
+                    <div class="relative w-64 h-64 sm:w-80 sm:h-80">
+                        <canvas id="vitalityIndexChart"></canvas>
+                        <div id="vitalityScore" class="absolute inset-0 flex flex-col items-center justify-center text-blue-900">
+                            <span class="text-6xl font-bold">78</span>
+                            <span class="text-xl font-medium">활력도 지수</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2">
+                    <div class="chart-container mx-auto h-80 md:h-96 max-h-[50vh]">
+                        <canvas id="pillarsRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold text-center mb-6">활력도 지수의 4대 핵심 축</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">활력도 지수는 네 가지 핵심 축을 종합하여 산출됩니다. 각 축은 소상공인의 특정 역량을 심층적으로 평가하며, 아이콘을 클릭하면 해당 설명으로 이동합니다.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="1">
+                        <div class="text-4xl mb-4 text-blue-600">💰</div>
+                        <h3 class="text-lg font-bold mb-2">재무 건전성</h3>
+                        <p class="text-sm text-gray-600">실시간 매출, 현금 흐름, 재무적 성실도를 평가합니다.</p>
+                    </div>
+                    <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="2">
+                        <div class="text-4xl mb-4 text-blue-600">⚙️</div>
+                        <h3 class="text-lg font-bold mb-2">운영 효율성</h3>
+                        <p class="text-sm text-gray-600">상품/메뉴 최적화, 재고 및 인력 관리 능력을 측정합니다.</p>
+                    </div>
+                    <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="3">
+                        <div class="text-4xl mb-4 text-blue-600">📈</div>
+                        <h3 class="text-lg font-bold mb-2">시장 경쟁력</h3>
+                        <p class="text-sm text-gray-600">상권 환경, 고객 리뷰 분석을 통해 시장 내 입지를 평가합니다.</p>
+                    </div>
+                    <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="4">
+                        <div class="text-4xl mb-4 text-blue-600">🔮</div>
+                        <h3 class="text-lg font-bold mb-2">미래 성장성</h3>
+                        <p class="text-sm text-gray-600">매출 예측과 스트레스 테스트로 잠재력과 회복력을 진단합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="framework" class="pt-24 -mt-16">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">새로운 평가 패러다임</h1>
+                <p class="text-lg text-gray-600">과거의 기록이 아닌, 현재의 역량과 미래의 가능성을 평가합니다.</p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg mb-12">
+                <h2 class="text-xl font-bold mb-4 text-center">전통적 모델 vs 활력도 지수</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">구분</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">전통적 모델</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">활력도 지수 (제안 모델)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">평가 초점</td>
+                                <td class="px-6 py-4 whitespace-nowrap">과거 재무 성과, 상환 이력</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-bold text-blue-700">총체적 비즈니스 건강 상태 (재무, 운영, 시장, 성장)</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">평가 시점</td>
+                                <td class="px-6 py-4 whitespace-nowrap">과거 (후행적)</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-bold text-blue-700">현재 및 미래 (실시간 + 예측)</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">주요 약점</td>
+                                <td class="px-6 py-4 whitespace-nowrap">'씬파일러' 배제, 시장 변화 반영 지연</td>
+                                <td class="px-6 py-4 whitespace-nowrap">데이터 통합의 복잡성, 초기 구축 비용</td>
+                            </tr>
+                             <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">주요 강점</td>
+                                <td class="px-6 py-4 whitespace-nowrap">표준화된 절차</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-bold text-blue-700">포용성, 정확성, 예측력, 동적 리스크 관리</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="allPillarDetails" class="space-y-12">
+                <div id="pillarDetailBlock1" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg"></div>
+                <div id="pillarDetailBlock2" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg"></div>
+                <div id="pillarDetailBlock3" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg"></div>
+                <div id="pillarDetailBlock4" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg"></div>
+            </div>
+        </section>
+        
+        <section id="ai-role" class="pt-24 -mt-16">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">생성형 AI의 역할</h1>
+                <p class="text-lg text-gray-600">데이터를 통찰력으로, 분석을 실행 가능한 보고서로 변환합니다.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">자동화된 서술형 보고서 (예시)</h2>
+                    <div class="bg-gray-50 p-4 rounded-md space-y-3 text-sm h-96 overflow-y-auto">
+                        <p class="font-bold">[Executive Summary]</p>
+                        <p>본 신청인의 소상공인 활력도 지수는 <span class="font-bold text-blue-700">78점</span>으로, '양호' 등급에 해당합니다. 특히 <span class="font-bold text-green-600">운영 효율성(92점)</span>과 <span class="font-bold text-green-600">시장 경쟁력(85점)</span>에서 높은 점수를 획득했으나, <span class="font-bold text-yellow-600">미래 성장성(65점)</span>은 추가적인 관리가 필요합니다.</p>
+                        <p class="font-bold">[재무 건전성 분석]</p>
+                        <p>지난 24개월간 공과금 및 통신요금 연체 이력이 없어 재무적 성실도가 높게 평가되었습니다. 다만, 최근 3개월간 카드 매출 변동성이 동종업계 평균 대비 15% 높게 나타나 현금흐름 안정성 관리가 요구됩니다.</p>
+                        <p class="font-bold">[시장 경쟁력 분석]</p>
+                        <p>온라인 리뷰 250건에 대한 감성 분석 결과, 긍정 리뷰 비율이 92%에 달하며, 특히 '신선한 재료'와 '친절한 서비스' 관련 키워드가 다수 언급되어 강력한 고객 자본을 형성하고 있습니다.</p>
+                        <p class="font-bold">[종합 의견]</p>
+                        <p>안정적인 운영 능력과 높은 고객 만족도를 바탕으로 현재 사업 기반은 튼튼하나, 향후 금리 인상 시나리오에서 이자 부담이 25% 증가할 것으로 예측되어, 선제적인 비용 구조 개선 노력이 필요합니다.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">데이터 소스 맵핑</h2>
+                    <p class="text-sm text-gray-600 mb-4">데이터 소스에 마우스를 올리면 어떤 평가 축에 활용되는지 확인할 수 있습니다.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,4">💳 카드</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2">🏦 은행/보험</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">🏛️ 공공기관</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">📟 POS</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">📱 쇼핑몰/배달앱</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,3">📡 통신사</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="3,4">� 포털</div>
+                    </div>
+                    <div class="mt-6 space-y-2">
+                        <div id="map-pillar-1" class="map-pillar-target p-2 rounded-md transition-all">💰 재무 건전성</div>
+                        <div id="map-pillar-2" class="map-pillar-target p-2 rounded-md transition-all">⚙️ 운영 효율성</div>
+                        <div id="map-pillar-3" class="map-pillar-target p-2 rounded-md transition-all">📈 시장 경쟁력</div>
+                        <div id="map-pillar-4" class="map-pillar-target p-2 rounded-md transition-all">🔮 미래 성장성</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="policy" class="pt-24 -mt-16">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">정책 연계 및 스트레스 테스트</h1>
+                <p class="text-lg text-gray-600">데이터 기반의 맞춤형 정책 설계와 선제적 리스크 관리를 지원합니다.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">맞춤형 대출 상품 설계</h2>
+                    <ul class="space-y-4">
+                        <li class="p-4 bg-blue-50 rounded-lg">
+                            <h3 class="font-bold text-blue-800">성장 가속화 대출</h3>
+                            <p class="text-sm text-gray-700">미래 성장성이 높은 '고위험 고성장' 유형을 위한 사업 확장 자금 지원</p>
+                        </li>
+                        <li class="p-4 bg-green-50 rounded-lg">
+                            <h3 class="font-bold text-green-800">안정 기반 대출</h3>
+                            <p class="text-sm text-gray-700">재무/운영이 안정적인 '안정형' 소상공인을 위한 저금리 운전자금 지원</p>
+                        </li>
+                        <li class="p-4 bg-yellow-50 rounded-lg">
+                            <h3 class="font-bold text-yellow-800">재기 지원 대출</h3>
+                            <p class="text-sm text-gray-700">긍정적 반등 신호가 포착되는 '턴어라운드' 유형을 위한 재도약 자금 지원</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">거시경제 스트레스 테스트 시뮬레이션</h2>
+                    <p class="text-sm text-gray-600 mb-4">가상 시나리오를 적용하여 소상공인의 경제 회복력을 테스트합니다.</p>
+                    <div class="flex space-x-2 mb-4">
+                        <button class="stress-btn flex-1 p-2 text-sm rounded-md bg-gray-200 transition" data-scenario="base">기본</button>
+                        <button class="stress-btn flex-1 p-2 text-sm rounded-md bg-gray-200 transition" data-scenario="recession">경기 침체</button>
+                        <button class="stress-btn flex-1 p-2 text-sm rounded-md bg-gray-200 transition" data-scenario="stagflation">스태그플레이션</button>
+                    </div>
+                    <div class="chart-container h-48 max-h-[25vh]">
+                        <canvas id="stressTestChart"></canvas>
+                    </div>
+                    <div id="stress-text" class="mt-4 text-sm bg-gray-50 p-3 rounded-md">
+                        시나리오를 선택하여 예상되는 재무 영향을 확인하세요.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pillarData = {
+                scores: {
+                    labels: ['재무 건전성', '운영 효율성', '시장 경쟁력', '미래 성장성'],
+                    datasets: [{
+                        label: '활력도 점수',
+                        data: [72, 92, 85, 65],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+                    }]
+                },
+                details: {
+                    '1': {
+                        title: '💰 제1축: 실시간 재무 건전성 및 안정성',
+                        description: '연 단위의 정적인 재무제표 분석에서 벗어나, 고빈도(high-frequency) 데이터를 활용하여 소상공인의 재무 건전성과 안정성을 실시간으로, 그리고 동적으로 평가합니다. 이는 기업의 재무 상태를 과거의 기록이 아닌 현재의 활력 징후(vital sign)로 파악하려는 시도입니다.',
+                        chartType: 'line',
+                        chartData: {
+                            labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+                            datasets: [{
+                                label: '실시간 매출',
+                                data: [65, 59, 80, 81, 56, 72],
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }, {
+                                label: '전년도 월평균 매출',
+                                data: [60, 60, 60, 60, 60, 60],
+                                fill: false,
+                                borderColor: 'rgb(255, 99, 132)',
+                                borderDash: [5, 5],
+                                tension: 0.1
+                            }]
+                        },
+                        chartTitle: '실시간 매출 vs 전년도 평균'
+                    },
+                    '2': {
+                        title: '⚙️ 제2축: 운영 탁월성 및 효율성',
+                        description: '소상공인의 \'경영 능력\'이라는 무형의 자산을 객관적인 데이터로 측정합니다. 동일한 매출을 올리더라도, 더 효율적으로 자원을 활용하고 현명한 운영 결정을 내리는 사업주는 장기적인 생존 가능성이 훨씬 높습니다.',
+                        chartType: 'bar',
+                        chartData: {
+                            labels: ['스타 상품', '캐시카우', '의문 상품', '도그 상품'],
+                            datasets: [{
+                                label: '상품 포트폴리오 분석',
+                                data: [4, 6, 2, 1],
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.6)',
+                                    'rgba(75, 192, 192, 0.6)',
+                                    'rgba(255, 206, 86, 0.6)',
+                                    'rgba(255, 99, 132, 0.6)'
+                                ]
+                            }]
+                        },
+                        chartTitle: '상품 포트폴리오(BCG 매트릭스) 분석'
+                    },
+                    '3': {
+                        title: '📈 제3축: 시장 경쟁력 및 고객 자본',
+                        description: '소상공인이 속한 미시적 시장 환경의 경쟁 강도와 그 안에서 차지하는 전략적 위치, 그리고 고객과의 관계에서 창출되는 무형의 자산인 \'고객 자본(Customer Capital)\'을 평가합니다.',
+                        chartType: 'doughnut',
+                        chartData: {
+                            labels: ['긍정', '중립', '부정'],
+                            datasets: [{
+                                label: '고객 리뷰 감성 분석',
+                                data: [92, 5, 3],
+                                backgroundColor: [
+                                    'rgba(75, 192, 192, 0.8)',
+                                    'rgba(201, 203, 207, 0.8)',
+                                    'rgba(255, 99, 132, 0.8)'
+                                ]
+                            }]
+                        },
+                        chartTitle: '고객 리뷰 감성 분석 (%)'
+                    },
+                    '4': {
+                        title: '🔮 제4축: 예측 성장성 및 경제 회복력',
+                        description: '평가의 관점을 현재에서 미래로 확장합니다. 해당 소상공인의 미래 성장 궤적을 예측하고, 거시 경제의 불확실성 속에서 생존할 수 있는 내재적 힘, 즉 회복력(Resilience)을 측정합니다.',
+                        chartType: 'line',
+                        chartData: {
+                            labels: ['-6개월', '-3개월', '현재', '+3개월', '+6개월', '+12개월'],
+                            datasets: [{
+                                label: 'AI 기반 매출 예측',
+                                data: [50, 55, 72, 75, 78, 82],
+                                fill: true,
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                borderColor: 'rgb(59, 130, 246)',
+                                tension: 0.2
+                            }]
+                        },
+                        chartTitle: 'AI 기반 미래 매출 예측'
+                    }
+                }
+            };
+            
+            const stressTestData = {
+                base: {
+                    label: '기본 시나리오',
+                    data: [100, 100],
+                    text: '현재 재무 상태를 기반으로 한 예상 현금 흐름 및 순이익입니다.'
+                },
+                recession: {
+                    label: '경기 침체 시나리오',
+                    data: [85, 75],
+                    text: '경기 침체(소비 10% 감소, 금리 1.5%p 인상) 시, 예상 현금 흐름은 15%, 순이익은 25% 감소할 것으로 예측됩니다.'
+                },
+                stagflation: {
+                    label: '스태그플레이션 시나리오',
+                    data: [90, 60],
+                    text: '스태그플레이션(원자재 15% 상승, 금리 3%p 인상) 시, 예상 현금 흐름은 10%, 순이익은 40% 감소하여 리스크가 크게 증가합니다.'
+                }
+            };
+            
+            let vitalityIndexChart, pillarsRadarChart, stressTestChart;
+
+            const createVitalityIndexChart = () => {
+                const ctx = document.getElementById('vitalityIndexChart').getContext('2d');
+                vitalityIndexChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [78, 22],
+                            backgroundColor: ['#2563EB', '#E5E7EB'],
+                            borderWidth: 0,
+                            circumference: 360,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '80%',
+                        plugins: {
+                            tooltip: { enabled: false }
+                        }
+                    }
+                });
+            };
+
+            const createPillarsRadarChart = () => {
+                const ctx = document.getElementById('pillarsRadarChart').getContext('2d');
+                pillarsRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: pillarData.scores,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { display: true },
+                                suggestedMin: 0,
+                                suggestedMax: 100,
+                                pointLabels: { font: { size: 14 } },
+                                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                                ticks: {
+                                    backdropColor: 'transparent',
+                                    stepSize: 20
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => `${context.dataset.label}: ${context.raw}`
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+            
+            const createStressTestChart = (scenario = 'base') => {
+                const ctx = document.getElementById('stressTestChart').getContext('2d');
+                const scenarioData = stressTestData[scenario];
+                
+                if (stressTestChart) {
+                    stressTestChart.data.datasets[0].data = scenarioData.data;
+                    stressTestChart.update();
+                } else {
+                    stressTestChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['예상 현금흐름', '예상 순이익'],
+                            datasets: [{
+                                label: scenarioData.label,
+                                data: scenarioData.data,
+                                backgroundColor: ['rgba(59, 130, 246, 0.6)', 'rgba(34, 197, 94, 0.6)'],
+                                barThickness: 40,
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    max: 110
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                title: { display: true, text: '시나리오별 재무 영향 (%)' }
+                            }
+                        }
+                    });
+                }
+                document.getElementById('stress-text').textContent = scenarioData.text;
+            };
+
+            const populateAndCreatePillarCharts = () => {
+                for (let i = 1; i <= 4; i++) {
+                    const pillarId = i.toString();
+                    const container = document.getElementById(`pillarDetailBlock${pillarId}`);
+                    const data = pillarData.details[pillarId];
+
+                    if (container && data) {
+                        container.innerHTML = `
+                            <h2 class="text-2xl font-bold mb-2">${data.title}</h2>
+                            <p class="text-gray-600 mb-6">${data.description}</p>
+                            <div class="chart-container h-64 max-h-[40vh]">
+                                <canvas id="detailChart${pillarId}"></canvas>
+                            </div>
+                        `;
+                        
+                        const ctx = document.getElementById(`detailChart${pillarId}`).getContext('2d');
+                        new Chart(ctx, {
+                            type: data.chartType,
+                            data: data.chartData,
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: data.chartTitle,
+                                        font: { size: 16 }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => observer.observe(section));
+
+            document.querySelectorAll('.pillar-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const pillarId = e.currentTarget.dataset.pillar;
+                    const targetElement = document.getElementById(`pillarDetailBlock${pillarId}`);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
+
+            document.querySelectorAll('.data-source-item').forEach(item => {
+                const targetPillars = item.dataset.sources.split(',');
+                item.addEventListener('mouseenter', () => {
+                    targetPillars.forEach(pillarId => {
+                        document.getElementById(`map-pillar-${pillarId}`).classList.add('bg-blue-200', 'font-bold');
+                    });
+                });
+                item.addEventListener('mouseleave', () => {
+                    targetPillars.forEach(pillarId => {
+                        document.getElementById(`map-pillar-${pillarId}`).classList.remove('bg-blue-200', 'font-bold');
+                    });
+                });
+            });
+            
+            document.querySelectorAll('.stress-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const scenario = e.currentTarget.dataset.scenario;
+                    createStressTestChart(scenario);
+                    document.querySelectorAll('.stress-btn').forEach(btn => btn.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                });
+            });
+
+            createVitalityIndexChart();
+            createPillarsRadarChart();
+            populateAndCreatePillarCharts();
+            createStressTestChart();
+            document.querySelector('.stress-btn[data-scenario="base"]').classList.add('active');
+        });
+    </script>
+</body>
+</html>
+�
