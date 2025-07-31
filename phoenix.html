@@ -111,25 +111,25 @@
 
             <div class="mt-12">
                 <h2 class="text-2xl font-bold text-center mb-6">활력도 지수의 4대 핵심 축</h2>
-                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">활력도 지수는 네 가지 핵심 축을 종합하여 산출됩니다. 각 축은 소상공인의 특정 역량을 심층적으로 평가하며, 아이콘을 클릭하면 해당 설명으로 이동합니다.</p>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">활력도 지수는 네 가지 핵심 축을 종합하여 산출됩니다. 각 축은 소상공인의 특정 역량을 심층적으로 평가하며, 카드를 클릭하면 해당 설명으로 이동합니다.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="1">
-                        <div class="text-4xl mb-4 text-blue-600">💰</div>
+                        <div class="text-2xl font-bold mb-4 text-blue-600">[재무]</div>
                         <h3 class="text-lg font-bold mb-2">재무 건전성</h3>
                         <p class="text-sm text-gray-600">실시간 매출, 현금 흐름, 재무적 성실도를 평가합니다.</p>
                     </div>
                     <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="2">
-                        <div class="text-4xl mb-4 text-blue-600">⚙️</div>
+                        <div class="text-2xl font-bold mb-4 text-blue-600">[운영]</div>
                         <h3 class="text-lg font-bold mb-2">운영 효율성</h3>
                         <p class="text-sm text-gray-600">상품/메뉴 최적화, 재고 및 인력 관리 능력을 측정합니다.</p>
                     </div>
                     <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="3">
-                        <div class="text-4xl mb-4 text-blue-600">📈</div>
+                        <div class="text-2xl font-bold mb-4 text-blue-600">[시장]</div>
                         <h3 class="text-lg font-bold mb-2">시장 경쟁력</h3>
                         <p class="text-sm text-gray-600">상권 환경, 고객 리뷰 분석을 통해 시장 내 입지를 평가합니다.</p>
                     </div>
                     <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="4">
-                        <div class="text-4xl mb-4 text-blue-600">🔮</div>
+                        <div class="text-2xl font-bold mb-4 text-blue-600">[성장]</div>
                         <h3 class="text-lg font-bold mb-2">미래 성장성</h3>
                         <p class="text-sm text-gray-600">매출 예측과 스트레스 테스트로 잠재력과 회복력을 진단합니다.</p>
                     </div>
@@ -211,19 +211,19 @@
                     <h2 class="text-xl font-bold mb-4">데이터 소스 맵핑</h2>
                     <p class="text-sm text-gray-600 mb-4">데이터 소스에 마우스를 올리면 어떤 평가 축에 활용되는지 확인할 수 있습니다.</p>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,4">💳 카드</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2">🏦 은행/보험</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">🏛️ 공공기관</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">📟 POS</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">📱 쇼핑몰/배달앱</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,3">📡 통신사</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="3,4">� 포털</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,4">[카드]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2">[은행/보험]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">[공공기관]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">[POS]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">[쇼핑몰/배달앱]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,3">[통신사]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="3,4">[포털]</div>
                     </div>
                     <div class="mt-6 space-y-2">
-                        <div id="map-pillar-1" class="map-pillar-target p-2 rounded-md transition-all">💰 재무 건전성</div>
-                        <div id="map-pillar-2" class="map-pillar-target p-2 rounded-md transition-all">⚙️ 운영 효율성</div>
-                        <div id="map-pillar-3" class="map-pillar-target p-2 rounded-md transition-all">📈 시장 경쟁력</div>
-                        <div id="map-pillar-4" class="map-pillar-target p-2 rounded-md transition-all">🔮 미래 성장성</div>
+                        <div id="map-pillar-1" class="map-pillar-target p-2 rounded-md transition-all">[재무] 재무 건전성</div>
+                        <div id="map-pillar-2" class="map-pillar-target p-2 rounded-md transition-all">[운영] 운영 효율성</div>
+                        <div id="map-pillar-3" class="map-pillar-target p-2 rounded-md transition-all">[시장] 시장 경쟁력</div>
+                        <div id="map-pillar-4" class="map-pillar-target p-2 rounded-md transition-all">[성장] 미래 성장성</div>
                     </div>
                 </div>
             </div>
@@ -271,6 +271,15 @@
         </section>
 
     </main>
+
+    <footer class="bg-gray-100 border-t border-gray-200 mt-12">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-600">
+            <div class="mb-2">
+                <p class="text-sm">문의: 딥서치 김재윤 대표 | <a href="mailto:jykim@deepsearch.com" class="text-blue-600 hover:underline">jykim@deepsearch.com</a> | 010-5122-3415</p>
+            </div>
+            <p class="text-sm">&copy; 2025 DeepSearch. All Rights Reserved.</p>
+        </div>
+    </footer>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -290,7 +299,7 @@
                 },
                 details: {
                     '1': {
-                        title: '💰 제1축: 실시간 재무 건전성 및 안정성',
+                        title: '[재무] 제1축: 실시간 재무 건전성 및 안정성',
                         description: '연 단위의 정적인 재무제표 분석에서 벗어나, 고빈도(high-frequency) 데이터를 활용하여 소상공인의 재무 건전성과 안정성을 실시간으로, 그리고 동적으로 평가합니다. 이는 기업의 재무 상태를 과거의 기록이 아닌 현재의 활력 징후(vital sign)로 파악하려는 시도입니다.',
                         chartType: 'line',
                         chartData: {
@@ -313,7 +322,7 @@
                         chartTitle: '실시간 매출 vs 전년도 평균'
                     },
                     '2': {
-                        title: '⚙️ 제2축: 운영 탁월성 및 효율성',
+                        title: '[운영] 제2축: 운영 탁월성 및 효율성',
                         description: '소상공인의 \'경영 능력\'이라는 무형의 자산을 객관적인 데이터로 측정합니다. 동일한 매출을 올리더라도, 더 효율적으로 자원을 활용하고 현명한 운영 결정을 내리는 사업주는 장기적인 생존 가능성이 훨씬 높습니다.',
                         chartType: 'bar',
                         chartData: {
@@ -332,7 +341,7 @@
                         chartTitle: '상품 포트폴리오(BCG 매트릭스) 분석'
                     },
                     '3': {
-                        title: '📈 제3축: 시장 경쟁력 및 고객 자본',
+                        title: '[시장] 제3축: 시장 경쟁력 및 고객 자본',
                         description: '소상공인이 속한 미시적 시장 환경의 경쟁 강도와 그 안에서 차지하는 전략적 위치, 그리고 고객과의 관계에서 창출되는 무형의 자산인 \'고객 자본(Customer Capital)\'을 평가합니다.',
                         chartType: 'doughnut',
                         chartData: {
@@ -350,7 +359,7 @@
                         chartTitle: '고객 리뷰 감성 분석 (%)'
                     },
                     '4': {
-                        title: '🔮 제4축: 예측 성장성 및 경제 회복력',
+                        title: '[성장] 제4축: 예측 성장성 및 경제 회복력',
                         description: '평가의 관점을 현재에서 미래로 확장합니다. 해당 소상공인의 미래 성장 궤적을 예측하고, 거시 경제의 불확실성 속에서 생존할 수 있는 내재적 힘, 즉 회복력(Resilience)을 측정합니다.',
                         chartType: 'line',
                         chartData: {
@@ -581,4 +590,3 @@
     </script>
 </body>
 </html>
-�
