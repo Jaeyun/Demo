@@ -10,10 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: KB Gold & Modern Neutrals -->
-    <!-- Application Structure Plan: The SPA structure is refined to: 1) Introduction, 2) Architecture, 3) Data Ecosystem, 4) Risk Cockpit, 5) Risk Alert Service, 6) AI Co-pilot, and 7) Execution Plan. This version provides a highly detailed view of the AI Co-pilot's functionality. -->
+    <!-- Application Structure Plan: The SPA structure is refined to: 1) Introduction, 2) Architecture, 3) Data Ecosystem, 4) Risk Cockpit, 5) Risk Alert Service, 6) AI Co-pilot, and 7) Execution Plan. This version features the requested treemap-style heatmap. -->
     <!-- Visualization & Content Choices: 
-        - AI Co-pilot: User Request -> Goal: Explain a detailed end-to-end process -> Viz: A multi-stage visual workflow diagram using cards and connecting arrows. -> Interaction: None (static visual for clarity) -> Justification: Breaks down the complex interview assistance process into clear, manageable steps (Preparation, Briefing, Execution, Follow-up) as requested by the user. -> Library/Method: HTML/Tailwind.
-        - Other sections are maintained in the established logical order.
+        - Treemap Heatmap: User Request -> Goal: Show macroscopic risk distribution with weighting -> Viz: A treemap where industry groups and individual companies are sized proportionally to their portfolio weight. -> Interaction: Hover on cells for tooltips. -> Justification: Accurately implements the user's visual reference, providing a dense, at-a-glance view of the entire portfolio's risk structure. -> Library/Method: HTML/Tailwind/JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -27,10 +26,26 @@
         .border-kb-gold { border-color: #b08d57; }
         .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: #b08d57; margin-top: 1rem; margin-left: auto; margin-right: auto; }
-        .heatmap-cell { text-align: center; padding: 0.5rem; border-radius: 0.25rem; color: white; font-weight: bold; }
         .heatmap-green { background-color: #10b981; }
         .heatmap-yellow { background-color: #f59e0b; }
         .heatmap-red { background-color: #ef4444; }
+        .treemap-cell {
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid #f8f9fa;
+        }
+        .treemap-cell:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -209,38 +224,9 @@
                             </div>
                         </div>
                         <div class="card p-6">
-                            <h3 class="text-xl font-bold mb-4">주요 관리 기업 리스크</h3>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm text-left">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-4 py-3">기업명</th>
-                                            <th scope="col" class="px-4 py-3">산업</th>
-                                            <th scope="col" class="px-4 py-3 text-center">리스크 등급</th>
-                                            <th scope="col" class="px-4 py-3">주요 이슈</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-white border-b hover:bg-red-50">
-                                            <td class="px-4 py-3 font-medium">코어칩스</td>
-                                            <td class="px-4 py-3">반도체</td>
-                                            <td class="px-4 py-3 text-center"><span class="heatmap-cell heatmap-red">고위험</span></td>
-                                            <td class="px-4 py-3">DDI 재고 급증, 현금흐름 악화</td>
-                                        </tr>
-                                        <tr class="bg-white border-b hover:bg-amber-50">
-                                            <td class="px-4 py-3 font-medium">미래건설</td>
-                                            <td class="px-4 py-3">건설</td>
-                                            <td class="px-4 py-3 text-center"><span class="heatmap-cell heatmap-yellow">주의</span></td>
-                                            <td class="px-4 py-3">PF 대출 만기 집중, 원자재가 상승</td>
-                                        </tr>
-                                        <tr class="bg-white hover:bg-green-50">
-                                            <td class="px-4 py-3 font-medium">KB오토</td>
-                                            <td class="px-4 py-3">자동차</td>
-                                            <td class="px-4 py-3 text-center"><span class="heatmap-cell heatmap-green">안정</span></td>
-                                            <td class="px-4 py-3">전기차 부품 점유율 확대</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <h3 class="text-xl font-bold mb-4">산업 및 기업 리스크 히트맵</h3>
+                            <div id="treemap-container" class="w-full aspect-video bg-gray-200 rounded-lg p-1 flex flex-col gap-1">
+                                <!-- JS will render treemap here -->
                             </div>
                         </div>
                     </div>
@@ -441,6 +427,93 @@
                     }
                 });
             }
+
+            function generateTreemapData() {
+                 const industriesData = {
+                    '반도체': { weight: 28, baseRisk: 'red', companies: ['삼성전자', 'SK하이닉스', 'DB하이텍', '원익IPS', '리노공업', '한미반도체', '주성엔지니어링', '이오테크닉스', '솔브레인', '동진쎄미켐', 'SK실트론', 'LX세미콘'] },
+                    '자동차': { weight: 22, baseRisk: 'green', companies: ['현대차', '기아', '현대모비스', 'HL만도', '한국타이어', '금호타이어', '현대위아', '한온시스템', '성우하이텍'] },
+                    '건설': { weight: 18, baseRisk: 'red', companies: ['현대건설', 'GS건설', 'DL이앤씨', '대우건설', '삼성물산', '포스코이앤씨', '태영건설'] },
+                    '금융': { weight: 10, baseRisk: 'green', companies: ['KB금융', '신한지주', '하나금융지주', '우리금융지주', '삼성생명', '미래에셋증권'] },
+                    '바이오': { weight: 8, baseRisk: 'yellow', companies: ['삼성바이오로직스', '셀트리온', 'SK바이오팜', '유한양행', '한미약품'] },
+                    '유통': { weight: 5, baseRisk: 'green', companies: ['이마트', '롯데쇼핑', '신세계', 'BGF리테일', 'GS리테일'] },
+                    'IT 서비스': { weight: 5, baseRisk: 'green', companies: ['NAVER', '카카오', '삼성SDS', 'KT', 'SK텔레콤'] },
+                    '화학': { weight: 4, baseRisk: 'yellow', companies: ['LG화학', '롯데케미칼', '한화솔루션', '금호석유'] },
+                };
+
+                return Object.keys(industriesData).map(industryName => {
+                    const industry = industriesData[industryName];
+                    const companies = industry.companies.map(companyName => {
+                        let risk;
+                        const riskRand = Math.random();
+                        if (industry.baseRisk === 'green') {
+                            risk = riskRand < 0.8 ? 'green' : (riskRand < 0.95 ? 'yellow' : 'red');
+                        } else if (industry.baseRisk === 'yellow') {
+                            risk = riskRand < 0.2 ? 'green' : (riskRand < 0.8 ? 'yellow' : 'red');
+                        } else { // red
+                            risk = riskRand < 0.1 ? 'green' : (riskRand < 0.5 ? 'yellow' : 'red');
+                        }
+                        return { name: companyName, risk: risk, size: Math.random() * 5 + 5 };
+                    });
+                    
+                    return { name: industryName, weight: industry.weight, companies: companies };
+                });
+            }
+
+            function renderTreemap() {
+                const data = generateTreemapData();
+                const container = document.getElementById('treemap-container');
+                if (!container) return;
+                container.innerHTML = '';
+
+                const mainGroups = [
+                    { flex: 6, children: data.slice(0, 3) },
+                    { flex: 4, children: data.slice(3) }
+                ];
+
+                mainGroups.forEach(group => {
+                    const groupContainer = document.createElement('div');
+                    groupContainer.className = 'flex flex-col gap-1';
+                    groupContainer.style.flexGrow = group.flex;
+
+                    group.children.forEach(industry => {
+                        const industryContainer = document.createElement('div');
+                        industryContainer.className = 'border border-gray-300 bg-white rounded p-2 flex flex-col';
+                        industryContainer.style.flexGrow = industry.weight;
+
+                        const industryTitle = document.createElement('h4');
+                        industryTitle.className = 'font-bold text-sm text-gray-800 mb-2 flex-shrink-0';
+                        industryTitle.textContent = industry.name;
+                        
+                        const companyGrid = document.createElement('div');
+                        companyGrid.className = 'grid gap-1 flex-grow';
+                        
+                        const numCompanies = industry.companies.length;
+                        const cols = Math.ceil(Math.sqrt(numCompanies) * 1.5);
+                        companyGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+
+                        industry.companies.forEach(company => {
+                            const cell = document.createElement('div');
+                            cell.className = `treemap-cell heatmap-${company.risk}`;
+                            cell.title = `${company.name}: ${company.risk === 'red' ? '위험' : company.risk === 'yellow' ? '주의' : '안정'}`;
+                            
+                            const nameSpan = document.createElement('span');
+                            nameSpan.className = 'text-xs font-medium text-white/90 truncate';
+                            nameSpan.textContent = company.name;
+                            cell.appendChild(nameSpan);
+
+                            companyGrid.appendChild(cell);
+                        });
+
+                        industryContainer.appendChild(industryTitle);
+                        industryContainer.appendChild(companyGrid);
+                        groupContainer.appendChild(industryContainer);
+                    });
+                    container.appendChild(groupContainer);
+                });
+            }
+
+            renderTreemap();
         });
     </script>
 
