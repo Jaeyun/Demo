@@ -62,6 +62,10 @@
             background-color: #1E40AF;
             color: white;
         }
+        .data-source-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -76,6 +80,7 @@
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">대시보드</a>
                         <a href="#framework" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">평가 프레임워크</a>
+                        <a href="#market-analysis" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">시장 동향 분석</a>
                         <a href="#ai-role" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">AI의 역할</a>
                         <a href="#policy" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700">정책 연계</a>
                     </div>
@@ -126,7 +131,7 @@
                     <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="3">
                         <div class="text-2xl font-bold mb-4 text-blue-600">[시장]</div>
                         <h3 class="text-lg font-bold mb-2">시장 경쟁력</h3>
-                        <p class="text-sm text-gray-600">상권 환경, 고객 리뷰 분석을 통해 시장 내 입지를 평가합니다.</p>
+                        <p class="text-sm text-gray-600">상권 환경, 고객 리뷰, 업종 트렌드를 분석하여 시장 내 입지를 평가합니다.</p>
                     </div>
                     <div class="pillar-card bg-white p-6 rounded-lg shadow-md text-center cursor-pointer" data-pillar="4">
                         <div class="text-2xl font-bold mb-4 text-blue-600">[성장]</div>
@@ -187,6 +192,51 @@
                 <div id="pillarDetailBlock4" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg"></div>
             </div>
         </section>
+
+        <section id="market-analysis" class="pt-24 -mt-16">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">업종 동향 및 시장 분석 (예시)</h1>
+                <p class="text-lg text-gray-600">AI가 분석한 '베트남 쌀국수 전문점' 업종의 심층 분석 리포트입니다.</p>
+            </div>
+            <div class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">시장 규모 및 성장성</h3>
+                        <p class="text-sm text-gray-600 mb-4">국내 베트남 음식 시장은 연평균 5.6%의 견조한 성장세를 보이며, 특히 쌀국수 카테고리는 외식 시장의 주요 트렌드로 자리 잡았습니다. 2024년까지 시장 규모는 지속적으로 확대될 전망입니다.</p>
+                        <div class="chart-container h-64 max-h-[35vh]">
+                            <canvas id="industryGrowthChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">소비자 트렌드 분석</h3>
+                        <p class="text-sm text-gray-600 mb-4">소셜 데이터 분석 결과, 소비자들은 '현지식'의 맛과 '프리미엄' 경험을 중시하며, '건강'과 '가성비' 또한 중요한 선택 기준으로 나타났습니다. '배달 편의성'에 대한 요구도 높게 유지되고 있습니다.</p>
+                        <div class="chart-container h-64 max-h-[35vh]">
+                            <canvas id="consumerTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <h3 class="text-xl font-bold mb-4">경쟁 환경 및 전략적 시사점</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold mb-2">경쟁 구도</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li><span class="font-bold">저가형 프랜차이즈:</span> 가격 경쟁력을 내세워 넓은 고객층 확보.</li>
+                                <li><span class="font-bold">독립 로컬 맛집:</span> 특색있는 맛과 분위기로 충성 고객층 형성.</li>
+                                <li><span class="font-bold">프리미엄 레스토랑:</span> 고급 식재료와 서비스로 차별화.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">기회 및 리스크 요인</h4>
+                             <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li><span class="text-green-600 font-bold">기회:</span> 건강식(Wellness) 트렌드 확산, K-콘텐츠를 통한 베트남 문화 관심 증대.</li>
+                                <li><span class="text-red-600 font-bold">리스크:</span> 핵심 식자재의 수입 가격 변동성, 유사 컨셉의 경쟁자 급증.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         
         <section id="ai-role" class="pt-24 -mt-16">
             <div class="text-center mb-10">
@@ -202,7 +252,7 @@
                         <p class="font-bold">[재무 건전성 분석]</p>
                         <p>지난 24개월간 공과금 및 통신요금 연체 이력이 없어 재무적 성실도가 높게 평가되었습니다. 다만, 최근 3개월간 카드 매출 변동성이 동종업계 평균 대비 15% 높게 나타나 현금흐름 안정성 관리가 요구됩니다.</p>
                         <p class="font-bold">[시장 경쟁력 분석]</p>
-                        <p>온라인 리뷰 250건에 대한 감성 분석 결과, 긍정 리뷰 비율이 92%에 달하며, 특히 '신선한 재료'와 '친절한 서비스' 관련 키워드가 다수 언급되어 강력한 고객 자본을 형성하고 있습니다.</p>
+                        <p>온라인 리뷰 250건에 대한 감성 분석 결과, 긍정 리뷰 비율이 92%에 달하며, 특히 '신선한 재료'와 '친절한 서비스' 관련 키워드가 다수 언급되어 강력한 고객 자본을 형성하고 있습니다. <span class="font-bold text-blue-700">또한, '베트남 쌀국수' 업종은 최근 3년간 검색량이 꾸준히 증가하는 성장기에 있으며, 특히 '현지식'과 '프리미엄' 키워드에 대한 관심이 높아지는 트렌드를 보이고 있어, 본 사업의 포지셔닝은 시장 상황과 부합하는 것으로 판단됩니다.</span></p>
                         <p class="font-bold">[종합 의견]</p>
                         <p>안정적인 운영 능력과 높은 고객 만족도를 바탕으로 현재 사업 기반은 튼튼하나, 향후 금리 인상 시나리오에서 이자 부담이 25% 증가할 것으로 예측되어, 선제적인 비용 구조 개선 노력이 필요합니다.</p>
                     </div>
@@ -210,20 +260,20 @@
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h2 class="text-xl font-bold mb-4">데이터 소스 맵핑</h2>
                     <p class="text-sm text-gray-600 mb-4">데이터 소스에 마우스를 올리면 어떤 평가 축에 활용되는지 확인할 수 있습니다.</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,4">[카드]</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2">[은행/보험]</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">[공공기관]</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">[POS]</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,2,3">[쇼핑몰/배달앱]</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="1,3">[통신사]</div>
-                        <div class="data-source-item bg-gray-100 p-3 rounded-md" data-sources="3,4">[포털]</div>
+                    <div class="grid grid-cols-2 gap-4 text-center font-medium">
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="1,4">[카드]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="1,2">[은행/보험]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="1,2,3">[공공기관]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="1,2,3">[POS]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="1,2,3">[쇼핑몰/배달앱]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="1,3">[통신사]</div>
+                        <div class="data-source-item bg-gray-100 p-3 rounded-md hover:bg-blue-100" data-sources="3,4">[포털]</div>
                     </div>
                     <div class="mt-6 space-y-2">
-                        <div id="map-pillar-1" class="map-pillar-target p-2 rounded-md transition-all">[재무] 재무 건전성</div>
-                        <div id="map-pillar-2" class="map-pillar-target p-2 rounded-md transition-all">[운영] 운영 효율성</div>
-                        <div id="map-pillar-3" class="map-pillar-target p-2 rounded-md transition-all">[시장] 시장 경쟁력</div>
-                        <div id="map-pillar-4" class="map-pillar-target p-2 rounded-md transition-all">[성장] 미래 성장성</div>
+                        <div id="map-pillar-1" class="map-pillar-target p-3 rounded-md transition-all duration-200">[재무] 재무 건전성</div>
+                        <div id="map-pillar-2" class="map-pillar-target p-3 rounded-md transition-all duration-200">[운영] 운영 효율성</div>
+                        <div id="map-pillar-3" class="map-pillar-target p-3 rounded-md transition-all duration-200">[시장] 시장 경쟁력</div>
+                        <div id="map-pillar-4" class="map-pillar-target p-3 rounded-md transition-all duration-200">[성장] 미래 성장성</div>
                     </div>
                 </div>
             </div>
@@ -342,7 +392,7 @@
                     },
                     '3': {
                         title: '[시장] 제3축: 시장 경쟁력 및 고객 자본',
-                        description: '소상공인이 속한 미시적 시장 환경의 경쟁 강도와 그 안에서 차지하는 전략적 위치, 그리고 고객과의 관계에서 창출되는 무형의 자산인 \'고객 자본(Customer Capital)\'을 평가합니다.',
+                        description: '소상공인이 속한 미시적 시장 환경의 경쟁 강도와 그 안에서 차지하는 전략적 위치, 그리고 고객과의 관계에서 창출되는 무형의 자산인 \'고객 자본(Customer Capital)\'을 평가합니다. 상세한 업종 분석은 \'시장 동향 분석\' 섹션을 참고하세요.',
                         chartType: 'doughnut',
                         chartData: {
                             labels: ['긍정', '중립', '부정'],
@@ -396,7 +446,7 @@
                 }
             };
             
-            let vitalityIndexChart, pillarsRadarChart, stressTestChart;
+            let vitalityIndexChart, pillarsRadarChart, stressTestChart, industryGrowthChart, consumerTrendChart;
 
             const createVitalityIndexChart = () => {
                 const ctx = document.getElementById('vitalityIndexChart').getContext('2d');
@@ -502,13 +552,14 @@
                     const data = pillarData.details[pillarId];
 
                     if (container && data) {
-                        container.innerHTML = `
+                        let content = `
                             <h2 class="text-2xl font-bold mb-2">${data.title}</h2>
                             <p class="text-gray-600 mb-6">${data.description}</p>
                             <div class="chart-container h-64 max-h-[40vh]">
                                 <canvas id="detailChart${pillarId}"></canvas>
                             </div>
                         `;
+                        container.innerHTML = content;
                         
                         const ctx = document.getElementById(`detailChart${pillarId}`).getContext('2d');
                         new Chart(ctx, {
@@ -531,6 +582,53 @@
                         });
                     }
                 }
+            };
+
+            const createIndustryCharts = () => {
+                const growthCtx = document.getElementById('industryGrowthChart').getContext('2d');
+                industryGrowthChart = new Chart(growthCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['2022', '2023', '2024(E)', '2025(E)'],
+                        datasets: [{
+                            label: '시장 규모 (억원)',
+                            data: [1200, 1280, 1350, 1420],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: '베트남 음식 시장 규모 추이' }
+                        },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+
+                const trendCtx = document.getElementById('consumerTrendChart').getContext('2d');
+                consumerTrendChart = new Chart(trendCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['현지식 맛', '프리미엄 경험', '가성비', '건강', '배달 편의성'],
+                        datasets: [{
+                            label: '소비자 중요도',
+                            data: [85, 75, 80, 70, 90],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: '핵심 구매 결정 요인' }
+                        },
+                        scales: { r: { suggestedMin: 0, suggestedMax: 100 } }
+                    }
+                });
             };
             
             const navLinks = document.querySelectorAll('.nav-link');
@@ -584,6 +682,7 @@
             createVitalityIndexChart();
             createPillarsRadarChart();
             populateAndCreatePillarCharts();
+            createIndustryCharts();
             createStressTestChart();
             document.querySelector('.stress-btn[data-scenario="base"]').classList.add('active');
         });
