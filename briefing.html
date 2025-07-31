@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSearch Global Market Briefing | 다국어 영상 인텔리전스 플랫폼</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Neutral Grays, Deep Blue, Soft Beige) -->
+    <!-- Application Structure Plan: A single-page, scrollable dashboard structure with a fixed top navigation. This design allows users (e.g., financial executives) to either follow a linear narrative or jump directly to sections relevant to their role (e.g., "Strategic Value"). The core interaction is a role-based filter in the "Strategic Value" section, which personalizes the content to demonstrate clear ROI for specific business units (PB, Global Strategy, etc.). This task-oriented approach is more engaging than a static report and directly addresses the user's question, "What's in it for my department?" -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: PB Communication Model comparison -> Goal: Compare -> Viz: Interactive Horizontal Bar Chart (Chart.js) -> Interaction: Visually contrasts the proposed solution against traditional methods on key metrics (Scalability, Value, Efficiency). Justification: A chart is more impactful than a table for comparing abstract values.
+        - Report Info: Growth of video consumption -> Goal: Inform -> Viz: Donut Chart (Chart.js) -> Interaction: Highlights the dominance of video as a medium. Justification: A donut chart is excellent for showing part-to-whole relationships and grabbing attention.
+        - Report Info: Value propositions for different departments -> Goal: Organize/Compare -> Viz: Tabbed/Button-driven content switcher (HTML/JS) -> Interaction: User clicks their department to see tailored challenges and solutions. Justification: This interactive filtering makes the proposal highly relevant and personal, increasing engagement.
+        - Report Info: Multi-language capability -> Goal: Inform -> Viz: Interactive announcer/language selector simulation (HTML/JS) -> Interaction: Users can click flags to see the announcer and language change. Justification: A simple simulation demonstrates the core product feature more effectively than text alone.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F9FA;
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0052CC;
+            border-bottom-color: #0052CC;
+        }
+        .btn-primary {
+            background-color: #0052CC;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #003d99;
+        }
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #495057;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary.active, .btn-secondary:hover {
+            background-color: #ced4da;
+            color: #212529;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #0052CC;
+            margin-top: 1rem;
+        }
+        [data-section] {
+            scroll-margin-top: 80px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl md:text-2xl font-bold text-gray-800">DeepSearch <span class="text-[#0052CC]">Global Market Briefing</span></a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#challenge" class="nav-link pb-1">전략적 과제</a>
+                <a href="#solution" class="nav-link pb-1">솔루션</a>
+                <a href="#demo" class="nav-link pb-1">데모 영상</a>
+                <a href="#value" class="nav-link pb-1">전략적 가치</a>
+                <a href="#paradigm" class="nav-link pb-1">새로운 패러다임</a>
+                <a href="#contact" class="nav-link pb-1">파트너십</a>
+            </div>
+            <a href="#contact" class="hidden md:block btn-primary px-5 py-2 rounded-full font-semibold">
+                데모 요청
+            </a>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 border-t">
+            <a href="#challenge" class="block py-2 text-gray-700 hover:text-[#0052CC]">전략적 과제</a>
+            <a href="#solution" class="block py-2 text-gray-700 hover:text-[#0052CC]">솔루션</a>
+            <a href="#demo" class="block py-2 text-gray-700 hover:text-[#0052CC]">데모 영상</a>
+            <a href="#value" class="block py-2 text-gray-700 hover:text-[#0052CC]">전략적 가치</a>
+            <a href="#paradigm" class="block py-2 text-gray-700 hover:text-[#0052CC]">새로운 패러다임</a>
+            <a href="#contact" class="block py-2 text-gray-700 hover:text-[#0052CC]">파트너십</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="bg-white pt-20 pb-24">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 leading-tight">
+                    글로벌 금융의 복잡성, <br class="hidden md:block">
+                    <span class="text-[#0052CC]">영상 인텔리전스</span>로 명확하게
+                </h1>
+                <p class="mt-6 text-lg text-gray-600 max-w-3xl mx-auto">
+                    DeepSearch Global Market Briefing은 매일 쏟아지는 시장 정보를 가장 효과적인 방식으로 전달합니다. 다국어 네이티브 전문가의 영상 브리핑을 통해 VIP 고객 경험을 격상시키고, 성공적인 글로벌 비즈니스를 위한 전략적 우위를 확보하세요.
+                </p>
+                <div class="mt-10">
+                    <a href="#solution" class="btn-primary px-8 py-4 rounded-full text-lg font-bold">핵심 솔루션 알아보기</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenge" data-section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-800 inline-block">금융 시장의 새로운 전략적 과제</h2>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">전례 없는 복잡성과 기회 속에서 금융 기관들은 세 가지 핵심적인 도전에 직면해 있습니다. 이 문제들을 해결하는 것이 미래 성장의 관건입니다.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="card p-8 text-center">
+                        <div class="text-5xl mb-4">👑</div>
+                        <h3 class="text-xl font-bold mb-2">VIP 고객 경험의 딜레마</h3>
+                        <p class="text-gray-600">디지털에 익숙한 VIP 고객들은 개인화된 프리미엄 서비스를 기대하지만, 기존 방식으로는 '확장 가능한 독점성'을 제공하기 어렵습니다.</p>
+                    </div>
+                    <div class="card p-8 text-center">
+                        <div class="text-5xl mb-4">🌏</div>
+                        <h3 class="text-xl font-bold mb-2">글로벌 확장의 마찰</h3>
+                        <p class="text-gray-600">동남아 등 신흥 시장 진출 시, 언어 장벽과 정보 부족으로 본사와 현지 법인 간 '인텔리전스 격차'가 발생하여 성장이 저해됩니다.</p>
+                    </div>
+                    <div class="card p-8 text-center">
+                        <div class="text-5xl mb-4">🎬</div>
+                        <h3 class="text-xl font-bold mb-2">정보 소비 패러다임 전환</h3>
+                        <p class="text-gray-600">정보의 핵심 매체가 텍스트에서 영상으로 완전히 전환되었습니다. 영상 중심 전략 없이는 고객의 외면을 받을 수밖에 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" data-section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-800 inline-block">솔루션: DeepSearch Global Market Briefing</h2>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">저희는 이러한 복합적인 문제들을 해결하기 위해 구조화된 인텔리전스와 다국어 영상 전달을 결합한 통합 플랫폼을 제공합니다.</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex justify-center mb-8 space-x-4">
+                        <button id="solution-tab-framework" class="solution-tab btn-secondary active px-6 py-2 rounded-full font-semibold">핵심 인텔리전스 프레임워크</button>
+                        <button id="solution-tab-language" class="solution-tab btn-secondary px-6 py-2 rounded-full font-semibold">다국어 네이티브 전달</button>
+                    </div>
+
+                    <div id="solution-content-framework" class="solution-content">
+                        <div class="bg-gray-50 p-8 rounded-lg">
+                            <h3 class="text-2xl font-bold text-center mb-6">매일 제공되는 실행 가능한 데일리 인사이트</h3>
+                            <div class="space-y-4">
+                                <div class="border-b pb-4">
+                                    <h4 class="font-semibold text-lg">📊 시장 지표 (Market Indicators)</h4>
+                                    <p class="text-gray-600 mt-1">주요 지수, 환율, 금리 등 시장의 전반적인 흐름을 한눈에 파악합니다.</p>
+                                </div>
+                                <div class="border-b pb-4">
+                                    <h4 class="font-semibold text-lg">📰 주요 경제 이슈 (Major Economic Issues)</h4>
+                                    <p class="text-gray-600 mt-1">통화 정책, 거시 경제 지표 등 시장에 중대한 영향을 미치는 이슈를 심층 분석합니다.</p>
+                                </div>
+                                <div class="border-b pb-4">
+                                    <h4 class="font-semibold text-lg">🏢 주요 이슈 기업 (Key Companies in the News)</h4>
+                                    <p class="text-gray-600 mt-1">시장의 화두가 된 기업들을 식별하고 주가 변동의 핵심 원인을 요약합니다.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg">🔬 기업 심층 분석 (In-Depth Corporate Analysis)</h4>
+                                    <p class="text-gray-600 mt-1">핵심 기업을 선정하여 헤드라인 뒤에 숨겨진 '왜(Why)'를 파고드는 분석을 제공합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="solution-content-language" class="solution-content hidden">
+                        <div class="bg-gray-50 p-8 rounded-lg text-center">
+                            <h3 class="text-2xl font-bold mb-6">단순 번역을 넘어, 진정한 현지화 소통</h3>
+                            <p class="text-gray-600 mb-8">AI 더빙이나 기계 번역이 아닌, 각 언어권의 전문 네이티브 아나운서가 직접 브리핑을 전달하여 문화적 뉘앙스까지 완벽하게 구현합니다. 예를 들어, 미국 시장 분석은 5개 언어 버전으로 각각 제작됩니다.</p>
+                            <div class="flex justify-center items-center space-x-4 mb-6">
+                                <button class="lang-selector" data-lang="ko" data-name="김민준 아나운서" data-img="https://placehold.co/100x100/EBF8FF/3182CE?text=KOR">🇰🇷</button>
+                                <button class="lang-selector" data-lang="en" data-name="John Smith" data-img="https://placehold.co/100x100/FEFCBF/D69E2E?text=ENG">🇺🇸</button>
+                                <button class="lang-selector" data-lang="ja" data-name="佐藤 健太" data-img="https://placehold.co/100x100/FEEBC8/DD6B20?text=JPN">🇯🇵</button>
+                                <button class="lang-selector" data-lang="vi" data-name="Nguyễn Văn An" data-img="https://placehold.co/100x100/FED7D7/C53030?text=VNM">🇻🇳</button>
+                                <button class="lang-selector" data-lang="id" data-name="Budi Santoso" data-img="https://placehold.co/100x100/E6FFFA/2C7A7B?text=IDN">🇮🇩</button>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <img id="announcer-img" src="https://placehold.co/100x100/EBF8FF/3182CE?text=KOR" alt="Announcer" class="w-24 h-24 rounded-full mb-4 object-cover shadow-lg">
+                                <p id="announcer-name" class="font-bold text-xl">김민준 아나운서</p>
+                                <p id="announcer-lang" class="text-gray-500">한국어 브리핑</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" data-section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-800 inline-block">실제 데모 영상 보기</h2>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">백문이 불여일견입니다. 아래 링크를 통해 실제 다국어 영상 브리핑이 어떻게 제공되는지 직접 확인해 보세요.</p>
+                </div>
+                <div class="max-w-2xl mx-auto card p-8 text-center">
+                    <img src="https://placehold.co/1280x720/1E293B/FFFFFF?text=Global+Market+Briefing" alt="DeepSearch Global Market Briefing 데모" class="rounded-lg shadow-md mb-8 w-full object-cover">
+                    <h3 class="text-2xl font-bold mb-6">DeepSearch Global Market Briefing 데모</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="https://drive.google.com/file/d/1dQsuuJaT8E9pYH--rxxE8GN8-aw9Ws0j/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn-primary px-6 py-3 rounded-full font-semibold text-lg inline-flex items-center">
+                            <span class="mr-2">🇰🇷</span> 한국어 데모 보기
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Gg1NHsFAUco32_Q6eYbeQv3QlBh_UJku/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn-primary px-6 py-3 rounded-full font-semibold text-lg inline-flex items-center" style="background-color: #A52A2A; hover:background-color: #8B0000;">
+                            <span class="mr-2">🇹🇭</span> 태국어 데모 보기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="value" data-section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-800 inline-block">부서별 전략적 가치와 ROI</h2>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">귀사의 어떤 부서에 속해 계신가요? DeepSearch Global Market Briefing이 어떻게 귀 부서의 당면 과제를 해결하고 구체적인 가치를 창출하는지 확인해 보세요.</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
+                    <button class="value-tab btn-secondary active px-4 py-2 rounded-full" data-target="pb">PB & 자산관리</button>
+                    <button class="value-tab btn-secondary px-4 py-2 rounded-full" data-target="global">글로벌 사업</button>
+                    <button class="value-tab btn-secondary px-4 py-2 rounded-full" data-target="retail">리테일 플랫폼</button>
+                    <button class="value-tab btn-secondary px-4 py-2 rounded-full" data-target="corp">기업 전략</button>
+                </div>
+
+                <div id="value-content-container" class="max-w-5xl mx-auto">
+                </div>
+                
+                <div class="mt-20">
+                    <h3 class="text-2xl font-bold text-center mb-8">시각화로 보는 가치: PB 고객 커뮤니케이션 모델의 진화</h3>
+                    <div class="chart-container">
+                        <canvas id="pbCommunicationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="paradigm" data-section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold text-gray-800 inline-block">정보 소비의 새로운 패러다임</h2>
+                    <p class="mt-4 text-gray-600 max-w-2xl mx-auto">전문가와 투자자들은 이미 텍스트를 넘어 영상으로 정보를 소비하고 있습니다. 영상은 더 이상 선택이 아닌 필수입니다.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                        <h3 class="text-2xl font-bold mb-4">영상, 전문성의 새로운 증거</h3>
+                        <p class="text-gray-600 mb-6">AI가 텍스트 보고서를 생성하는 시대, 명확한 논리로 시장을 분석하는 고품질 영상은 진정한 전문성을 증명하는 가장 강력한 수단입니다. 이는 텍스트만으로는 결코 구축할 수 없는 수준의 신뢰를 형성합니다.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-4 text-[#0052CC]">✓</span>
+                                <p><strong class="font-semibold">전 세대 선호 매체:</strong> MZ세대 뿐만 아니라 60대 이상 고연령층의 60%도 숏폼 시청 경험이 있을 정도로 영상은 보편적 소통 방식입니다.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-4 text-[#0052CC]">✓</span>
+                                <p><strong class="font-semibold">강력한 구매 전환:</strong> 영상 시청 후 상품을 구매할 가능성은 3.6배 더 높으며, 이는 영상이 실제 투자 결정에 직접적인 영향을 미침을 의미합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="videoPreferenceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" data-section class="py-20 bg-gray-800 text-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold">미래 성장을 위한 전략적 파트너십</h2>
+                <p class="mt-4 text-gray-300 max-w-2xl mx-auto">
+                    DeepSearch Global Market Briefing은 단순한 서비스를 넘어, 귀사의 비즈니스 혁신을 위한 핵심 역량을 제공합니다. 지금 바로 후속 미팅을 요청하고, 실제 플랫폼 데모를 통해 서비스의 가치를 직접 체험해 보세요.
+                </p>
+                <div class="mt-10">
+                    <a href="mailto:sales@deepsearch.com" class="bg-white text-[#0052CC] px-8 py-4 rounded-full text-lg font-bold transition hover:bg-gray-200">
+                        파일럿 프로그램 및 데모 요청
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 DeepSearch Inc. All Rights Reserved.</p>
+            <p class="text-sm mt-2">본 문서는 제안 목적으로 작성되었으며, 실제 서비스 내용과 일부 차이가 있을 수 있습니다.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', function () {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const solutionTabs = document.querySelectorAll('.solution-tab');
+            const solutionContents = document.querySelectorAll('.solution-content');
+
+            solutionTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    solutionTabs.forEach(t => t.classList.remove('active', 'btn-secondary.active'));
+                    tab.classList.add('active', 'btn-secondary.active');
+                    
+                    const targetId = tab.id.replace('tab', 'content');
+                    solutionContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const langSelectors = document.querySelectorAll('.lang-selector');
+            const announcerImg = document.getElementById('announcer-img');
+            const announcerName = document.getElementById('announcer-name');
+            const announcerLang = document.getElementById('announcer-lang');
+
+            langSelectors.forEach(selector => {
+                selector.addEventListener('click', () => {
+                    announcerImg.src = selector.dataset.img;
+                    announcerName.textContent = selector.dataset.name;
+                    announcerLang.textContent = `${selector.textContent.trim()} 브리핑`;
+                });
+            });
+
+            const valueData = {
+                pb: {
+                    title: "프라이빗 뱅킹(PB) & 자산관리",
+                    challenge: "다수의 고액자산가 고객을 효율적으로 관리하면서도, 단순 거래 이상의 가치를 증명하고, 담당 PB/RM에게 시의적절하고 강력한 고객 소통의 계기를 제공해야 하는 과제.",
+                    solution: "영상 브리핑은 고객과의 관계를 강화하는 '프리미엄 데일리 터치포인트' 역할을 합니다. 담당 PB는 영상을 고객에게 전달하며 개인화된 메시지를 덧붙여 손쉽게 전문성을 어필하고, 고객의 신뢰를 꾸준히 각인시킬 수 있습니다."
+                },
+                global: {
+                    title: "글로벌 사업 및 해외 전략",
+                    challenge: "본사와 해외 법인 간 정보 비대칭과 소통 부재로 인해 발생하는 전략적 표류 및 사업 기회 상실. 현지화 실패의 악순환 고리.",
+                    solution: "본 서비스는 글로벌 전략을 위한 '로제타석' 역할을 합니다. 본사와 현지 법인이 동일한 수준의 전문가 분석을 각자의 언어로 전달받아 '단일한 진실의 원천'을 구축하고, 일관된 전략 수립과 현지 팀 역량 강화를 지원합니다."
+                },
+                retail: {
+                    title: "리테일 브로커리지 및 디지털 플랫폼",
+                    challenge: "해외 주식 투자자 급증에 따른 치열한 플랫폼 경쟁. 거래 수수료가 아닌 정보와 투자 도구의 품질이 핵심 경쟁력으로 부상.",
+                    solution: "영상 브리핑을 MTS/HTS에 프리미엄 콘텐츠로 탑재하여 단순 거래 플랫폼을 '인텔리전스 허브'로 변모시킵니다. 이는 사용자의 체류 시간, DAU, 그리고 궁극적으로 거래량을 증대시켜 명확한 ROI를 창출합니다."
+                },
+                corp: {
+                    title: "글로벌 기업 전략 및 내부 커뮤니케이션",
+                    challenge: "지리적으로 분산된 조직 내부에 만연한 정보 사일로(silo)와 전략적 불일치. 비효율적인 정보 공유로 인한 중복 업무 및 수익 손실 발생.",
+                    solution: "조직 전체에 표준화된 고품질 데일리 인텔리전스를 제공합니다. 핵심 글로벌 허브의 팀들이 매일 아침 동일한 시장 컨텍스트를 공유하며 업무를 시작하여, 전사적으로 통일된 전략적 관점을 함양하고 신속한 의사결정을 지원합니다."
+                }
+            };
+
+            const valueTabs = document.querySelectorAll('.value-tab');
+            const valueContentContainer = document.getElementById('value-content-container');
+
+            function updateValueContent(target) {
+                const data = valueData[target];
+                valueContentContainer.innerHTML = `
+                    <div class="card p-8 md:p-10">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">${data.title}</h3>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-semibold text-lg text-red-600 mb-2">당면 과제 (Challenge)</h4>
+                                <p class="text-gray-600">${data.challenge}</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-blue-600 mb-2">솔루션 (Solution)</h4>
+                                <p class="text-gray-600">${data.solution}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            valueTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    valueTabs.forEach(t => t.classList.remove('active', 'btn-secondary.active'));
+                    tab.classList.add('active', 'btn-secondary.active');
+                    updateValueContent(tab.dataset.target);
+                });
+            });
+
+            updateValueContent('pb');
+
+            const pbChartCtx = document.getElementById('pbCommunicationChart').getContext('2d');
+            new Chart(pbChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['확장성', '고객 인지 가치', 'RM/PB 시간 효율성', '정보 깊이/적시성'],
+                    datasets: [
+                        {
+                            label: '전통적 방식 (대면)',
+                            data: [1, 5, 1, 4],
+                            backgroundColor: '#adb5bd',
+                            borderColor: '#adb5bd',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '표준 디지털 (PDF)',
+                            data: [5, 2, 4, 3],
+                            backgroundColor: '#6c757d',
+                            borderColor: '#6c757d',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'DeepSearch Global Market Briefing',
+                            data: [5, 4, 5, 5],
+                            backgroundColor: '#0052CC',
+                            borderColor: '#0052CC',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'PB 고객 커뮤니케이션 모델 비교 (1: 낮음 ~ 5: 매우 높음)',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const videoChartCtx = document.getElementById('videoPreferenceChart').getContext('2d');
+            new Chart(videoChartCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['영상 콘텐츠', '텍스트/기타'],
+                    datasets: [{
+                        label: '정보 소비 선호도',
+                        data: [75, 25],
+                        backgroundColor: [
+                            '#0052CC',
+                            '#e9ecef'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '금융 정보 소비 선호 매체',
+                            font: { size: 16 }
+                        },
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+            
+            const sections = document.querySelectorAll('[data-section]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
