@@ -202,13 +202,15 @@
                         <div class="chart-container mt-6">
                             <canvas id="ceoAgeChart"></canvas>
                         </div>
+                        <p class="text-xs text-gray-500 text-right mt-2">출처: 중소기업중앙회</p>
                     </div>
                     <div class="bg-white p-8 rounded-xl shadow-lg">
                         <h3 class="text-2xl font-bold text-center">끊어진 승계 사다리</h3>
-                        <p class="text-center mt-2 text-gray-600">가업 승계에 대한 세대 간 인식 차이</p>
-                         <div class="chart-container mt-6">
+                        <p class="text-center mt-2 text-gray-600">중소기업 후계자 유무 현황</p>
+                        <div class="chart-container mt-6">
                             <canvas id="successionGapChart"></canvas>
                         </div>
+                        <p class="text-xs text-gray-500 text-right mt-2">출처: 중소기업중앙회</p>
                     </div>
                 </div>
                  <div class="mt-12 bg-white p-8 rounded-xl text-center max-w-5xl mx-auto shadow-md">
@@ -610,10 +612,10 @@
             new Chart(ceoAgeCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['2012년', '2022년'],
+                    labels: ['2012년', '2023년'],
                     datasets: [{
                         label: '60세 이상 CEO 비중 (%)',
-                        data: [14.1, 33.5],
+                        data: [14.1, 38],
                         backgroundColor: ['rgba(231, 96, 51, 0.6)', 'rgba(231, 96, 51, 0.9)'],
                         borderColor: [mainColor, mainColor],
                         borderWidth: 1
@@ -635,7 +637,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: 40,
+                            max: 45,
                             title: { display: true, text: '비중 (%)' }
                         }
                     }
@@ -646,10 +648,10 @@
             new Chart(successionGapCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['자녀 승계 희망', '자녀 승계 거부', '기타/무응답'],
+                    labels: ['후계자 존재', '후계자 부재'],
                     datasets: [{
-                        data: [64.7, 20.5, 14.8],
-                        backgroundColor: [mainColor, '#FBEAE4', '#f0a286'],
+                        data: [52, 48],
+                        backgroundColor: ['#f0a286', mainColor],
                         borderColor: '#FFFBF9',
                         borderWidth: 3
                     }]
