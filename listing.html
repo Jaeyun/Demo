@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Orange -->
-    <!-- Application Structure Plan: The application is designed as a narrative-driven, single-page vertical scroll. The structure guides the user through a logical story: 1. Hero. 2. A new infographic section explaining the service. 3. The massive, untapped market opportunity (The Problem). 4. Validation through market precedent (The Proof). 5. The innovative solution offered by LISTING (The Solution & Technology), now including official certifications. 6. The long-term vision (The Ecosystem). 7. A concluding section on the inevitable market paradigm shift driven by AI, presented as an infographic. This storytelling approach is more engaging and persuasive. -->
+    <!-- Application Structure Plan: The application is designed as a narrative-driven, single-page vertical scroll. The structure guides the user through a logical story: 1. Hero. 2. A new infographic section explaining the service. 3. The massive, untapped market opportunity (The Problem). 4. Validation through market precedent (The Proof). 5. The innovative solution offered by LISTING (The Solution). 6. The enabling technology (The Technology). 7. Proof of the solution's effectiveness (Trust & Performance). 8. The long-term vision (The Ecosystem). 9. A concluding section on the inevitable market paradigm shift driven by AI, presented as an infographic. This storytelling approach is more engaging and persuasive. -->
     <!-- Visualization & Content Choices: 
         - Report Info: Service Explanation -> Goal: Clarify the service offering upfront -> Viz: Infographic (HTML/CSS) -> Interaction: None -> Justification: Provides a quick, visual summary of the platform's value proposition for different user types.
         - Report Info: Aging CEO data -> Goal: Show urgency -> Viz: Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Clearly visualizes the time-series trend.
@@ -104,13 +104,15 @@
 <body class="bg-[#FFFBF9]">
 
     <header id="header" class="bg-[#FFFBF9]/80 backdrop-blur-md sticky top-0 z-50 transition-shadow duration-300">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <a href="#hero" class="text-2xl font-bold text-[#333333]">LISTING</a>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#about" class="nav-link">리스팅 소개</a>
                 <a href="#problem" class="nav-link">시장의 기회</a>
                 <a href="#precedent" class="nav-link">성공 사례</a>
                 <a href="#solution" class="nav-link">솔루션</a>
+                <a href="#technology" class="nav-link">AI 기술</a>
+                <a href="#proof" class="nav-link">신뢰와 성과</a>
                 <a href="#vision" class="nav-link">미래 비전</a>
                 <a href="#paradigm-shift" class="nav-link">패러다임 전환</a>
             </div>
@@ -121,6 +123,8 @@
             <a href="#problem" class="block text-center py-2 nav-link">시장의 기회</a>
             <a href="#precedent" class="block text-center py-2 nav-link">성공 사례</a>
             <a href="#solution" class="block text-center py-2 nav-link">솔루션</a>
+            <a href="#technology" class="block text-center py-2 nav-link">AI 기술</a>
+            <a href="#proof" class="block text-center py-2 nav-link">신뢰와 성과</a>
             <a href="#vision" class="block text-center py-2 nav-link">미래 비전</a>
             <a href="#paradigm-shift" class="block text-center py-2 nav-link">패러다임 전환</a>
         </div>
@@ -128,7 +132,7 @@
 
     <main>
         <section id="hero" class="min-h-screen flex items-center bg-[#FBEAE4]">
-            <div class="container mx-auto px-6 text-center">
+            <div class="container mx-auto px-4 sm:px-6 text-center">
                 <h1 class="text-4xl md:text-6xl font-black leading-tight text-[#333333]">
                     AI가 잠든<br><span class="text-[#E76033]">중소기업 M&A 시장</span>의<br>가치를 깨웁니다
                 </h1>
@@ -154,7 +158,7 @@
         </section>
 
         <section id="about" class="py-20">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="section-title">리스팅, 어떤 서비스인가요?</h2>
                     <p class="section-subtitle">
@@ -182,7 +186,7 @@
         </section>
 
         <section id="problem" class="py-20 bg-[#FBEAE4]">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="section-title">조용한 위기, 거대한 기회</h2>
                     <p class="section-subtitle">
@@ -217,7 +221,7 @@
         </section>
 
         <section id="precedent" class="py-20">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                  <div class="text-center max-w-4xl mx-auto">
                     <h2 class="section-title">미래를 먼저 경험한 일본, 한국의 명확한 청사진</h2>
                     <p class="section-subtitle">
@@ -237,7 +241,7 @@
         </section>
 
         <section id="solution" class="py-20 bg-[#FBEAE4]">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="section-title">AI, M&A의 공식을 바꾸다</h2>
                     <p class="section-subtitle">
@@ -290,41 +294,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="mt-20 bg-white p-10 rounded-xl shadow-md">
-                    <div class="text-center max-w-3xl mx-auto">
-                        <h3 class="text-3xl font-bold">공식 인증으로 증명된 신뢰성</h3>
-                        <p class="mt-4 text-lg text-gray-700">M&A 시장의 가장 큰 허들은 '신뢰'입니다. 리스팅은 기술력과 전문성을 공식적으로 인정받아, <span class="font-bold">한국벤처캐피탈협회(KVCA)와 기술보증기금의 공식 M&A 자문기관</span>으로 선정되었습니다.</p>
-                        <p class="mt-6 font-bold text-xl text-[#E76033]">리스팅을 통해 M&A를 진행하는 벤처기업은 기업가치평가 비용을 최대 2,000만 원까지 지원받을 수 있습니다.</p>
-                    </div>
-                </div>
-
-                <div class="mt-20 text-center">
-                    <h3 class="text-3xl font-bold">결과는 숫자로 증명됩니다</h3>
-                    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <p class="kpi-number" data-target="3">0</p>
-                            <p class="mt-2 text-lg font-bold">명의 전문 매니저</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <p class="kpi-number" data-target="700">0</p>
-                            <p class="mt-2 text-lg font-bold">개+ 동시 관리 딜</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <p class="kpi-number" data-target="8">0</p>
-                            <p class="mt-2 text-lg font-bold">건의 최근 1년 딜 성사</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <p class="kpi-number" data-target="100">0</p>
-                            <p class="mt-2 text-lg font-bold">배 높은 생산성</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
         <section id="technology" class="py-20">
-            <div class="container mx-auto px-6">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="section-title">독보적 기술, 강력한 해자</h2>
                     <p class="section-subtitle">
@@ -396,8 +370,49 @@
             </div>
         </section>
 
-        <section id="vision" class="py-20 bg-[#FBEAE4]">
-            <div class="container mx-auto px-6">
+        <section id="proof" class="py-20 bg-[#FBEAE4]">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="section-title">신뢰와 성과</h2>
+                    <p class="section-subtitle">
+                        리스팅은 기술력과 전문성을 바탕으로 시장의 신뢰를 구축하고, 실질적인 혜택으로 증명합니다.
+                    </p>
+                </div>
+
+                <div class="mt-16 bg-white p-10 rounded-xl shadow-md">
+                    <div class="text-center max-w-3xl mx-auto">
+                        <h3 class="text-3xl font-bold">공식 인증으로 증명된 신뢰성</h3>
+                        <p class="mt-4 text-lg text-gray-700">M&A 시장의 가장 큰 허들은 '신뢰'입니다. 리스팅은 기술력과 전문성을 공식적으로 인정받아, <span class="font-bold">한국벤처캐피탈협회(KVCA)와 기술보증기금의 공식 M&A 자문기관</span>으로 선정되었습니다.</p>
+                        <p class="mt-6 font-bold text-xl text-[#E76033]">리스팅을 통해 M&A를 진행하는 벤처기업은 기업가치평가 비용을 최대 2,000만 원까지 지원받을 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <div class="mt-20 text-center">
+                    <h3 class="text-3xl font-bold">결과는 숫자로 증명됩니다</h3>
+                    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <p class="kpi-number" data-target="3">0</p>
+                            <p class="mt-2 text-lg font-bold">명의 전문 매니저</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <p class="kpi-number" data-target="700">0</p>
+                            <p class="mt-2 text-lg font-bold">개+ 동시 관리 딜</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <p class="kpi-number" data-target="8">0</p>
+                            <p class="mt-2 text-lg font-bold">건의 최근 1년 딜 성사</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <p class="kpi-number" data-target="100">0</p>
+                            <p class="mt-2 text-lg font-bold">배 높은 생산성</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vision" class="py-20">
+            <div class="container mx-auto px-4 sm:px-6">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="section-title">미래는 '생태계'입니다</h2>
                     <p class="section-subtitle">
@@ -435,8 +450,8 @@
             </div>
         </section>
         
-        <section id="paradigm-shift" class="py-20">
-            <div class="container mx-auto px-6">
+        <section id="paradigm-shift" class="py-20 bg-[#FBEAE4]">
+            <div class="container mx-auto px-4 sm:px-6">
                  <div class="text-center max-w-4xl mx-auto">
                     <h2 class="section-title">AI가 만드는 새로운 M&A 시대</h2>
                     <p class="section-subtitle">
@@ -468,7 +483,7 @@
     </main>
 
     <footer class="bg-[#333333] text-white py-12">
-        <div class="container mx-auto px-6 text-center">
+        <div class="container mx-auto px-4 sm:px-6 text-center">
             <p class="text-2xl font-bold">AI가 여는 새로운 M&A의 시대, 리스팅과 함께하세요.</p>
             <p class="mt-4 text-gray-400">귀사의 성공적인 매각과 인수를 위한 최적의 파트너가 되겠습니다.</p>
             <div class="mt-8">
