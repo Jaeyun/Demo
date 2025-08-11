@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung DeepSearch AI 글로벌 방산 지수 제안</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A persuasive, single-page dashboard flow designed for executive review. The structure starts with a high-level "Why" (market opportunity), moves to the "How" (our unique index methodology), proves it with "What" (interactive performance data and portfolio), and closes with the "Opportunity" (competitive gap and call to action). This non-linear, dashboard-style approach allows users to quickly grasp the key value points and then dive into the data that supports them, making it more effective for decision-making than a linear report. -->
+    <!-- Visualization & Content Choices: 
+        - Market Opportunity (Inform): Used large stat cards for immediate impact on the two core trends (Defense Spending & AI Growth).
+        - Methodology (Organize): A simple HTML/CSS flow diagram to visually explain the 70/30 hybrid model, which is more intuitive than text alone.
+        - Performance (Compare/Change): A Chart.js line chart shows historical performance, while key metrics are presented in a clear dashboard format. A Chart.js donut chart visualizes the current portfolio composition.
+        - Portfolio (Explore): An interactive table is linked to the donut chart, allowing users to click and explore the strategic role of each top holding. This interaction fosters deeper understanding.
+        - Competition (Compare): A card-based layout with simple icons (✓/✗) provides a quick, at-a-glance analysis of the market gap, clearly positioning the proposed ETF as superior.
+        - Justification: All choices prioritize clarity, interactivity, and persuasive storytelling to guide the user towards a positive decision. Chart.js was used for all data visualizations.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f7f4;
+            color: #2c3e50;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        .active-nav {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            font-weight: 700;
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .table-row-highlight {
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-gray-800">DeepSearch AI 방산 지수</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#opportunity" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">시장 기회</a>
+                        <a href="#methodology" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">지수 방법론</a>
+                        <a href="#performance" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">성과 분석</a>
+                        <a href="#portfolio" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">포트폴리오</a>
+                        <a href="#comparison" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">경쟁 우위</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+                    차세대 투자의 미래: AI 글로벌 방산
+                </h1>
+                <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-600">
+                    지정학과 기술이 만나는 거대한 패러다임 전환,
+                    <br class="hidden sm:block">삼성자산운용이 시장을 선도할 독보적 기회입니다.
+                </p>
+                <div class="mt-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="stat-card">
+                        <p class="text-4xl font-bold text-blue-600">228.8%</p>
+                        <p class="mt-2 text-gray-600 font-medium">누적 수익률</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="text-4xl font-bold text-blue-600">19.74%</p>
+                        <p class="mt-2 text-gray-600 font-medium">5년 연평균 수익률 (CAGR)</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="text-4xl font-bold text-blue-600">1.08</p>
+                        <p class="mt-2 text-gray-600 font-medium">샤프 지수 (Sharpe Ratio)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="opportunity" class="py-16 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900">시장의 거대한 두 축: 왜 지금인가?</h2>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">본 지수는 향후 10년을 지배할 두 가지 강력한 메가 트렌드의 교차점에 정확히 위치합니다. 이 두 가지 성장 엔진이 결합하여 만들어내는 강력한 시너지는 일시적 현상이 아닌 구조적 변화이며, 지금이 바로 이 기회를 포착해야 할 때입니다.</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="stat-card p-8">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-blue-100 rounded-full">
+                                <span class="text-2xl">🌍</span>
+                            </div>
+                            <h3 class="ml-4 text-2xl font-bold text-gray-800">구조적 국방비 증강</h3>
+                        </div>
+                        <p class="mt-4 text-gray-600">냉전 종식 이후 지속된 '평화 배당' 시대는 막을 내렸습니다. 유럽의 전쟁과 아태지역의 긴장 고조는 전 세계적인 재무장 시대를 열었으며, 이는 단순한 예산 증가를 넘어 국방 패러다임의 근본적인 변화를 의미합니다.</p>
+                        <div class="mt-6 border-t pt-4">
+                            <p class="text-4xl font-bold text-blue-600">$2.7T+</p>
+                            <p class="text-gray-600 font-medium">2024년 전 세계 군사 지출 (역대 최고)</p>
+                        </div>
+                    </div>
+                    <div class="stat-card p-8">
+                         <div class="flex items-center">
+                            <div class="p-3 bg-indigo-100 rounded-full">
+                                <span class="text-2xl">💡</span>
+                            </div>
+                            <h3 class="ml-4 text-2xl font-bold text-gray-800">AI 기술 혁명</h3>
+                        </div>
+                        <p class="mt-4 text-gray-600">전장의 미래는 AI에 의해 쓰여지고 있습니다. 데이터 분석, 자율 시스템, 지능형 지휘 통제는 현대전의 승패를 가르는 핵심 요소가 되었습니다. AI는 국방 분야에서 가장 폭발적인 성장이 기대되는 하위 섹터입니다.</p>
+                        <div class="mt-6 border-t pt-4">
+                            <p class="text-4xl font-bold text-indigo-600">33.3%</p>
+                            <p class="text-gray-600 font-medium">군사 AI 시장 연평균 성장률(CAGR) 전망</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="methodology" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900">지능형 설계: 미래를 포착하는 방법론</h2>
+                    <p class="mt-3 max-w-3xl mx-auto text-lg text-gray-600">과거의 성과에 의존하는 전통적인 시가총액 방식 지수와 달리, DeepSearch AI 방산 지수는 미래의 성장 잠재력을 능동적으로 포착하도록 설계된 선구적인 하이브리드 방법론을 사용합니다.</p>
+                </div>
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <div class="relative">
+                        <div class="absolute w-full h-1 bg-gray-200 top-1/2 -translate-y-1/2"></div>
+                        <div class="relative flex justify-between items-start">
+                            <div class="w-1/3 text-center">
+                                <div class="relative z-10 mx-auto w-20 h-20 flex items-center justify-center bg-blue-500 text-white rounded-full text-2xl font-bold shadow-lg">70%</div>
+                                <h4 class="mt-4 text-lg font-bold">AI 키워드 관련성</h4>
+                                <p class="mt-1 text-sm text-gray-600">NLP 분석을 통해 기업 공시, 특허, 계약 등에서 AI-국방 테마의 진정한 연관성을 측정하는 미래지향적 지표</p>
+                            </div>
+                            <div class="w-1/3 text-center pt-20">
+                                 <div class="relative z-10 mx-auto w-20 h-20 flex items-center justify-center bg-gray-700 text-white rounded-full text-4xl font-bold shadow-lg">+</div>
+                            </div>
+                            <div class="w-1/3 text-center">
+                                <div class="relative z-10 mx-auto w-20 h-20 flex items-center justify-center bg-indigo-500 text-white rounded-full text-2xl font-bold shadow-lg">30%</div>
+                                <h4 class="mt-4 text-lg font-bold">시가총액</h4>
+                                <p class="mt-1 text-sm text-gray-600">포트폴리오의 안정성과 투자 용이성을 확보하며, 검증된 대형 우량주를 편입하는 안정 장치</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-12">
+                        <div class="inline-block bg-green-100 text-green-800 rounded-full px-6 py-3 font-bold">
+                            = 독보적 성과를 내는 동적이고 지능적인 포트폴리오
+                        </div>
+                        <p class="mt-4 text-gray-600">분기별 리밸런싱을 통해 시장 변화에 신속하게 대응하고, 항상 최적의 테마 노출을 유지합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="performance" class="py-16 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900">성과 분석: 데이터로 증명된 우수성</h2>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">엄격한 백테스팅 결과, 본 지수는 단순한 테마 추종을 넘어 탁월한 위험 조정 수익률을 기록했습니다. 이는 지능적 설계가 실제 성과로 이어진다는 명백한 증거입니다.</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3 stat-card p-4 space-y-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">누적 수익률 추이</h3>
+                            <img src="kodex-ai.png" alt="누적 수익률 추이" class="w-full h-auto rounded-lg object-cover shadow-lg">
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">최근 1년 성과 비교</h3>
+                            <img src="kodex-ai-2.png" alt="최근 1년 성과 비교" class="w-full h-auto rounded-lg object-cover shadow-lg">
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2 grid grid-cols-2 gap-4">
+                        <div class="stat-card text-center">
+                            <p class="text-3xl font-bold text-blue-600">1.08</p>
+                            <p class="mt-1 text-sm text-gray-600 font-medium">샤프 지수</p>
+                        </div>
+                        <div class="stat-card text-center">
+                            <p class="text-3xl font-bold text-blue-600">1.68</p>
+                            <p class="mt-1 text-sm text-gray-600 font-medium">소티노 지수</p>
+                        </div>
+                         <div class="stat-card text-center">
+                            <p class="text-3xl font-bold text-blue-600">153.28%</p>
+                            <p class="mt-1 text-sm text-gray-600 font-medium">1년 수익률</p>
+                        </div>
+                         <div class="stat-card text-center">
+                            <p class="text-3xl font-bold text-red-600">-41.86%</p>
+                            <p class="mt-1 text-sm text-gray-600 font-medium">최대 낙폭 (MDD)</p>
+                        </div>
+                        <div class="stat-card text-center col-span-2">
+                            <p class="text-3xl font-bold text-blue-600">27.82%</p>
+                            <p class="mt-1 text-sm text-gray-600 font-medium">연환산 변동성</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900">핵심 포트폴리오: 안정과 혁신의 조화</h2>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">본 지수는 단순한 기술주 집합이 아닙니다. 국방 예산 증가의 수혜를 받는 전통 강자와 미래 전장을 주도할 파괴적 혁신 기업을 전략적으로 결합하여 안정적인 성장을 추구합니다.</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Top 10 보유 종목 (최신 기준)</h3>
+                        <div class="chart-container h-80 md:h-96">
+                            <canvas id="portfolioDonutChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <div id="portfolio-table-container" class="stat-card p-0">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">기업명 (티커)</th>
+                                        <th scope="col" class="px-6 py-3 text-right">비중 (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="portfolio-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                         <div id="portfolio-detail" class="mt-4 stat-card bg-blue-50 border border-blue-200 min-h-[120px]">
+                            <h4 id="detail-name" class="font-bold text-lg text-blue-900">종목을 선택하여 역할을 확인하세요.</h4>
+                            <p id="detail-role" class="mt-1 text-blue-800"></p>
+                            <p id="detail-tech" class="mt-2 text-sm text-gray-600"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="py-16 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900">경쟁 우위: 점유되지 않은 시장</h2>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">현재 시장에는 AI와 국방의 교차점에 순수하게 집중하는 상품이 없습니다. 이는 삼성이 '최초'이자 '최고'의 상품으로 시장을 정의할 수 있는 명백한 선점 기회입니다.</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="stat-card border-2 border-blue-500 ring-4 ring-blue-100">
+                        <h3 class="text-xl font-bold text-blue-700">제안: Samsung DeepSearch ETF</h3>
+                        <ul class="mt-4 space-y-3 text-gray-700">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> AI & 자율성 테마 집중</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 글로벌 포트폴리오</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 미래지향적 하이브리드 가중</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 높은 테마 순수성</li>
+                        </ul>
+                    </div>
+                    <div class="stat-card opacity-70">
+                        <h3 class="text-xl font-bold text-gray-800">기존 방산 ETF (ITA, PPA)</h3>
+                         <ul class="mt-4 space-y-3 text-gray-700">
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 전통/레거시 기업 편중</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 미국 중심의 제한적 범위</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 과거지향적 시총 가중</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 상업 항공우주로 희석</li>
+                        </ul>
+                    </div>
+                    <div class="stat-card opacity-70">
+                        <h3 class="text-xl font-bold text-gray-800">기존 기술 ETF (BOTZ)</h3>
+                         <ul class="mt-4 space-y-3 text-gray-700">
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 비국방 분야로 테마 희석</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 낮은 국방 테마 관련성</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 지정학적 순풍 미반영</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">✗</span> 산업/의료 로봇에 집중</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold">시장을 선도할 준비가 되셨습니까?</h2>
+            <p class="mt-3 max-w-xl mx-auto text-gray-300">데이터는 준비되었고, 방법론은 견고하며, 시장 타이밍은 완벽합니다. 국방 투자의 미래를 정의하고 지배하기 위한 파트너십을 지금 시작하십시오.</p>
+            <button class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition">
+                파트너십 논의 시작하기
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const portfolioData = [
+                { ticker: 'PLTR', name: '팔란티어 테크놀로지스', weight: 16.07, role: 'AI 및 데이터 분석 리더', tech: '고담 플랫폼, AI 기반 지휘통제' },
+                { ticker: 'RTX', name: 'RTX', weight: 12.90, role: '전통적 통합업체 및 안정 장치', tech: '미사일 방어, 센서, C5ISR' },
+                { ticker: 'KTOS', name: '크라토스 디펜스 & 시큐리티 솔', weight: 11.10, role: '무인 항공 시스템 (UAS)', tech: '자율 전투 드론 (발키리)' },
+                { ticker: 'ACHR', name: '아처 에비에이션', weight: 10.65, role: '미래 이동성 및 자율성', tech: 'eVTOL, 자율 비행 제어' },
+                { ticker: 'AVAV', name: '에어로바이런먼트', weight: 10.37, role: '전술 UAS 및 배회폭탄', tech: '스위치블레이드, 퓨마, ISR 드론' },
+                { ticker: 'APH', name: '암페놀', weight: 9.01, role: '핵심 부품 및 상호연결 솔루션', tech: '고성능 커넥터, 센서, 안테나 시스템' },
+                { ticker: 'HON', name: '허니웰 인터내셔널', weight: 8.90, role: '다각화된 기술 및 안정 장치', tech: '항공전자, 항법, 엔진' },
+                { ticker: 'LHX', name: 'L3 해리스 테크놀러지', weight: 7.39, role: 'C5ISR 및 전자장비', tech: '센서, 통신, 우주' },
+                { ticker: 'RKLB', name: '로켓 랩 USA', weight: 7.10, role: '우주 발사 및 위성 시스템', tech: '소형 위성 발사체 (일렉트론), 위성 부품' },
+                { ticker: 'HWM', name: '하우멧 에어로스페이스', weight: 6.52, role: '항공우주 엔지니어링 및 부품', tech: '티타늄 구조물, 제트 엔진 부품' }
+            ].sort((a, b) => b.weight - a.weight);
+
+            let portfolioDonutChart;
+
+            function renderPortfolioDonutChart(activeIndex = -1) {
+                const ctx = document.getElementById('portfolioDonutChart').getContext('2d');
+                const data = {
+                    labels: portfolioData.map(p => `${p.name} (${p.ticker})`),
+                    datasets: [{
+                        data: portfolioData.map(p => p.weight),
+                        backgroundColor: ['#2563eb', '#4f46e5', '#7c3aed', '#9333ea', '#c026d3', '#db2777', '#e11d48', '#f97316', '#f59e0b', '#84cc16'],
+                        borderColor: '#f8f7f4',
+                        borderWidth: 3,
+                        hoverOffset: 10,
+                        hoverBorderColor: '#fff',
+                    }]
+                };
+                
+                if(activeIndex !== -1) {
+                    const activeBorderColors = Array(portfolioData.length).fill('#f8f7f4');
+                    activeBorderColors[activeIndex] = '#000'; 
+                    data.datasets[0].borderColor = activeBorderColors;
+                    data.datasets[0].borderWidth = Array(portfolioData.length).fill(3);
+                    data.datasets[0].borderWidth[activeIndex] = 5;
+                }
+
+                if (portfolioDonutChart) {
+                    portfolioDonutChart.destroy();
+                }
+
+                portfolioDonutChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                enabled: true,
+                                backgroundColor: '#1f2937',
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += `${context.parsed.toFixed(2)}%`;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const chartElement = elements[0];
+                                const index = chartElement.index;
+                                updatePortfolioDetail(index);
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderPortfolioTable() {
+                const tableBody = document.getElementById('portfolio-table-body');
+                tableBody.innerHTML = '';
+                portfolioData.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.className = 'bg-white border-b hover:bg-gray-50 cursor-pointer';
+                    row.dataset.index = index;
+                    row.innerHTML = `
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${item.name} (${item.ticker})</td>
+                        <td class="px-6 py-4 text-right">${item.weight.toFixed(2)}%</td>
+                    `;
+                    row.addEventListener('click', () => updatePortfolioDetail(index));
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function updatePortfolioDetail(index) {
+                const item = portfolioData[index];
+                document.getElementById('detail-name').textContent = `${item.name} (${item.ticker})`;
+                document.getElementById('detail-role').textContent = item.role;
+                document.getElementById('detail-tech').textContent = `핵심 기술: ${item.tech}`;
+
+                document.querySelectorAll('#portfolio-table-body tr').forEach(row => {
+                    row.classList.remove('table-row-highlight');
+                });
+                document.querySelector(`#portfolio-table-body tr[data-index='${index}']`).classList.add('table-row-highlight');
+                
+                renderPortfolioDonutChart(index);
+            }
+            
+            function setupNavScroll() {
+                const sections = document.querySelectorAll('main section');
+                const navLinks = document.querySelectorAll('.nav-link');
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            navLinks.forEach(link => {
+                                link.classList.remove('active-nav');
+                                if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                    link.classList.add('active-nav');
+                                }
+                            });
+                        }
+                    });
+                }, { rootMargin: "-50% 0px -50% 0px" });
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+
+                navLinks.forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+            }
+
+            renderPortfolioDonutChart();
+            renderPortfolioTable();
+            updatePortfolioDetail(0); // Initialize with the first item
+            setupNavScroll();
+        });
+    </script>
+</body>
+</html>
