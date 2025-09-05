@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Chroma - M&A Teaser Note</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony Neutrals -->
+    <!-- Application Structure Plan: A top-down narrative SPA structure with a sticky navigation bar is chosen to guide potential acquirers logically through the investment thesis. The flow starts with a high-level opportunity overview, adds a new deep-dive section on the signature product to immediately showcase the core asset, moves to compelling investment highlights to capture interest, delves into the core R&D and product differentiation, outlines the clear market growth strategy, provides transparent financial data, and concludes with the specific deal structure. This linear storytelling approach is most effective for M&A teasers where clarity, persuasiveness, and a guided discovery process are paramount for busy decision-makers. -->
+    <!-- Visualization & Content Choices: 
+        - Opportunity Overview: Text Block -> Goal: Inform -> Justification: Sets the stage with a concise summary.
+        - Signature Cream Section (NEW): Multi-column layout with stats and a key comparison chart -> Goal: Deep-dive/Persuade -> Justification: Focuses attention on the primary value driver (the hero product) early in the narrative. The bar chart provides a powerful, data-backed competitive advantage.
+        - Investment Highlights: Card Layout (HTML/Tailwind) -> Goal: Inform/Organize -> Justification: Allows for quick scanning of the primary value propositions.
+        - Core Technology: Tabbed Layout (HTML/JS) & Diagram-like Divs -> Goal: Organize/Explain -> Justification: Separates complex R&D information cleanly and visually explains the proprietary PIS absorption method without complex graphics.
+        - Market Strategy: Timeline Graphic (HTML/Tailwind) -> Goal: Organize/Show Change -> Justification: Clearly presents the multi-phased growth plan.
+        - Financials: Bar Chart (Revenue Trend) & Donut Chart (Expense Breakdown) via Chart.js -> Goal: Show Change/Proportions -> Justification: Provides a standard, easily digestible view of financial performance and strategic investment in R&D.
+        - Deal Structure: Text Block -> Goal: Inform -> Justification: Clearly and directly states the transaction details.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F7F4;
+            color: #333;
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #1a3a3a;
+        }
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #006D77;
+            border-bottom-color: #006D77;
+        }
+        .tab-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .tab-button.active {
+            background-color: #1a3a3a;
+            color: #fff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F8F7F4]">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-[#1a3a3a]">Project Chroma</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#regeneration-cream" class="nav-link">Signature Cream</a>
+                <a href="#highlights" class="nav-link">Investment Highlights</a>
+                <a href="#technology" class="nav-link">Technology</a>
+                <a href="#growth" class="nav-link">Market & Growth</a>
+                <a href="#financials" class="nav-link">Financials</a>
+                <a href="#deal" class="nav-link">Deal Structure</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="bg-white py-20 sm:py-32">
+            <div class="container mx-auto text-center px-6">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-[#1a3a3a] leading-tight mb-4">CONFIDENTIAL M&A OPPORTUNITY</h1>
+                <p class="text-xl md:text-2xl text-gray-600 mb-8">독자 개발 원천 기술 기반의 혁신 더마 코스메틱 브랜드 인수 제안</p>
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1a3a3a] mb-2">Transaction</h3>
+                        <p class="text-gray-700">대상 회사 지분 100% 매각</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1a3a3a] mb-2">Enterprise Value</h3>
+                        <p class="text-gray-700">40억원 (부채 약 6억원 포함)</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1a3a3a] mb-2">Key Strength</h3>
+                        <p class="text-gray-700">독자 개발 원료 및 특허 공법 보유</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Overview -->
+        <section id="overview" class="py-16 md:py-24">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">The Opportunity</h2>
+                <p class="section-subtitle">
+                    Project Chroma는 난치성 피부 질환을 겪은 설립자의 개인적인 경험에서 출발한 더마 코스메틱 브랜드입니다. 시중 제품의 한계를 극복하고자 직접 원료 개발부터 시작하여, 독자적인 고효능 성분과 특허 흡수 기술을 확보했습니다. 이를 통해 단순한 화장품을 넘어 피부 본연의 건강을 되찾아주는 '코스메슈티컬' 시장의 새로운 기준을 제시하고 있습니다.
+                </p>
+                 <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                    <p class="text-lg text-gray-700 text-left leading-relaxed">
+                        본 M&A는 단순한 브랜드 인수를 넘어, 검증된 R&D 역량과 높은 고객 충성도를 바탕으로 폭발적인 성장을 앞둔 회사의 미래 가치를 선점할 기회입니다. Project Chroma는 이미 국내 약국 및 면세점 등 전문 채널에 성공적으로 진입했으며, 유럽, 아시아 시장 진출을 위한 기반을 모두 갖추었습니다. 강력한 마케팅 및 유통 역량을 보유한 파트너와 함께라면, 단기간 내에 글로벌 더마 코스메틱 시장의 게임 체인저로 도약할 잠재력을 지니고 있습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Signature Product Section -->
+        <section id="regeneration-cream" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-center">Signature Product: The Regeneration Cream</h2>
+                <p class="section-subtitle text-center">
+                    브랜드의 정체성이자 성장의 핵심 동력인 재생 크림은 단순한 제품을 넘어선 '솔루션'입니다. 설립자의 아픔에서 탄생한 진정성이 고객의 마음을 움직였습니다.
+                </p>
+                <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-[#1a3a3a] mb-4">"효과가 없으면 의미가 없다"</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            화학 성분 알러지로 고통받던 설립자는 시중의 어떤 제품으로도 효과를 보지 못했습니다. '내가 쓸 수 있는 진짜 제품을 만들자'는 절박함으로 원료 연구에 매달렸고, 타협 없는 고함량, 자연 유래 성분 원칙을 고수하여 마침내 피부의 근본적인 변화를 이끌어내는 데 성공했습니다. 이 스토리는 제품의 효능에 대한 가장 강력한 증거입니다.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="text-3xl font-bold text-[#006D77]">70%+</div>
+                                <div class="text-sm text-gray-600">재구매율</div>
+                            </div>
+                             <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="text-3xl font-bold text-[#006D77]">No.1</div>
+                                <div class="text-sm text-gray-600">약국 채널 선호도</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <h3 class="text-2xl font-bold text-center text-[#1a3a3a] mb-4">압도적인 경쟁 우위</h3>
+                         <p class="text-center text-gray-600 mb-6">시중 1위 제품 대비 10배 높은 핵심 성분 함량은 누구도 따라올 수 없는 기술적 차별점입니다.</p>
+                         <div class="chart-container" style="height: 300px;">
+                             <canvas id="mainComparisonChart"></canvas>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investment Highlights -->
+        <section id="highlights" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-center">Investment Highlights</h2>
+                <p class="section-subtitle text-center">
+                    Project Chroma가 매력적인 투자 기회인 핵심적인 이유입니다.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-[#1a3a3a] mb-3">1. 진정성 있는 브랜드 스토리</h3>
+                        <p class="text-gray-600">설립자의 실제 질병 극복 경험은 그 어떤 마케팅으로도 만들 수 없는 강력한 브랜드 서사를 구축하여, 소비자와의 깊은 신뢰 관계를 형성합니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-[#1a3a3a] mb-3">2. 독자적인 R&D 역량 (Moat)</h3>
+                        <p class="text-gray-600">'Product Anti-X', 'Product Cera-VINE' 등 독자 개발 원료와 나노 흡수 공법(PIS Solution) 특허는 모방이 불가능한 기술적 해자를 구축합니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-[#1a3a3a] mb-3">3. 검증된 제품력과 고객 충성도</h3>
+                        <p class="text-gray-600">공격적인 마케팅 없이도 재구매율 70% 이상을 기록하며, 제품의 탁월한 효능과 시장성을 입증했습니다. 이는 안정적인 매출 기반을 의미합니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <h3 class="text-xl font-bold text-[#1a3a3a] mb-3">4. 명확한 성장 및 확장 전략</h3>
+                        <p class="text-gray-600">'피부가 좋아지는 색조 화장품' 등 신시장 개척과 약국, 면세점, 글로벌 시장으로 이어지는 단계별 확장 로드맵은 높은 성장 잠재력을 보여줍니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology & Products -->
+        <section id="technology" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-center">Technology & Products</h2>
+                <p class="section-subtitle text-center">
+                    경쟁 우위의 원천인 독자적인 기술력과 이를 바탕으로 탄생한 핵심 제품 포트폴리오를 소개합니다.
+                </p>
+                <div class="max-w-4xl mx-auto">
+                    <div class="mb-8 flex justify-center border-b">
+                        <button id="tech-btn" class="tab-button active text-lg font-semibold py-3 px-8 rounded-t-lg">Core Technology</button>
+                        <button id="prod-btn" class="tab-button text-lg font-semibold py-3 px-8 rounded-t-lg">Product Portfolio</button>
+                    </div>
+
+                    <div id="tech-content" class="tab-content bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-[#1a3a3a] mb-6">독자 개발 원료 및 특허 공법</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800">핵심 원료</h4>
+                                <ul class="list-disc list-inside mt-2 text-gray-700 space-y-2">
+                                    <li><strong>Product Anti-X:</strong> 항바이러스 및 항염 효과를 지닌 독자 개발 성분으로, 문제성 피부 개선에 탁월한 효능을 보입니다.</li>
+                                    <li><strong>Product Cera-VINE:</strong> 기존 보습 성분 대비 12배 높은 보습력과 강력한 피부 장벽 강화 효과를 제공하는 차세대 원료입니다.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800">PIS (Penetrating Inter-cellular Solution) 공법</h4>
+                                <p class="mt-2 text-gray-700">유효 성분을 피부 장벽보다 작은 나노 입자로 쪼개어 세포 사이로 직접 침투시키는 특허 기술입니다. 일반 화장품과 비교할 수 없는 흡수율과 안정성을 구현하여 효능을 극대화합니다.</p>
+                                <div class="mt-4 border rounded-lg p-4 flex items-center space-x-4">
+                                    <div class="text-center">
+                                        <div class="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center font-bold text-blue-800">일반</div>
+                                        <p class="text-sm">피부 표면</p>
+                                    </div>
+                                    <div class="flex-grow text-2xl text-center text-gray-400">&rarr;</div>
+                                    <div class="text-center">
+                                        <div class="w-16 h-16 bg-red-100 rounded-full mx-auto mb-2 flex items-center justify-center font-bold text-red-800">PIS</div>
+                                        <p class="text-sm">피부 속 침투</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="prod-content" class="tab-content bg-white p-8 rounded-lg shadow-lg hidden">
+                        <h3 class="text-2xl font-bold text-[#1a3a3a] mb-8">확장을 위한 제품 라인업</h3>
+                        <div class="space-y-12">
+                             <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-xl font-bold text-gray-800">피부 개선용 색조 라인업</h4>
+                                    <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Future Growth Engine</span>
+                                </div>
+                                <p class="mt-2 text-gray-700">'바를수록 피부가 좋아진다'는 역발상에서 시작된 신시장 개척 라인업입니다. 피부 트러블을 가리기 위해 어쩔 수 없이 메이크업을 해야 하는 악순환의 고리를 끊는 혁신적인 제품입니다.</p>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div class="bg-gray-50 p-3 rounded-lg"><strong class="text-gray-600">컨셉:</strong> 더마 스킨케어 기술과 색조의 결합</div>
+                                    <div class="bg-gray-50 p-3 rounded-lg"><strong class="text-gray-600">1차 출시:</strong> 아토피 개선 파운데이션</div>
+                                    <div class="bg-gray-50 p-3 rounded-lg"><strong class="text-gray-600">차별점:</strong> 의료기기 등록 추진 (병원 판매)</div>
+                                    <div class="bg-gray-50 p-3 rounded-lg"><strong class="text-gray-600">기대효과:</strong> 색조 시장 패러다임 전환 및 신규 고객층 확보</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market & Growth -->
+        <section id="growth" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-center">Market & Growth Strategy</h2>
+                <p class="section-subtitle text-center">
+                    검증된 제품력을 바탕으로 국내외 시장을 공략하기 위한 체계적인 성장 로드맵을 보유하고 있습니다.
+                </p>
+                <div class="max-w-6xl mx-auto">
+                    <div class="relative border-l-2 border-[#1a3a3a] ml-4 md:ml-0">
+                        <!-- Phase 1 -->
+                        <div class="mb-12">
+                            <div class="absolute w-6 h-6 bg-[#006D77] rounded-full -left-3.5 border-4 border-white"></div>
+                            <div class="pl-12">
+                                <span class="text-sm font-semibold text-[#006D77] tracking-wider">단기 (1-2년)</span>
+                                <h3 class="text-2xl font-bold text-gray-800 mt-1 mb-2">국내 전문 채널 및 온라인 공략</h3>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li>전국 약국 입점 300개 이상으로 확대</li>
+                                    <li>신세계, 현대 등 주요 면세점 입점 완료 및 확장</li>
+                                    <li>대한항공 등 기내 면세점 입점 추진</li>
+                                    <li>온라인 자사몰 및 종합몰 마케팅 강화 (매출 견인)</li>
+                                    <li><strong>예상 매출: 연 50-80억원</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Phase 2 -->
+                        <div class="mb-12">
+                            <div class="absolute w-6 h-6 bg-[#006D77] rounded-full -left-3.5 border-4 border-white"></div>
+                            <div class="pl-12">
+                                <span class="text-sm font-semibold text-[#006D77] tracking-wider">중기 (3-4년)</span>
+                                <h3 class="text-2xl font-bold text-gray-800 mt-1 mb-2">글로벌 시장 진출 및 라인업 확장</h3>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li>유럽 CPNP 인증 완료, 현지 유통 파트너와 협업</li>
+                                    <li>중국/동남아 온라인 플랫폼(티몰, 쇼피 등) 진출</li>
+                                    <li>'피부 개선용 색조' 라인업 정식 론칭 (신시장 창출)</li>
+                                    <li>글로벌 코스모프로프 등 해외 박람회 참가</li>
+                                    <li><strong>예상 매출: 연 200-300억원</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Phase 3 -->
+                        <div>
+                            <div class="absolute w-6 h-6 bg-[#006D77] rounded-full -left-3.5 border-4 border-white"></div>
+                            <div class="pl-12">
+                                <span class="text-sm font-semibold text-[#006D77] tracking-wider">장기 (5년+)</span>
+                                <h3 class="text-2xl font-bold text-gray-800 mt-1 mb-2">B2B 및 의약외품 영역 확장</h3>
+                                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                                    <li>국내/해외 B2B 원료 공급 사업 개시</li>
+                                    <li>특수 치료용 화장품 및 의약외품 개발 및 허가</li>
+                                    <li>라이프스타일 제품으로 카테고리 확장</li>
+                                    <li>글로벌 코스메슈티컬 선도 기업으로 도약</li>
+                                    <li><strong>예상 매출: 연 500-1,000억원</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financials -->
+        <section id="financials" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="section-title text-center">Financial Overview</h2>
+                <p class="section-subtitle text-center">
+                    과거 재무는 R&D 집중 투자를 반영하며, 향후 유통 채널 확장과 마케팅 본격화에 따라 폭발적인 매출 성장이 기대됩니다.
+                </p>
+                <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-center text-[#1a3a3a] mb-8">주요 재무 현황 (단위: 백만원)</h3>
+                    <div class="overflow-x-auto mb-12">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-4 font-semibold">항목</th>
+                                    <th class="p-4 font-semibold text-right">2022년</th>
+                                    <th class="p-4 font-semibold text-right">2023년</th>
+                                    <th class="p-4 font-semibold text-right">2024년 (E)</th>
+                                    <th class="p-4 font-semibold text-right">2025년 (F)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="p-4">매출액</td>
+                                    <td class="p-4 text-right">45</td>
+                                    <td class="p-4 text-right">22</td>
+                                    <td class="p-4 text-right">800</td>
+                                    <td class="p-4 text-right">5,000</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-4">영업이익</td>
+                                    <td class="p-4 text-right text-red-600">(499)</td>
+                                    <td class="p-4 text-right text-red-600">(517)</td>
+                                    <td class="p-4 text-right text-red-600">(250)</td>
+                                    <td class="p-4 text-right text-green-600">750</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-4">당기순이익</td>
+                                    <td class="p-4 text-right text-red-600">(499)</td>
+                                    <td class="p-4 text-right text-red-600">(517)</td>
+                                    <td class="p-4 text-right text-red-600">(250)</td>
+                                    <td class="p-4 text-right text-green-600">750</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-sm text-gray-500 mt-2 text-right">*2023년까지는 R&D 및 인프라 구축에 집중 투자. 2024년부터 본격적인 매출 성장 시작.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <h4 class="text-xl font-semibold text-center text-gray-800 mb-4">매출 성장 추이 및 전망</h4>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-center text-gray-800 mb-4">투자금 및 자금 사용처 (2023년 기준)</h4>
+                            <div class="chart-container">
+                                <canvas id="expenseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Deal Structure -->
+        <section id="deal" class="py-16 md:py-24">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">Deal Structure & Next Steps</h2>
+                <p class="section-subtitle">
+                    본 M&A는 회사의 100% 지분 인수를 목표로 하며, 투명하고 신속한 절차를 통해 진행될 예정입니다.
+                </p>
+                <div class="max-w-3xl mx-auto bg-gray-50 p-10 rounded-lg shadow-xl border">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-baseline pb-2 border-b">
+                            <span class="text-lg font-medium text-gray-600">거래 구조</span>
+                            <span class="text-lg font-bold text-gray-900">대상 회사 지분 100% 인수</span>
+                        </div>
+                        <div class="flex justify-between items-baseline pb-2 border-b">
+                            <span class="text-lg font-medium text-gray-600">총 기업 가치 (EV)</span>
+                            <span class="text-lg font-bold text-gray-900">4,000,000,000 원</span>
+                        </div>
+                        <div class="flex justify-between items-baseline pb-2 border-b">
+                            <span class="text-lg font-medium text-gray-600">부채 (승계)</span>
+                            <span class="text-lg font-bold text-gray-900">약 600,000,000 원</span>
+                        </div>
+                        <div class="flex justify-between items-baseline text-xl font-bold text-[#006D77] pt-4">
+                            <span class="font-medium">총 지분 가치 (Equity Value)</span>
+                            <span>3,400,000,000 원</span>
+                        </div>
+                    </div>
+                    <div class="mt-10 pt-8 border-t">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">향후 절차</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            비밀유지협약(NDA) 체결 후 상세 정보(IM, VDR)가 제공될 예정입니다. 추가 정보나 미팅을 원하시면 아래 연락처로 문의 주시기 바랍니다. 귀사의 비전과 Project Chroma의 잠재력이 만나 만들어낼 시너지를 기대합니다.
+                        </p>
+                         <button class="mt-8 bg-[#1a3a3a] text-white font-bold py-3 px-8 rounded-lg hover:bg-[#006D77] transition-colors duration-300">
+                            CONTACT FOR MORE INFORMATION
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>Project Chroma M&A Teaser</p>
+            <p class="text-sm text-gray-400 mt-2">This document is strictly confidential and is being provided for informational purposes only.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            window.onscroll = () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 70) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+
+            // Tab functionality
+            const techBtn = document.getElementById('tech-btn');
+            const prodBtn = document.getElementById('prod-btn');
+            const techContent = document.getElementById('tech-content');
+            const prodContent = document.getElementById('prod-content');
+
+            techBtn.addEventListener('click', () => {
+                techBtn.classList.add('active');
+                prodBtn.classList.remove('active');
+                techContent.classList.remove('hidden');
+                prodContent.classList.add('hidden');
+            });
+
+            prodBtn.addEventListener('click', () => {
+                prodBtn.classList.add('active');
+                techBtn.classList.remove('active');
+                prodContent.classList.remove('hidden');
+                techContent.classList.add('hidden');
+            });
+            
+            // Chart.js Implementations
+            const chartFontColor = '#333';
+            Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+            Chart.defaults.color = chartFontColor;
+
+            // 1. Main Comparison Chart
+            const mainComparisonCtx = document.getElementById('mainComparisonChart').getContext('2d');
+            new Chart(mainComparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['경쟁사 (재생크림 1위)', 'Project Chroma (Product T)'],
+                    datasets: [{
+                        label: '유효성분(PDRN) 함량 (ppm)',
+                        data: [1000, 10000],
+                        backgroundColor: [
+                            'rgba(200, 200, 200, 0.6)',
+                            'rgba(0, 109, 119, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(200, 200, 200, 1)',
+                            'rgba(0, 109, 119, 1)'
+                        ],
+                        borderWidth: 1,
+                        barThickness: 50,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toLocaleString()} ppm`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 2. Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023', '2024 (E)', '2025 (F)'],
+                    datasets: [{
+                        label: '매출액 (백만원)',
+                        data: [45, 22, 800, 5000],
+                         backgroundColor: [
+                            '#d1d5db',
+                            '#9ca3af',
+                            '#38bdf8',
+                            '#006D77',
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            type: 'logarithmic',
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    if (value === 10 || value === 100 || value === 1000 || value === 5000) {
+                                        return value.toLocaleString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 3. Expense Chart
+            const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+            new Chart(expenseCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['R&D (원료/임상)', '마케팅/광고', '인건비', '기타'],
+                    datasets: [{
+                        label: '자금 사용처',
+                        data: [55, 15, 20, 10],
+                        backgroundColor: [
+                            '#006D77', // R&D
+                            '#83C5BE', // Marketing
+                            '#EDF6F9', // Personnel
+                            '#FFDDD2'  // Etc
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                         tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
