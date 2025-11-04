@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SC제일은행 &amp; 리스팅: 1,000조 M&A 시너지 제안</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Tailwind Custom Config (Inter 폰트 적용) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'sc-blue': {
+                            'light': '#0072c6', // SC제일은행의 밝은 파란색 (포인트용)
+                            'DEFAULT': '#004a9b', // SC제일은행의 메인 파란색
+                            'dark': '#002d5a'  // SC제일은행의 어두운 파란색 (헤더, 푸터용)
+                        },
+                        'slate': tailwind.colors.slate,
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 탭 기능 및 차트 활성화를 위한 CSS -->
+    <style>
+        /* 기본적으로 탭 컨텐츠는 숨김 */
+        .tab-content {
+            display: none;
+        }
+        /* 'active' 클래스가 붙은 탭 컨텐츠만 표시 */
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 'active' 탭 버튼 스타일 */
+        .tab-btn.active {
+            border-color: #e5e7eb; /* tailwind 'gray-200' */
+            border-bottom-color: white;
+            color: #004a9b; /* sc-blue */
+            font-weight: 600;
+            background-color: white;
+            transform: translateY(1px); /* 살짝 내려와서 content와 연결된 느낌 */
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-700 font-sans antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Brand -->
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="font-bold text-xl text-sc-blue-dark">LISTING</span>
+                    <span class="mx-2 text-gray-300">&amp;</span>
+                    <span class="font-bold text-xl text-sc-blue">SC제일은행</span>
+                </div>
+                
+                <!-- Desktop Navigation Links -->
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="#urgency" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">시대적 배경</a>
+                    <a href="#precedent" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">해외 사례</a>
+                    <a href="#market-size" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">1000조 시장</a>
+                    <a href="#platform" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">플랫폼</a>
+                    <a href="#synergy" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">시너지</a>
+                    <a href="#benefits" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">기대 효과</a>
+                    <a href="#action" class="text-gray-500 hover:text-sc-blue font-medium inline-flex items-center px-1 pt-1 text-sm">협업 제안</a>
+                </div>
+                <!-- 모바일 메뉴 버튼 (기능은 구현되지 않음) -->
+                <div class="sm:hidden flex items-center">
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="intro" class="bg-sc-blue-dark text-white relative">
+            <div class="absolute inset-0 bg-black opacity-10"></div> <!-- 미묘한 오버레이 -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 text-center relative z-10">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
+                    1,000조원의 기회
+                </h1>
+                <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto mb-10">
+                    M&A 금융의 미래, 리스팅과 SC제일은행이 선점합니다
+                </p>
+                <p class="text-lg text-blue-200 max-w-3xl mx-auto mb-12 leading-relaxed">
+                    국내 최대 M&A 플랫폼 '리스팅'과 SC제일은행의 150개 전국 지점망이 만나,
+                    데이터와 현장 네트워크가 결합된 새로운 기업 금융의 혁신을 제안합니다.
+                </p>
+                <a href="mailto:jykim@deepsearch.com" class="inline-block bg-white text-sc-blue-dark font-bold py-3 px-10 rounded-lg text-lg shadow-lg hover:bg-gray-100 transition duration-300 transform hover:-translate-y-0.5">
+                    미팅 요청하기
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 1: Urgency (시대적 배경) -->
+        <section id="urgency" class="py-20 md:py-24 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">대한민국의 위기: <span class="text-sc-blue">기업 노령화</span></h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        지금 대한민국은 심각한 기업 후계자 부재 문제에 직면해 있습니다. <br class="hidden sm:block">이는 개별 기업을 넘어 국가 경제 전반의 위기이며, 동시에 거대한 기회입니다.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <!-- Card 1 -->
+                    <div class="bg-white shadow-lg rounded-lg p-8 border-l-4 border-sc-blue">
+                        <div class="text-6xl font-extrabold text-sc-blue mb-3">40%</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">노령 기업 비중</h3>
+                        <p class="text-gray-600 text-lg">국내 기업 10개 중 4개는 CEO가 60세 이상인 '노령 기업'입니다.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white shadow-lg rounded-lg p-8 border-l-4 border-sc-blue">
+                        <div class="text-6xl font-extrabold text-sc-blue mb-3">50%</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">후계자 부재</h3>
+                        <p class="text-gray-600 text-lg">이들 노령 기업 중 절반은 명확한 후계자가 없는 실정입니다.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 rounded-lg p-8 md:p-12 text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">잠재적 M&A 시장: <span class="text-sc-blue">20만 개+</span></h3>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        자본시장연구원 통계에 따르면, 당장 기업승계가 필요한 기업의 수는 <span class="font-bold text-gray-800">20만 개</span>가 넘어가고 있습니다.
+                        이 기업들이 방치되면 폐업으로 이어지지만, M&A를 통해 새로운 성장 기회를 맞이할 수 있습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Precedent (Japan) -->
+        <section id="precedent" class="py-20 md:py-24 bg-slate-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">이미 검증된 시장: <span class="text-sc-blue">일본의 사례</span></h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        우리보다 먼저 고령화를 겪은 일본은 M&A 플랫폼이 기업 승계 문제의 핵심 해결책으로 자리 잡았으며, 거대한 시장을 창출하고 폭발적으로 성장했습니다.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white shadow-lg rounded-lg p-8 text-center transform transition duration-300 hover:scale-105">
+                        <div class="text-6xl font-extrabold text-sc-blue mb-3">4조원+</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">M&A 플랫폼 시총</h3>
+                        <p class="text-gray-600 text-lg">일본 3대 M&A 중개 플랫폼의 시가총액 합계는 4조 원을 돌파하며 시장성을 증명했습니다.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white shadow-lg rounded-lg p-8 text-center transform transition duration-300 hover:scale-105">
+                        <div class="text-6xl font-extrabold text-sc-blue mb-3">40x↑</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">폭발적 딜 성장</h3>
+                        <p class="text-gray-600 text-lg">M&A 종합연구소는 2021년 누적 25개 딜에서, 현재 <span class="font-bold text-gray-800">연 1,000+개</span> 딜을 성사시키고 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Government Action -->
+        <section id="government" class="py-20 md:py-24 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">정부의 움직임: <span class="text-sc-blue">기업승계 활성화</span></h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        정부 역시 이 문제의 심각성을 인지하고, M&A를 통한 기업승계를 국가적 아젠다로 설정하며 적극적인 지원책을 마련하고 있습니다.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Icon Card 1 -->
+                    <div class="text-center p-6">
+                        <div class="text-6xl mb-6">📜</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">기업승계특별법</h3>
+                        <p class="text-gray-600 text-lg">원활한 M&A 승계를 위한 법적, 제도적 기반을 마련하고 있습니다.</p>
+                    </div>
+                    <!-- Icon Card 2 -->
+                    <div class="text-center p-6">
+                        <div class="text-6xl mb-6">🏦</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">기보(KIBO) 보증 확대</h3>
+                        <p class="text-gray-600 text-lg">기술보증기금을 통해 M&A 인수 자금에 대한 보증을 확대하고 있습니다.</p>
+                    </div>
+                    <!-- Icon Card 3 -->
+                    <div class="text-center p-6">
+                        <div class="text-6xl mb-6">💰</div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">다양한 금융 지원</h3>
+                        <p class="text-gray-600 text-lg">정책 자금 및 세제 혜택 등 M&A 활성화를 위한 프로그램을 진행 중입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: 1000 Trillion Market -->
+        <section id="market-size" class="py-20 md:py-24 bg-sc-blue-dark text-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-4">잠재 인수금융 시장 규모</h2>
+                <p class="text-7xl md:text-8xl font-extrabold text-blue-200 mb-12">1,000 조원</p>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-8 text-xl md:text-2xl font-semibold mb-12">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">20만+</div>
+                        <div class="text-blue-200">승계 필요 기업</div>
+                    </div>
+                    <div class="text-4xl text-blue-300 font-light">×</div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">평균 50억</div>
+                        <div class="text-blue-200">건당 인수금융</div>
+                    </div>
+                    <div class="text-4xl text-blue-300 font-light">=</div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">1,000조</div>
+                        <div class="text-blue-200">총 금융 시장</div>
+                    </div>
+                </div>
+                
+                <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+                    이는 SC제일은행이 M&A 인수금융의 <span class="font-bold text-white">핵심 플레이어</span>로
+                    자리매김하고 <span class="font-bold text-white">막대한 수익</span>을 창출할 수 있는
+                    유례없는 기회입니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 5: Platform Introduction -->
+        <section id="platform" class="py-20 md:py-24 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">국내 1위 M&A 플랫폼 <span class="text-sc-blue">'리스팅'</span></h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        '리스팅'은 이 거대한 기회를 현실로 만들고 있는 국내 최대 규모의 M&A 플랫폼입니다.
+                    </p>
+                </div>
+                
+                <!-- Platform Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                    <div class="text-center bg-slate-50 p-8 rounded-lg shadow-md">
+                        <span class="text-5xl font-extrabold text-sc-blue">800+</span>
+                        <p class="text-xl text-gray-700 font-semibold mt-2">라이브 매물</p>
+                    </div>
+                    <div class="text-center bg-slate-50 p-8 rounded-lg shadow-md">
+                        <span class="text-5xl font-extrabold text-sc-blue">1,000+</span>
+                        <p class="text-xl text-gray-700 font-semibold mt-2">월간 검토 건</p>
+                    </div>
+                    <div class="text-center bg-slate-50 p-8 rounded-lg shadow-md">
+                        <span class="text-5xl font-extrabold text-sc-blue">월 1~2건</span>
+                        <p class="text-xl text-gray-700 font-semibold mt-2">딜 성사 (Top 5)</p>
+                        <p class="text-gray-500 mt-1">현재 추이로 <span class="font-bold text-gray-600">내년 월 10건+</span> 성장</p>
+                    </div>
+                </div>
+                
+                <!-- Chart -->
+                <div class="max-w-4xl mx-auto">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-8">플랫폼 핵심 활동 지표 (월간)</h3>
+                    <div class="relative h-96 w-full bg-white p-4 rounded-lg shadow-xl border border-gray-100">
+                        <canvas id="platformActivityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Synergy Model -->
+        <section id="synergy" class="py-20 md:py-24 bg-slate-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">핵심 시너지 모델</h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        <span class="font-semibold text-sc-blue-dark">Digital Platform (리스팅)</span> + <span class="font-semibold text-sc-blue">Physical Network (SC제일은행)</span>
+                    </p>
+                </div>
+
+                <!-- Synergy Diagram -->
+                <div class="flex flex-col md:flex-row items-center justify-center md:space-x-8 space-y-8 md:space-y-0">
+                    <!-- Box 1: Listing Platform -->
+                    <div class="bg-white shadow-xl rounded-lg p-8 text-center w-64 h-64 flex flex-col justify-center items-center border-t-4 border-sc-blue-dark">
+                        <span class="text-6xl mb-4">💻</span>
+                        <h3 class="text-2xl font-bold text-gray-900">리스팅 플랫폼</h3>
+                        <p class="text-gray-600 text-lg">Digital Hub<br>(800+ 딜 정보)</p>
+                    </div>
+
+                    <!-- Arrow 1 -->
+                    <div class="text-5xl text-gray-400 transform rotate-90 md:rotate-0">➔</div>
+
+                    <!-- Box 2: SC Jeil Branches -->
+                    <div class="bg-white shadow-xl rounded-lg p-8 text-center w-64 h-64 flex flex-col justify-center items-center border-t-4 border-sc-blue">
+                        <span class="text-6xl mb-4">🏦</span>
+                        <h3 class="text-2xl font-bold text-gray-900">SC제일은행 150개 지점</h3>
+                        <p class="text-gray-600 text-lg">Physical Network<br>(자문, WM, 딜 소싱)</p>
+                    </div>
+                    
+                    <!-- Arrow 2 -->
+                    <div class="text-5xl text-gray-400 transform rotate-90 md:rotate-0">➔</div>
+
+                    <!-- Box 3: Clients -->
+                    <div class="bg-white shadow-xl rounded-lg p-8 text-center w-64 h-64 flex flex-col justify-center items-center border-t-4 border-gray-400">
+                        <span class="text-6xl mb-4">👥</span>
+                        <h3 class="text-2xl font-bold text-gray-900">전국 기업 고객</h3>
+                        <p class="text-gray-600 text-lg">20만+ 잠재 고객</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Benefits -->
+        <section id="benefits" class="py-20 md:py-24 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">SC제일은행의 <span class="text-sc-blue">5대 기대 효과</span></h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        본 협업은 SC제일은행에 1,000조 시장을 선점할 수 있는 5가지 핵심 가치를 제공합니다.
+                    </p>
+                </div>
+
+                <!-- Tabbed Interface -->
+                <div class="max-w-5xl mx-auto">
+                    <!-- Tab Buttons -->
+                    <div class="flex flex-wrap border-b border-gray-200 -mb-px">
+                        <button class="tab-btn active text-lg py-4 px-6 bg-gray-50 border border-transparent border-b-gray-200 text-gray-500 hover:text-sc-blue hover:border-gray-300 rounded-t-lg transition duration-200" data-tab="benefit1">1. 인수금융 수익</button>
+                        <button class="tab-btn text-lg py-4 px-6 bg-gray-50 border border-transparent border-b-gray-200 text-gray-500 hover:text-sc-blue hover:border-gray-300 rounded-t-lg transition duration-200" data-tab="benefit2">2. 정책 기여 (승계)</button>
+                        <button class="tab-btn text-lg py-4 px-6 bg-gray-50 border border-transparent border-b-gray-200 text-gray-500 hover:text-sc-blue hover:border-gray-300 rounded-t-lg transition duration-200" data-tab="benefit3">3. 매각 자금 유치</button>
+                        <button class="tab-btn text-lg py-4 px-6 bg-gray-50 border border-transparent border-b-gray-200 text-gray-500 hover:text-sc-blue hover:border-gray-300 rounded-t-lg transition duration-200" data-tab="benefit4">4. 핵심 고객 확보</button>
+                        <button class="tab-btn text-lg py-4 px-6 bg-gray-50 border border-transparent border-b-gray-200 text-gray-500 hover:text-sc-blue hover:border-gray-300 rounded-t-lg transition duration-200" data-tab="benefit5">5. 기업 WM 강화</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="relative bg-white border border-gray-200 border-t-0 rounded-b-lg shadow-lg">
+                        <div id="benefit1" class="tab-content active p-8 md:p-12">
+                            <h3 class="text-2xl font-bold text-sc-blue mb-4">인수금융 및 수수료 수익</h3>
+                            <p class="text-lg text-gray-600 leading-relaxed">플랫폼을 통해 성사되는 M&A 딜에 대한 인수금융(1,000조 시장)을 선점하고, 관련 금융 자문 및 주선 수수료 수익을 창출합니다. 은행의 핵심 수익원이 될 것입니다.</p>
+                        </div>
+                        <div id="benefit2" class="tab-content p-8 md:p-12">
+                            <h3 class="text-2xl font-bold text-sc-blue mb-4">노령기업 승계 지원 (정부 정책 기여)</h3>
+                            <p class="text-lg text-gray-600 leading-relaxed">20만 개에 달하는 노령 기업의 M&A를 지원함으로써, 정부의 기업 승계 활성화 정책에 기여하고 은행의 사회적 책임을 다하는 리딩 뱅크로 자리매김합니다.</p>
+                        </div>
+                        <div id="benefit3" class="tab-content p-8 md:p-12">
+                            <h3 class="text-2xl font-bold text-sc-blue mb-4">매각 기업 자금 유치 및 관리</h3>
+                            <p class="text-lg text-gray-600 leading-relaxed">M&A를 통해 기업을 매각한 주주 및 법인의 막대한 자금을 유치하고, 이를 전문적으로 관리하는 WM 서비스를 제공함으로써 신규 고객 및 자산을 대규모로 확보합니다.</p>
+                        </div>
+                        <div id="benefit4" class="tab-content p-8 md:p-12">
+                            <h3 class="text-2xl font-bold text-sc-blue mb-4">M&A 핵심 주체와 관계 형성</h3>
+                            <p class="text-lg text-gray-600 leading-relaxed">M&A의 핵심 주체인 인수자(PE, 전략적 투자자) 및 매각자(기업 오너)들과 독점적 금융 파트너 관계를 맺어, 향후 모든 잠재적 금융 수요를 선점할 수 있습니다.</p>
+                        </div>
+                        <div id="benefit5" class="tab-content p-8 md:p-12">
+                            <h3 class="text-2xl font-bold text-sc-blue mb-4">150여개 지점: 기업 WM 허브로 진화</h3>
+                            <p class="text-lg text-gray-600 leading-relaxed">전국 지점망이 단순 입출금 창구를 넘어, 지역 기업 고객을 대상으로 M&A 상담, 자산관리, 기업 승계 플랜 등을 제공하는 전문 기업 WM(Wealth Management) 허브로 거듭납니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Action Plan -->
+        <section id="action" class="py-20 md:py-24 bg-slate-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">제안: <span class="text-sc-blue">즉시 실행 가능한 협업</span></h2>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        이 1,000조의 기회를 현실화하기 위해, SC제일은행의 강점을 활용한 두 가지 즉각적인 실행 방안을 제안합니다.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Action Card 1 -->
+                    <div class="bg-white shadow-xl rounded-lg p-8 md:p-10 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                        <span class="text-5xl mb-6 block">🤝</span>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">1. M&A 딜 진행 및 전문 상담</h3>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            플랫폼에서 발생하는 딜에 대해 150개 지점망을 활용하여 초기 상담 창구 역할을 수행합니다. M&A 프로세스 전반에 걸친 매니징과 전문 자문을 제공하여 고객 접점을 강화합니다.
+                        </p>
+                    </div>
+                    <!-- Action Card 2 -->
+                    <div class="bg-white shadow-xl rounded-lg p-8 md:p-10 transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                        <span class="text-5xl mb-6 block">🔍</span>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">2. 지역 기반 딜 소싱 및 리서치</h3>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            각 지점의 기업 고객 네트워크를 활용하여, 아직 발견되지 않은 지역의 우량 매물(20만 개 잠재 기업)을 발굴하고 리서치를 시작합니다. 이는 플랫폼의 딜 파이프라인을 폭발시킬 것입니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- New Footer with Contact Info -->
+    <footer class="bg-sc-blue-dark text-blue-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Column 1: Proposal Info -->
+                <div class="md:col-span-1">
+                    <h3 class="text-lg font-semibold text-white mb-4 tracking-wider">SC제일은행 &amp; 리스팅</h3>
+                    <p class="text-blue-200">1,000조 M&A 시너지 제안</p>
+                </div>
+                
+                <!-- Column 2: Contact Info -->
+                <div class="md:col-span-1">
+                    <h3 class="text-lg font-semibold text-white mb-4 tracking-wider">제안사 연락처</h3>
+                    <p class="mb-2 font-medium text-white">딥서치 김재윤 대표</p>
+                    <p class="mb-2">
+                        <a href="tel:010-5122-3415" class="hover:text-white transition duration-200">010-5122-3415</a>
+                    </p>
+                    <p>
+                        <a href="mailto:jykim@deepsearch.com" class="hover:text-white transition duration-200">jykim@deepsearch.com</a>
+                    </p>
+                </div>
+                
+                <!-- Column 3: Call to Action -->
+                <div class="md:col-span-1 md:text-right">
+                     <p class="text-lg text-blue-100 mb-6">긍정적인 검토를 부탁드립니다.</p>
+                     <a href="mailto:jykim@deepsearch.com" class="inline-block bg-white text-sc-blue-dark font-bold py-3 px-8 rounded-lg text-lg shadow-lg hover:bg-gray-100 transition duration-300">
+                        미팅 요청하기
+                    </a>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-blue-700 pt-8 text-center text-sm text-blue-300">
+                <p>&copy; 2024 DeepSearch &amp; Listing. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript (Tabs & Chart.js) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- 탭 기능 구현 ---
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+
+                    // 모든 버튼에서 active 클래스 제거
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // 클릭한 버튼에 active 클래스 추가
+                    button.classList.add('active');
+
+                    // 모든 컨텐츠 숨기기
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    // 해당 ID를 가진 컨텐츠 보여주기
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // --- Chart.js 구현 ---
+            const ctx = document.getElementById('platformActivityChart');
+            if (ctx) {
+                new Chart(ctx.getContext('2d'), {
+                    type: 'line', // 라인 차트로 트렌드 표시
+                    data: {
+                        labels: ['6개월 전', '5개월 전', '4개월 전', '3개월 전', '2개월 전', '지난 달'],
+                        datasets: [
+                            {
+                                label: '라이브 매물',
+                                data: [520, 580, 610, 700, 780, 810],
+                                backgroundColor: 'rgba(0, 74, 155, 0.1)', // sc-blue-dark 10%
+                                borderColor: 'rgba(0, 74, 155, 1)', // sc-blue-dark
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4 // 부드러운 곡선
+                            },
+                            {
+                                label: '월간 검토 건',
+                                data: [600, 710, 800, 880, 950, 1020],
+                                backgroundColor: 'rgba(0, 114, 198, 0.1)', // sc-blue-light 10%
+                                borderColor: 'rgba(0, 114, 198, 1)', // sc-blue-light
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: {
+                                    color: '#e5e7eb' // gray-200
+                                },
+                                ticks: {
+                                    color: '#4b5563' // gray-600
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#4b5563' // gray-600
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#1f2937' // gray-800
+                                }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                mode: 'index',
+                                intersect: false,
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
+
