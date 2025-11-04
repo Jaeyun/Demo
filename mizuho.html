@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>みずほ銀行 AIデータプラットフォーム提案書 - DeepSearch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals and Professional Blue -->
+    <!-- Application Structure Plan: 
+        A single-page, scrollable application. All content is visible by default, removing the need for clicks, tabs, or interactive section loading. 
+        This structure is chosen based on the user request for a "no-click" layout.
+        - 'Data Universe' is converted from an interactive explorer to a static grid of cards, displaying all information upfront.
+        - 'AI Insights' displays both mockups sequentially instead of in tabs.
+        - A language switcher (i18n) is added to the header, managed by JavaScript, to toggle between Japanese, English, and Korean.
+        - The CTA button is replaced with static contact information.
+        This design prioritizes complete information visibility and multilingual access over the previous interactive, exploratory model.
+    -->
+    <!-- Visualization & Content Choices:
+        - Report Info: List of 10+ data types -> Goal: Organize/Inform -> Viz/Presentation: A static grid of Tailwind cards (e.g., md:grid-cols-2). Each card contains the title, description, and use case. -> Interaction: None (static) -> Justification: Fulfills "no-click" requirement. All info is visible. -> Library/Method: HTML/Tailwind.
+        - Report Info: AI Services (Briefing, Risk) -> Goal: Inform/Demonstrate -> Viz/Presentation: HTML/CSS/Tailwind mockups displayed sequentially, one after the other. -> Interaction: None (static) -> Justification: Fulfills "no-click" requirement.
+        - Report Info: Key Stats -> Goal: Inform/Compare -> Viz/Presentation: 1) Stat Cards. 2) Donut Chart. -> Interaction: Hover (tooltip) -> Justification: Visual impact. Chart labels are now translated by the i18n JS. -> Library/Method: Chart.js/Canvas.
+        - Report Info: Client References -> Goal: Proof -> Viz/Presentation: Static grid of HTML cards. -> Interaction: None -> Justification: Static social proof. -> Library/Method: HTML/Tailwind.
+        - New Feature: i18n -> Goal: Accessibility -> Viz/Presentation: JS object (translations) + HTML data-i18n attributes + JS function (switchLanguage). -> Interaction: Click (on lang buttons) -> Justification: Fulfills multilingual request. -> Library/Method: Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+        }
+        .lang-button {
+            @apply px-3 py-1 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer;
+        }
+        .lang-button-active {
+            @apply bg-blue-700 text-white hover:bg-blue-800 hover:text-white;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <header class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-blue-800">DeepSearch</span>
+                    <span class="mx-2 text-gray-300">|</span>
+                    <span class="text-lg font-medium text-slate-700" data-i18n="header_title">みずほ銀行 提案書</span>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="lang-ja" class="lang-button lang-button-active" onclick="switchLanguage('ja')">日本語</button>
+                    <button id="lang-en" class="lang-button" onclick="switchLanguage('en')">English</button>
+                    <button id="lang-ko" class="lang-button" onclick="switchLanguage('ko')">한국어</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+
+        <!-- Section: Home (Executive Summary) -->
+        <section id="section-home" data-section="home">
+            <div class="bg-white rounded-xl shadow-lg p-8 md:p-12 border border-slate-200">
+                <h1 class="text-3xl md:text-4xl font-bold text-blue-800 mb-4" data-i18n="home_title">みずほ銀行のグローバルAIイノベーションのためのコアパートナー</h1>
+                <p class="text-xl md:text-2xl text-slate-700 mb-6" data-i18n="home_subtitle">DeepSearchの検証済みデータプラットフォームで、みずほ銀行のAIサービスを完成させてください。</p>
+                <p class="text-lg text-slate-600 max-w-4xl mb-8" data-i18n="home_p1">
+                    グローバル金融市場はAIを中心に再編されています。みずほ銀行のAIサービス(PB, WM, IB, Risk)の成功的な構築のためには、LLMモデルを超え、信頼できる膨大な<strong>グローバル金融/企業データ</strong>が不可欠です。DeepSearchは、日本市場を超え、みずほ銀行のグローバル戦略に不可欠な<strong>米国および韓国市場のコアデータとAI分析エンジン</strong>を、すぐに利用可能なAPI形式で提供します。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-slate-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-blue-700 mb-2" data-i18n="home_card1_title">市場投入までの時間短縮</h3>
+                        <p class="text-slate-600" data-i18n="home_card1_desc">膨大なグローバルデータの収集と処理にかかる時間とコストを画期的に削減します。</p>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-blue-700 mb-2" data-i18n="home_card2_title">差別化されたグローバルサービス</h3>
+                        <p class="text-slate-600" data-i18n="home_card2_desc">日本のお客様に米国/韓国市場に関する深いAIベースのインサイトを提供します。</p>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-blue-700 mb-2" data-i18n="home_card3_title">高いAI精度</h3>
+                        <p class="text-slate-600" data-i18n="home_card3_desc">検証済みの高品質データでLLMのハルシネーションを最小限に抑え、信頼性を最大化します。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Data Universe -->
+        <section id="section-data" data-section="data">
+            <div class="bg-white rounded-xl shadow-lg p-8 md:p-12 border border-slate-200">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4" data-i18n="data_title">Data Universe</h2>
+                <p class="text-lg text-slate-600 mb-8" data-i18n="data_subtitle">みずほ銀行のAIが学習し分析する、膨大なグローバルデータをご覧ください。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Data Card: US Stocks -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_us_stocks_title">米国上場企業</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_us_stocks_desc">米国(NYSE, NASDAQなど)上場企業の基本情報、リアルタイム株価、詳細財務諸表(500+項目)を提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_us_stocks_usecase">AI PBが顧客の米国株式ポートフォリオを分析し、財務データに基づいた投資助言を生成します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: KR Stocks -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_kr_stocks_title">韓国上場企業</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_kr_stocks_desc">韓国(KOSPI, KOSDAQなど)上場企業の基本情報、株価、財務データを提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_kr_stocks_usecase">グローバルポートフォリオに韓国株式を組み入れた顧客に、正確な企業情報と投資インサイトを提供します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: KR Non-listed -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_kr_non_listed_title">韓国非上場企業</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_kr_non_listed_desc">350万社以上の韓国非上場企業の企業情報および財務諸表データを提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_kr_non_listed_usecase">みずほ銀行の韓国IB部門が、企業金融(与信、M&A)対象企業を発掘し、リスク審査に活用します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: ETF -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_etf_title">米国/韓国 ETF</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_etf_desc">米国と韓国に上場されている全ETFの基本情報、収益率、構成銘柄データなどを提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_etf_usecase">AI資産管理サービスが、顧客の志向に合わせたグローバルETFポートフォリオを構成し、リバランスします。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: News -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_news_title">ニュース (米国/韓国)</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_news_desc">米国/韓国企業関連のリアルタイムニュースを収集、精製し、AIが分析しやすい形で提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_news_usecase">AIがニュースを分析して「デイリーブリーフィング」を生成し、「リスクモニタリング」の核心情報として活用します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: Filings -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_filings_title">開示 (SEC / DART)</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_filings_desc">米国SEC(10-K, 10-Q, 8-Kなど)および韓国DARTの開示原文およびテキストデータを提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_filings_usecase">AIが開示内容をリアルタイムで分析し、重大リスク(横領、業績悪化)を検知し、アーニングサプライズなどを要約します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: Earning Calls -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_earning_calls_title">アーニングコール・トランスクリプト</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_earning_calls_desc">米国上場企業の四半期業績発表(Earning Call)の全文(Transcript)とQ&Aセッションを提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_earning_calls_usecase">AIリサーチチャットボットが「CEOが今回の業績発表で最も強調した点は？」といった複雑な質問に回答します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: Reports -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_reports_title">リサーチレポート / IR資料</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_reports_desc">国内外の証券会社リサーチレポートおよび企業IR資料を収集して提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_reports_usecase">LLMがレポートとIR資料を学習し、特定産業や企業に関する深層分析レポートを自動生成します。</span>
+                        </div>
+                    </div>
+                    <!-- Data Card: Patents -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-blue-800 mb-3" data-i18n="data_patents_title">特許情報</h4>
+                        <p class="text-slate-700 mb-4" data-i18n="data_patents_desc">企業別登録/出願特許情報を収集し、企業の技術競争力を分析できるように提供します。</p>
+                        <div class="border-t border-slate-300 pt-4 text-sm">
+                            <strong class="text-slate-800" data-i18n="data_use_case_label">活用例:</strong>
+                            <span class="text-slate-600" data-i18n="data_patents_usecase">AIが企業のR&D能力と技術的優位性を特許データに基づいて評価します。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: AI-Powered Insights -->
+        <section id="section-insights" data-section="insights">
+            <div class="bg-white rounded-xl shadow-lg p-8 md:p-12 border border-slate-200">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4" data-i18n="insights_title">AI-Powered Insights</h2>
+                <p class="text-lg text-slate-600 mb-8" data-i18n="insights_subtitle">単なるデータ提供を超え、DeepSearchのAIが加工したインサイトをAPIで即座に活用してください。</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <!-- Insight 1: Daily Briefing -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-4" data-i18n="insights_briefing_title">デイリーブリーフィング</h3>
+                        <p class="text-slate-600 mb-6" data-i18n="insights_briefing_desc">"昨日の米国市場はなぜ上昇したのか？", "A企業の株価がなぜ急騰したのか？"に対するAIの明確な要約ブリーフィングを、みずほ銀行のPBチャットボット、MTSなどにすぐに搭載できます。</p>
+                        
+                        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-xl border border-slate-200 p-6">
+                            <div class="flex items-center mb-4">
+                                <span class="w-10 h-10 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold text-xl mr-3">AI</span>
+                                <h4 class="text-xl font-semibold text-slate-800" data-i18n="insights_briefing_mock_title">AIアナリスト ブリーフィング</h4>
+                            </div>
+                            <p class="text-sm text-slate-500 mb-4" data-i18n="insights_mock_date">2025年 11月 4日 (火) 08:00 KST</p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <h5 class="font-bold text-slate-700" data-i18n="insights_briefing_mock_market_title">米国 S&P 500 市場要約</h5>
+                                    <p class="text-slate-600 text-sm" data-i18n="insights_briefing_mock_market_desc">S&P 500指数は前日比 <span class="text-green-600 font-medium">+0.8%</span> 上昇して取引を終えました。これは10月の雇用統計が予想を下回り、FRBの利下げ期待が高まったことと、A社およびB社の好決算発表がハイテク株ラリーを牽引したためです。</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-slate-700" data-i18n="insights_briefing_mock_stock_title">個別銘柄: [TSLA] テスラ (+5.2%)</h5>
+                                    <p class="text-slate-600 text-sm" data-i18n="insights_briefing_mock_stock_desc">テスラの株価は<strong>「中国上海ギガファクトリーの生産量20%拡大」</strong>の公式発表および<strong>「新型普及モデルのデザイン公開」</strong>のニュースが相次いで報じられ、投資心理が大幅に改善し急騰しました。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Insight 2: Risk Monitoring -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-4" data-i18n="insights_risk_title">AIリスクモニタリング</h3>
+                        <p class="text-slate-600 mb-6" data-i18n="insights_risk_desc">みずほ銀行の顧客ポートフォリオ(米国/韓国株式)および与信企業(非上場含む)のリスクをAIが24時間監視し、イシュー発生時に即座にアラートを提供します。</p>
+
+                        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-xl border-2 border-red-500 p-6">
+                            <div class="flex items-center mb-4">
+                                <span class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xl mr-3">!</span>
+                                <h4 class="text-xl font-semibold text-red-700" data-i18n="insights_risk_mock_title">AIリスク 緊急アラート</h4>
+                            </div>
+                            <p class="text-sm text-slate-500 mb-4" data-i18n="insights_mock_date">2025年 11月 4日 (火) 10:30 KST</p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <h5 class="font-bold text-slate-700" data-i18n="insights_risk_mock_stock_title">企業: [OOバイオ] (韓国非上場)</h5>
+                                    <p class="text-slate-600 text-sm" data-i18n="insights_risk_mock_stock_desc"><strong class="text-red-600">[横領/背任]</strong> 本日10:25、「OOバイオ元役員、100億ウォン台の横領容疑で起訴」関連の単独速報が報じられました。</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-slate-700" data-i18n="insights_risk_mock_ai_title">AI判断</h5>
+                                    <p class="text-slate-600 text-sm" data-i18n="insights_risk_mock_ai_desc">本ニュースは企業信用度および株価に非常に否定的な影響を与え得る「重大リスク」と判断されます。即時の与信限度見直しおよび投資家保護措置が必要です。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Why DeepSearch? (Proof) -->
+        <section id="section-proof" data-section="proof">
+            <div class="bg-white rounded-xl shadow-lg p-8 md:p-12 border border-slate-200">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4" data-i18n="proof_title">Why DeepSearch?</h2>
+                <p class="text-lg text-slate-600 mb-8" data-i18n="proof_subtitle">DeepSearchは単なるデータ供給者ではなく、韓国最高の金融機関が選んだ「AI構築パートナー」です。</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                    <div class="lg:col-span-2">
+                        <h3 class="text-2xl font-semibold text-slate-700 mb-6 text-center" data-i18n="proof_stats_title">信頼できる数字が証明します</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg text-center border border-blue-200">
+                                <span class="text-4xl font-bold text-blue-700" data-i18n="proof_stat1_num">43.3%</span>
+                                <p class="text-slate-600 mt-2" data-i18n="proof_stat1_desc">Top-Tier金融機関<br>AIエンジン導入率</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-lg text-center border border-blue-200">
+                                <span class="text-4xl font-bold text-blue-700" data-i18n="proof_stat2_num">500万+</span>
+                                <p class="text-slate-600 mt-2" data-i18n="proof_stat2_desc">DeepSearchコンテンツ<br>月間利用者</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-lg text-center border border-blue-200">
+                                <span class="text-4xl font-bold text-blue-700" data-i18n="proof_stat3_num">1.7兆ウォン</span>
+                                <p class="text-slate-600 mt-2" data-i18n="proof_stat3_desc">技術ベース<br>総運用資産(AUM)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-1">
+                        <h3 class="text-2xl font-semibold text-slate-700 mb-6 text-center" data-i18n="proof_chart_title">金融AIエンジン市場シェア</h3>
+                        <div class="chart-container">
+                            <canvas id="marketShareChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-lg p-8 border border-slate-200">
+                    <h3 class="text-2xl font-semibold text-slate-700 mb-6 text-center" data-i18n="proof_clients_title">韓国の主要金融機関がDeepSearchと共にしています</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_nps">NPS 国民年金</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_krx">KRX 韓国取引所</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_kb">KB国民銀行</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_shinhan">新韓銀行</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_hana">KEBハナ銀行</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_bnk">BNK釜山銀行</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_samsung_sec">三星証券</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_nh_sec">NH投資証券</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_hanwha_sec">ハンファ投資証券</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_shinhan_sec">新韓投資証券</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_mirae">未来アセット資産運用</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_kb_am">KB資産運用</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_deloitte">Deloitte</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_nice">NICE評価情報</div>
+                        <div class="p-4 bg-white rounded-md shadow-sm border border-slate-200 text-center font-medium text-slate-700" data-i18n="client_sk">SK C&C</div>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="text-center mt-12 bg-blue-50 p-8 md:p-12 rounded-lg border border-blue-200">
+                    <h3 class="text-2xl font-bold text-slate-800" data-i18n="contact_title">お問い合わせ</h3>
+                    <p class="text-lg text-slate-600 mt-3 mb-6 max-w-2xl mx-auto" data-i18n="contact_subtitle">みずほ銀行のAI戦略、DX、データ担当部署をご紹介いただければ、詳細な協力方案についてご相談させていただきます。</p>
+                    <div class="text-lg text-slate-800">
+                        <p class="font-bold text-blue-800" data-i18n="contact_name">担当者: キム・ジェユン (Jae-Yoon Kim) | DeepSearch 代表</p>
+                        <p class="mt-2" data-i18n="contact_phone">電話: 010-5122-3415</p>
+                        <p class="mt-1" data-i18n="contact_email">Eメール: jykim@deepsearch.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="text-center py-8">
+        <p class="text-sm text-slate-500">&copy; 2025 DeepSearch Inc. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let marketShareChart = null;
+
+        const translations = {
+            ja: {
+                header_title: "みずほ銀行 提案書",
+                home_title: "みずほ銀行のグローバルAIイノベーションのためのコアパートナー",
+                home_subtitle: "DeepSearchの検証済みデータプラットフォームで、みずほ銀行のAIサービスを完成させてください。",
+                home_p1: "グローバル金融市場はAIを中心に再編されています。みずほ銀行のAIサービス(PB, WM, IB, Risk)の成功的な構築のためには、LLMモデルを超え、信頼できる膨大な<strong>グローバル金融/企業データ</strong>が不可欠です。DeepSearchは、日本市場を超え、みずほ銀行のグローバル戦略に不可欠な<strong>米国および韓国市場のコアデータとAI分析エンジン</strong>を、すぐに利用可能なAPI形式で提供します。",
+                home_card1_title: "市場投入までの時間短縮",
+                home_card1_desc: "膨大なグローバルデータの収集と処理にかかる時間とコストを画期的に削減します。",
+                home_card2_title: "差別化されたグローバルサービス",
+                home_card2_desc: "日本のお客様に米国/韓国市場に関する深いAIベースのインサイトを提供します。",
+                home_card3_title: "高いAI精度",
+                home_card3_desc: "検証済みの高品質データでLLMのハルシネーションを最小限に抑え、信頼性を最大化します。",
+                data_title: "Data Universe",
+                data_subtitle: "みずほ銀行のAIが学習し分析する、膨大なグローバルデータをご覧ください。",
+                data_use_case_label: "活用例:",
+                data_us_stocks_title: "米国上場企業",
+                data_us_stocks_desc: "米国(NYSE, NASDAQなど)上場企業の基本情報、リアルタイム株価、詳細財務諸表(500+項目)を提供します。",
+                data_us_stocks_usecase: "AI PBが顧客の米国株式ポートフォリオを分析し、財務データに基づいた投資助言を生成します。",
+                data_kr_stocks_title: "韓国上場企業",
+                data_kr_stocks_desc: "韓国(KOSPI, KOSDAQなど)上場企業の基本情報、株価、財務データを提供します。",
+                data_kr_stocks_usecase: "グローバルポートフォリオに韓国株式を組み入れた顧客に、正確な企業情報と投資インサイトを提供します。",
+                data_kr_non_listed_title: "韓国非上場企業",
+                data_kr_non_listed_desc: "350万社以上の韓国非上場企業の企業情報および財務諸表データを提供します。",
+                data_kr_non_listed_usecase: "みずほ銀行の韓国IB部門が、企業金融(与信、M&A)対象企業を発掘し、リスク審査に活用します。",
+                data_etf_title: "米国/韓国 ETF",
+                data_etf_desc: "米国と韓国に上場されている全ETFの基本情報、収益率、構成銘柄データなどを提供します。",
+                data_etf_usecase: "AI資産管理サービスが、顧客の志向に合わせたグローバルETFポートフォリオを構成し、リバランスします。",
+                data_news_title: "ニュース (米国/韓国)",
+                data_news_desc: "米国/韓国企業関連のリアルタイムニュースを収集、精製し、AIが分析しやすい形で提供します。",
+                data_news_usecase: "AIがニュースを分析して「デイリーブリーフィング」を生成し、「リスクモニタリング」の核心情報として活用します。",
+                data_filings_title: "開示 (SEC / DART)",
+                data_filings_desc: "米国SEC(10-K, 10-Q, 8-Kなど)および韓国DARTの開示原文およびテキストデータを提供します。",
+                data_filings_usecase: "AIが開示内容をリアルタイムで分析し、重大リスク(横領、業績悪化)を検知し、アーニングサプライズなどを要約します。",
+                data_earning_calls_title: "アーニングコール・トランスクリプト",
+                data_earning_calls_desc: "米国上場企業の四半期業績発表(Earning Call)の全文(Transcript)とQ&Aセッションを提供します。",
+                data_earning_calls_usecase: "AIリサーチチャットボットが「CEOが今回の業績発表で最も強調した点は？」といった複雑な質問に回答します。",
+                data_reports_title: "リサーチレポート / IR資料",
+                data_reports_desc: "国内外の証券会社リサーチレポートおよび企業IR資料を収集して提供します。",
+                data_reports_usecase: "LLMがレポートとIR資料を学習し、特定産業や企業に関する深層分析レポートを自動生成します。",
+                data_patents_title: "特許情報",
+                data_patents_desc: "企業別登録/出願特許情報を収集し、企業の技術競争力を分析できるように提供します。",
+                data_patents_usecase: "AIが企業のR&D能力と技術的優位性を特許データに基づいて評価します。",
+                insights_title: "AI-Powered Insights",
+                insights_subtitle: "単なるデータ提供を超え、DeepSearchのAIが加工したインサイトをAPIで即座に活用してください。",
+                insights_briefing_title: "デイリーブリーフィング",
+                insights_briefing_desc: "「昨日の米国市場はなぜ上昇したのか？」、「A企業の株価がなぜ急騰したのか？」に対するAIの明確な要約ブリーフィングを、みずほ銀行のPBチャットボット、MTSなどにすぐに搭載できます。",
+                insights_risk_title: "AIリスクモニタリング",
+                insights_risk_desc: "みずほ銀行の顧客ポートフォリオ(米国/韓国株式)および与信企業(非上場含む)のリスクをAIが24時間監視し、イシュー発生時に即座にアラートを提供します。",
+                insights_mock_date: "2025年 11月 4日 (火)",
+                insights_briefing_mock_title: "AIアナリスト ブリーフィング",
+                insights_briefing_mock_market_title: "米国 S&P 500 市場要約",
+                insights_briefing_mock_market_desc: "S&P 500指数は前日比 <span class=\"text-green-600 font-medium\">+0.8%</span> 上昇して取引を終えました。これは10月の雇用統計が予想を下回り、FRBの利下げ期待が高まったことと、A社およびB社の好決算発表がハイテク株ラリーを牽引したためです。",
+                insights_briefing_mock_stock_title: "個別銘柄: [TSLA] テスラ (+5.2%)",
+                insights_briefing_mock_stock_desc: "テスラの株価は<strong>「中国上海ギガファクトリーの生産量20%拡大」</strong>の公式発表および<strong>「新型普及モデルのデザイン公開」</strong>のニュースが相次いで報じられ、投資心理が大幅に改善し急騰しました。",
+                insights_risk_mock_title: "AIリスク 緊急アラート",
+                insights_risk_mock_stock_title: "企業: [OOバイオ] (韓国非上場)",
+                insights_risk_mock_stock_desc: "<strong class=\"text-red-600\">[横領/背任]</strong> 本日10:25、「OOバイオ元役員、100億ウォン台の横領容疑で起訴」関連の単独速報が報じられました。",
+                insights_risk_mock_ai_title: "AI判断",
+                insights_risk_mock_ai_desc: "本ニュースは企業信用度および株価に非常に否定的な影響を与え得る「重大リスク」と判断されます。即時の与信限度見直しおよび投資家保護措置が必要です。",
+                proof_title: "Why DeepSearch?",
+                proof_subtitle: "DeepSearchは単なるデータ供給者ではなく、韓国最高の金融機関が選んだ「AI構築パートナー」です。",
+                proof_stats_title: "信頼できる数字が証明します",
+                proof_stat1_num: "43.3%",
+                proof_stat1_desc: "Top-Tier金融機関<br>AIエンジン導入率",
+                proof_stat2_num: "500万+",
+                proof_stat2_desc: "DeepSearchコンテンツ<br>月間利用者",
+                proof_stat3_num: "1.7兆ウォン",
+                proof_stat3_desc: "技術ベース<br>総運用資産(AUM)",
+                proof_chart_title: "金融AIエンジン市場シェア",
+                proof_chart_label1: "DeepSearch AI",
+                proof_chart_label2: "その他",
+                proof_clients_title: "韓国の主要金融機関がDeepSearchと共にしています",
+                client_nps: "NPS 国民年金",
+                client_krx: "KRX 韓国取引所",
+                client_kb: "KB国民銀行",
+                client_shinhan: "新韓銀行",
+                client_hana: "KEBハナ銀行",
+                client_bnk: "BNK釜山銀行",
+                client_samsung_sec: "三星証券",
+                client_nh_sec: "NH投資証券",
+                client_hanwha_sec: "ハンファ投資証券",
+                client_shinhan_sec: "新韓投資証券",
+                client_mirae: "未来アセット資産運用",
+                client_kb_am: "KB資産運用",
+                client_deloitte: "Deloitte",
+                client_nice: "NICE評価情報",
+                client_sk: "SK C&C",
+                contact_title: "お問い合わせ",
+                contact_subtitle: "みずほ銀行のAI戦略、DX、データ担当部署をご紹介いただければ、詳細な協力方案についてご相談させていただきます。",
+                contact_name: "担当者: キム・ジェユン (Jay Kim) | DeepSearch 代表",
+                contact_phone: "電話: 010-5122-3415",
+                contact_email: "Eメール: jykim@deepsearch.com"
+            },
+            en: {
+                header_title: "Proposal for Mizuho Bank",
+                home_title: "Core Partner for Mizuho Bank's Global AI Innovation",
+                home_subtitle: "Complete Mizuho Bank's AI services with DeepSearch's proven data platform.",
+                home_p1: "The global financial market is being reshaped around AI. For Mizuho Bank to successfully build its AI services (PB, WM, IB, Risk), it requires more than just LLM models; it needs vast, reliable <strong>global financial/corporate data</strong>. DeepSearch provides essential <strong>US and Korean market core data and AI analytics engines</strong>, vital for Mizuho's global strategy, in a ready-to-use API format.",
+                home_card1_title: "Faster Time-to-Market",
+                home_card1_desc: "Drastically reduce the time and cost associated with collecting and processing vast global data.",
+                home_card2_title: "Differentiated Global Services",
+                home_card2_desc: "Provide Japanese clients with deep, AI-driven insights into the US and Korean markets.",
+                home_card3_title: "High AI Accuracy",
+                home_card3_desc: "Minimize LLM hallucinations and maximize reliability with verified, high-quality data.",
+                data_title: "Data Universe",
+                data_subtitle: "Explore the vast global data for Mizuho Bank's AI to learn and analyze.",
+                data_use_case_label: "Use Case:",
+                data_us_stocks_title: "US-Listed Companies",
+                data_us_stocks_desc: "Provides basic info, real-time quotes, and detailed financial statements (500+ items) for all US-listed (NYSE, NASDAQ) companies.",
+                data_us_stocks_usecase: "AI PB analyzes a client's US stock portfolio and generates investment advice based on financial data.",
+                data_kr_stocks_title: "Korean-Listed Companies",
+                data_kr_stocks_desc: "Provides basic info, quotes, and financial data for all companies listed in Korea (KOSPI, KOSDAQ).",
+                data_kr_stocks_usecase: "Offers accurate corporate information and insights to clients who have included Korean stocks in their global portfolios.",
+                data_kr_non_listed_title: "Korean Unlisted Companies",
+                data_kr_non_listed_desc: "Provides corporate information and financial statements for over 3.5 million unlisted Korean companies.",
+                data_kr_non_listed_usecase: "Mizuho Bank's IB division in Korea uses this to discover and screen potential corporate finance (lending, M&A) clients.",
+                data_etf_title: "US/Korean ETFs",
+                data_etf_desc: "Provides basic info, returns, and constituent data for all ETFs listed in the US and Korea.",
+                data_etf_usecase: "AI wealth management service constructs and rebalances global ETF portfolios tailored to client preferences.",
+                data_news_title: "News (US/Korea)",
+                data_news_desc: "Collects and refines real-time news related to US/Korean companies, provided in an AI-friendly format.",
+                data_news_usecase: "AI analyzes news to generate 'Daily Briefings' and uses it as core information for 'Risk Monitoring'.",
+                data_filings_title: "Filings (SEC / DART)",
+                data_filings_desc: "Provides original text data from US SEC (10-K, 10-Q, 8-K) and Korean DART filings.",
+                data_filings_usecase: "AI analyzes filings in real-time to detect material risks (e.g., embezzlement, poor earnings) and summarize earning surprises.",
+                data_earning_calls_title: "Earning Call Transcripts",
+                data_earning_calls_desc: "Provides full transcripts and Q&A sessions from US-listed company earnings calls.",
+                data_earning_calls_usecase: "Enables an AI research chatbot to answer complex questions like, 'What did the CEO emphasize most in this call?'",
+                data_reports_title: "Research Reports / IR Materials",
+                data_reports_desc: "Collects and provides research reports from domestic/international securities firms and corporate IR materials.",
+                data_reports_usecase: "LLM learns from reports to automatically generate in-depth analysis on specific industries or companies.",
+                data_patents_title: "Patent Information",
+                data_patents_desc: "Provides company-specific patent data (registered/applied) to analyze technological competitiveness.",
+                data_patents_usecase: "AI evaluates a company's R&D capabilities and technological moat based on patent data.",
+                insights_title: "AI-Powered Insights",
+                insights_subtitle: "Go beyond simple data delivery. Use AI-processed insights from DeepSearch immediately via API.",
+                insights_briefing_title: "Daily Briefing",
+                insights_briefing_desc: "Instantly embed clear AI-generated summaries for questions like 'Why was the US market up yesterday?' or 'Why did Company A's stock surge?' into Mizuho's PB chatbots and mobile trading systems.",
+                insights_risk_title: "AI Risk Monitoring",
+                insights_risk_desc: "AI monitors risks 24/7 for Mizuho's client portfolios (US/Korean stocks) and credit clients (including unlisted), providing instant alerts when issues arise.",
+                insights_mock_date: "November 4, 2025 (Tue)",
+                insights_briefing_mock_title: "AI Analyst Briefing",
+                insights_briefing_mock_market_title: "US S&P 500 Market Summary",
+                insights_briefing_mock_market_desc: "The S&P 500 index closed up <span class=\"text-green-600 font-medium\">+0.8%</span>. This was due to the October employment report coming in below expectations, raising hopes for a Fed rate cut, and strong earnings from Company A and B, which led a tech rally.",
+                insights_briefing_mock_stock_title: "Stock: [TSLA] Tesla (+5.2%)",
+                insights_briefing_mock_stock_desc: "Tesla's stock surged as investor sentiment significantly improved following an official announcement of a <strong>'20% production increase at Giga Shanghai'</strong> and news of a <strong>'new mass-market model design reveal'</strong>.",
+                insights_risk_mock_title: "AI Risk - Urgent Alert",
+                insights_risk_mock_stock_title: "Company: [OO Bio] (Korean Unlisted)",
+                insights_risk_mock_stock_desc: "<strong class=\"text-red-600\">[Embezzlement/Malpractice]</strong> Today at 10:25, an exclusive breaking news report was released: 'Former OO Bio executive indicted on charges of 10B KRW embezzlement'.",
+                insights_risk_mock_ai_title: "AI Judgement",
+                insights_risk_mock_ai_desc: "This news is judged as a 'Material Risk' that could have a severe negative impact on the company's creditworthiness and stock price. Immediate re-evaluation of credit limits and investor protection measures are required.",
+                proof_title: "Why DeepSearch?",
+                proof_subtitle: "DeepSearch is not just a data provider; we are the 'AI implementation partner' chosen by Korea's top financial institutions.",
+                proof_stats_title: "The Numbers Prove It",
+                proof_stat1_num: "43.3%",
+                proof_stat1_desc: "AI Engine Adoption Rate<br>among Top-Tier Financial Firms",
+                proof_stat2_num: "5 Million+",
+                proof_stat2_desc: "Monthly Users<br>of DeepSearch Content",
+                proof_stat3_num: "1.7 Trillion KRW",
+                proof_stat3_desc: "Technology-Based<br>Assets Under Management (AUM)",
+                proof_chart_title: "Financial AI Engine Market Share",
+                proof_chart_label1: "DeepSearch AI",
+                proof_chart_label2: "Others",
+                proof_clients_title: "Korea's Key Financial Institutions Partner with DeepSearch",
+                client_nps: "NPS",
+                client_krx: "Korea Exchange (KRX)",
+                client_kb: "KB Kookmin Bank",
+                client_shinhan: "Shinhan Bank",
+                client_hana: "KEB Hana Bank",
+                client_bnk: "BNK Busan Bank",
+                client_samsung_sec: "Samsung Securities",
+                client_nh_sec: "NH Investment & Sec",
+                client_hanwha_sec: "Hanwha Investment & Sec",
+                client_shinhan_sec: "Shinhan Investment",
+                client_mirae: "Mirae Asset Mgt",
+                client_kb_am: "KB Asset Management",
+                client_deloitte: "Deloitte",
+                client_nice: "NICE D&B",
+                client_sk: "SK C&C",
+                contact_title: "Contact Us",
+                contact_subtitle: "Please introduce us to Mizuho Bank's AI Strategy, DX, or Data departments. We would be happy to discuss a detailed partnership.",
+                contact_name: "Contact: Jay Kim | CEO, DeepSearch",
+                contact_phone: "Phone: 010-5122-3415",
+                contact_email: "Email: jykim@deepsearch.com"
+            },
+            ko: {
+                header_title: "미즈호 은행 제안서",
+                home_title: "미즈호 은행의 글로벌 AI 혁신을 위한 핵심 파트너",
+                home_subtitle: "딥서치의 검증된 데이터 플랫폼으로 미즈호 은행의 AI 서비스를 완성하십시오.",
+                home_p1: "글로벌 금융 시장은 AI를 중심으로 재편되고 있습니다. 미즈호 은행의 성공적인 AI 서비스(PB, WM, IB, Risk) 구축을 위해서는 LLM 모델을 넘어, 신뢰할 수 있는 방대한 <strong>글로벌 금융/기업 데이터</strong>가 필수적입니다. 딥서치는 일본 시장을 넘어 미즈호 은행의 글로벌 전략에 필수적인 <strong>미국 및 한국 시장의 핵심 데이터와 AI 분석 엔진</strong>을 즉시 사용 가능한 API 형태로 제공합니다.",
+                home_card1_title: "Time-to-Market 단축",
+                home_card1_desc: "방대한 글로벌 데이터 수집 및 가공에 드는 시간과 비용을 획기적으로 절감합니다.",
+                home_card2_title: "차별화된 글로벌 서비스",
+                home_card2_desc: "일본 고객에게 미국/한국 시장에 대한 깊이 있는 AI 기반 인사이트를 제공합니다.",
+                home_card3_title: "높은 AI 정확도",
+                home_card3_desc: "검증된 고품질 데이터로 LLM의 환각(Hallucination)을 최소화하고 신뢰도를 극대화합니다.",
+                data_title: "Data Universe",
+                data_subtitle: "미즈호 은행의 AI가 학습하고 분석할 방대한 글로벌 데이터를 확인해 보세요.",
+                data_use_case_label: "활용 예시:",
+                data_us_stocks_title: "미국 상장 기업",
+                data_us_stocks_desc: "미국(NYSE, NASDAQ 등) 상장 기업의 기본 정보, 실시간 시세, 상세 재무제표 (500+ 항목)를 제공합니다.",
+                data_us_stocks_usecase: "AI PB가 고객의 미국 주식 포트폴리오를 분석하고, 재무 데이터를 기반으로 투자 조언을 생성합니다.",
+                data_kr_stocks_title: "한국 상장 기업",
+                data_kr_stocks_desc: "한국(KOSPI, KOSDAQ 등) 상장 기업의 기본 정보, 시세, 재무 데이터를 제공합니다.",
+                data_kr_stocks_usecase: "글로벌 포트폴리오에 한국 주식을 편입한 고객에게 정확한 기업 정보 및 투자 인사이트를 제공합니다.",
+                data_kr_non_listed_title: "한국 비상장 기업",
+                data_kr_non_listed_desc: "350만 개 이상의 한국 비상장 기업 정보 및 재무제표 데이터를 제공합니다.",
+                data_kr_non_listed_usecase: "미즈호 은행의 한국 IB 부서가 기업 금융(여신, M&A) 대상 기업을 발굴하고 리스크를 심사하는 데 활용됩니다.",
+                data_etf_title: "미국/한국 ETF",
+                data_etf_desc: "미국과 한국에 상장된 모든 ETF의 기본 정보, 수익률, 구성 종목 데이터 등을 제공합니다.",
+                data_etf_usecase: "AI 자산관리 서비스가 고객 성향에 맞는 글로벌 ETF 포트폴리오를 구성하고 리밸런싱합니다.",
+                data_news_title: "뉴스 (미국/한국)",
+                data_news_desc: "미국/한국 기업과 관련된 실시간 뉴스를 수집, 정제하여 AI가 분석하기 쉬운 형태로 제공합니다.",
+                data_news_usecase: "AI가 뉴스를 분석하여 '데일리 브리핑'을 생성하고, '리스크 모니터링'의 핵심 정보로 활용합니다.",
+                data_filings_title: "공시 (SEC / DART)",
+                data_filings_desc: "미국 SEC(10-K, 10-Q, 8-K 등) 및 한국 DART 공시 원문 및 텍스트 데이터를 제공합니다.",
+                data_filings_usecase: "AI가 공시 내용을 실시간으로 분석하여 중대 리스크(횡령, 실적 악화)를 감지하고, 어닝 서프라이즈 등을 요약합니다.",
+                data_earning_calls_title: "어닝 콜 트랜스크립트",
+                data_earning_calls_desc: "미국 상장 기업의 분기별 실적 발표(Earning Call) 전문(Transcript)과 Q&A 세션을 제공합니다.",
+                data_earning_calls_usecase: "AI 리서치 챗봇이 \"CEO가 이번 실적 발표에서 가장 강조한 부분은?\"과 같은 복잡한 질문에 답변하게 합니다.",
+                data_reports_title: "리서치 리포트 / IR 자료",
+                data_reports_desc: "국내외 증권사 리서치 리포트 및 기업 IR 자료를 수집하여 제공합니다.",
+                data_reports_usecase: "LLM이 리포트와 IR 자료를 학습하여, 특정 산업이나 기업에 대한 심층 분석 리포트를 자동으로 생성합니다.",
+                data_patents_title: "특허 정보",
+                data_patents_desc: "기업별 등록/출원 특허 정보를 수집하여 기업의 기술 경쟁력을 분석할 수 있도록 제공합니다.",
+                data_patents_usecase: "AI가 기업의 R&D 역량과 기술적 해자를 특허 데이터를 기반으로 평가합니다.",
+                insights_title: "AI-Powered Insights",
+                insights_subtitle: "단순한 데이터 제공을 넘어, 딥서치의 AI가 가공한 인사이트를 API로 즉시 활용하세요.",
+                insights_briefing_title: "데일리 브리핑",
+                insights_briefing_desc: "\"어제 미국 시장이 왜 올랐나요?\", \"A기업 주가가 왜 급등했나요?\"에 대한 AI의 명확한 요약 브리핑을 미즈호 은행의 PB 챗봇, MTS 등에 바로 탑재할 수 있습니다.",
+                insights_risk_title: "AI 리스크 모니터링",
+                insights_risk_desc: "미즈호 은행의 고객 포트폴리오(미국/한국 주식) 및 여신 기업(비상장 포함)의 리스크를 AI가 24시간 모니터링하고, 이슈 발생 시 즉각 알림을 제공합니다.",
+                insights_mock_date: "2025년 11월 4일 (화)",
+                insights_briefing_mock_title: "AI 애널리스트 브리핑",
+                insights_briefing_mock_market_title: "미국 S&P 500 시장 요약",
+                insights_briefing_mock_market_desc: "S&P 500 지수는 전일 대비 <span class=\"text-green-600 font-medium\">+0.8%</span> 상승 마감했습니다. 이는 10월 고용지표가 예상치를 하회하며 연준의 금리 인하 기대감이 높아진 점과, A사 및 B사의 호실적 발표가 기술주 랠리를 견인했기 때문입니다.",
+                insights_briefing_mock_stock_title: "개별 종목: [TSLA] 테슬라 (+5.2%)",
+                insights_briefing_mock_stock_desc: "테슬라의 주가는 <strong>'중국 상하이 기가팩토리 생산량 20% 확대'</strong> 공식 발표 및 <strong>'신규 보급형 모델 디자인 공개'</strong> 뉴스가 연이어 보도되며 투자 심리가 크게 개선되어 급등했습니다.",
+                insights_risk_mock_title: "AI 리스크 긴급 알림",
+                insights_risk_mock_stock_title: "기업: [OO바이오] (한국 비상장)",
+                insights_risk_mock_stock_desc: "<strong class=\"text-red-600\">[횡령/배임]</strong> 금일 10:25, 'OO바이오 전 임원, 100억 원대 횡령 혐의로 기소' 관련 단독 속보가 보도되었습니다.",
+                insights_risk_mock_ai_title: "AI 판단",
+                insights_risk_mock_ai_desc: "본 뉴스는 기업 신용도 및 주가에 매우 부정적인 영향을 미칠 수 있는 '중대 리스크'로 판단됩니다. 즉각적인 여신 한도 재검토 및 투자자 보호 조치가 필요합니다.",
+                proof_title: "Why DeepSearch?",
+                proof_subtitle: "딥서치는 단순한 데이터 공급사가 아닌, 대한민국 최고의 금융 기관들이 선택한 'AI 구축 파트너'입니다.",
+                proof_stats_title: "신뢰할 수 있는 숫자가 증명합니다",
+                proof_stat1_num: "43.3%",
+                proof_stat1_desc: "Top-Tier 금융기관<br>AI 엔진 도입률",
+                proof_stat2_num: "500만+",
+                proof_stat2_desc: "딥서치 콘텐츠<br>월간 이용자",
+                proof_stat3_num: "1.7조원",
+                proof_stat3_desc: "기술 기반<br>총 운용자산(AUM)",
+                proof_chart_title: "금융 AI 엔진 시장 점유율",
+                proof_chart_label1: "딥서치 AI",
+                proof_chart_label2: "기타",
+                proof_clients_title: "대한민국 핵심 금융 기관들이 딥서치와 함께합니다",
+                client_nps: "NPS 국민연금",
+                client_krx: "KRX 한국거래소",
+                client_kb: "KB국민은행",
+                client_shinhan: "신한은행",
+                client_hana: "KEB하나은행",
+                client_bnk: "BNK부산은행",
+                client_samsung_sec: "삼성증권",
+                client_nh_sec: "NH투자증권",
+                client_hanwha_sec: "한화투자증권",
+                client_shinhan_sec: "신한투자증권",
+                client_mirae: "미래에셋자산운용",
+                client_kb_am: "KB자산운용",
+                client_deloitte: "Deloitte",
+                client_nice: "NICE평가정보",
+                client_sk: "SK C&C",
+                contact_title: "연락처",
+                contact_subtitle: "미즈호 은행의 AI 전략 부서, DX 부서, 데이터 담당 부서를 소개해 주시면, 상세한 협력 방안을 논의 드리겠습니다.",
+                contact_name: "담당자: 딥서치 김재윤 대표",
+                contact_phone: "연락처: 010-5122-3415",
+                contact_email: "이메일: jykim@deepsearch.com"
+            }
+        };
+
+        function switchLanguage(lang) {
+            if (!translations[lang]) return;
+
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('.lang-button').forEach(btn => {
+                btn.classList.remove('lang-button-active');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('lang-button-active');
+
+            createMarketShareChart(translations[lang].proof_chart_label1, translations[lang].proof_chart_label2);
+        }
+
+        function createMarketShareChart(label1, label2) {
+            if (marketShareChart) {
+                marketShareChart.destroy();
+            }
+            
+            const ctx = document.getElementById('marketShareChart').getContext('2d');
+            marketShareChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [label1, label2],
+                    datasets: [{
+                        data: [43.3, 56.7],
+                        backgroundColor: [
+                            'rgb(29, 78, 216)',
+                            'rgb(226, 232, 240)'
+                        ],
+                        borderColor: [
+                            'rgb(29, 78, 216)',
+                            'rgb(226, 232, 240)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchLanguage('ja'); // Set default language to Japanese
+        });
+    </script>
+</body>
+</html>
+
+
