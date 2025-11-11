@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSearch: 금융 AI 인프라</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Calm Harmony (Light stone/ivory background, dark text, professional blue accent) -->
+    <!-- Application Structure Plan: A single-page, top-to-bottom narrative SPA. The flow guides the user from 'Who' (About + Stats), to 'Why' (The Problem), to 'How' (The Solution: Finorma), to 'What' (Data & AI Services). This structure was chosen because it mirrors a persuasive pitch, logically building a case for the product, which is more intuitive for a potential customer than a fragmented dashboard. Interactions (Chart, Tabs) are used to condense complex info (stats, product features) into digestible, clean UI elements. -->
+    <!-- Visualization & Content Choices: 1. Market Trust (Report Info) -> Goal: Inform/Credibility -> Viz: Horizontal Bar Chart (Chart.js) -> Interaction: Hover Tooltip -> Justification: Clearly shows 43.3% stat -> Library: Chart.js (Canvas). 2. Problem/Solution Flow (Report Info) -> Goal: Organize/Explain -> Viz: 3-step HTML/Tailwind diagrams -> Interaction: None (static) -> Justification: Visually maps problem to solution components simply. -> Library: HTML/Tailwind. 3. AI Services (Report Info) -> Goal: Compare/Organize -> Viz: Tabbed Interface -> Interaction: Click to toggle panes -> Justification: Standard, clean way to show 2 distinct products (Briefing, Risk) -> Library: Vanilla JS. 4. Service Examples (Report Info) -> Goal: Demonstrate -> Viz: HTML/Tailwind UI Mockups -> Interaction: None -> Justification: Makes abstract services tangible. -> Library: HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TH:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans TH', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px;
+            max-height: 250px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 150px;
+            }
+        }
+        #lang-selector {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-13%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2013l128%20128c3.6%203.6%207.8%205.4%2013%205.4s9.4-1.8%2013-5.4l128-128c3.6-3.6%205.4-7.8%205.4-13%200-4.9-1.8-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            background-size: 0.65em auto;
+            padding-right: 2.5rem;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-gray-800">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl font-bold text-blue-600">DeepSearch</span>
+                </div>
+                <div class="hidden md:flex items-center">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#about" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.about">소개</a>
+                        <a href="#problem" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.problem">당면 과제</a>
+                        <a href="#solution" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.solution">솔루션: Finorma</a>
+                        <a href="#data" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.data">핵심 데이터</a>
+                        <a href="#services" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.services">AI 서비스</a>
+                    </div>
+                    <div class="ml-6">
+                        <select id="lang-selector" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 pr-10 py-2">
+                            <option value="ko">🇰🇷 한국어</option>
+                            <option value="en">🇬🇧 English</option>
+                            <option value="ja">🇯🇵 日本語</option>
+                            <option value="th">🇹🇭 ภาษาไทย</option>
+                            <option value="ms">🇲🇾 Bahasa Melayu</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <div class="mr-4">
+                        <select id="lang-selector-mobile" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 pr-10 py-1.5">
+                            <option value="ko">🇰🇷</option>
+                            <option value="en">🇬🇧</option>
+                            <option value="ja">🇯🇵</option>
+                            <option value="th">🇹🇭</option>
+                            <option value="ms">🇲🇾</option>
+                        </select>
+                    </div>
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.about">소개</a>
+                <a href="#problem" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.problem">당면 과제</a>
+                <a href="#solution" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.solution">솔루션: Finorma</a>
+                <a href="#data" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.data">핵심 데이터</a>
+                <a href="#services" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.services">AI 서비스</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <section id="about" class="pt-16 -mt-16 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900" data-i18n-key="hero.title">DeepSearch</h1>
+            <h2 class="text-2xl md:text-3xl font-bold text-blue-600 mt-2" data-i18n-key="hero.subtitle">금융 AI 인프라의 표준</h2>
+            <p class="mt-6 text-lg text-gray-700 max-w-3xl mx-auto" data-i18n-key="hero.desc">
+                딥서치는 12년차 한국의 핀테크/AI 스타트업으로, 금융 AI 인프라를 제공합니다. 
+                저희는 복잡하고 방대한 금융 데이터의 수집, 분석, 활용을 자동화하여
+                금융 기관이 더 빠르고 정확한 투자 결정을 내릴 수 있도록 돕습니다.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-3xl font-bold text-blue-600" data-i18n-key="stats.y12.num">12년</div>
+                    <div class="mt-2 text-gray-600" data-i18n-key="stats.y12.text">업력</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-3xl font-bold text-blue-600" data-i18n-key="stats.e30.num">30명+</div>
+                    <div class="mt-2 text-gray-600" data-i18n-key="stats.e30.text">전문 인력</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-3xl font-bold text-blue-600" data-i18n-key="stats.r6b.num">60억+</div>
+                    <div class="mt-2 text-gray-600" data-i18n-key="stats.r6b.text">연 매출</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-3xl font-bold text-blue-600" data-i18n-key="stats.t100.num">100대</div>
+                    <div class="mt-2 text-gray-600" data-i18n-key="stats.t100.text">한국 AI 기업</div>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto border border-gray-100">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4" data-i18n-key="stats.trustTitle">주요 금융 기관의 신뢰</h3>
+                <p class="text-gray-700 mb-6" data-i18n-key="stats.trustDesc">
+                    국민연금, 한국거래소(KRX)를 비롯한 대한민국 주요 은행, 증권사들이 딥서치의 기술력을 신뢰하고 있습니다.
+                </p>
+                <div class="chart-container">
+                    <canvas id="marketTrustChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-2" data-i18n-key="stats.trustCaption">주요 10대 은행, 증권사, 자산운용사 기준</p>
+            </div>
+        </section>
+
+        <section id="problem" class="pt-24 -mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-900" data-i18n-key="problem.title">금융 AI, 왜 이렇게 어려운가요?</h2>
+            <p class="mt-4 text-lg text-gray-700 text-center max-w-3xl mx-auto" data-i18n-key="problem.desc">
+                금융 기관이 자체적으로 AI 투자 서비스를 개발할 때, 수많은 난관에 부딪힙니다.
+                데이터에서 실제 서비스까지의 과정은 복잡하고 비용이 많이 듭니다.
+            </p>
+            <div class="mt-12 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8">
+                <div class="flex-1 w-full max-w-sm bg-white p-6 rounded-lg shadow-lg text-center border border-red-100">
+                    <div class="text-2xl font-bold text-red-600 mb-3" data-i18n-key="problem.p1.title">1. 데이터 수집</div>
+                    <p class="text-gray-700" data-i18n-key="problem.p1.desc">방대하고 산재된 금융 데이터(뉴스, 공시, 어닝콜 등)를 실시간으로 수집하고 표준화하는 것은 거대한 엔지니어링 도전입니다.</p>
+                </div>
+                <div class="text-2xl text-gray-400 transform rotate-90 md:rotate-0">→</div>
+                <div class="flex-1 w-full max-w-sm bg-white p-6 rounded-lg shadow-lg text-center border border-red-100">
+                    <div class="text-2xl font-bold text-red-600 mb-3" data-i18n-key="problem.p2.title">2. 검색 및 색인</div>
+                    <p class="text-gray-700" data-i18n-key="problem.p2.desc">수집된 비정형 데이터를 금융 문맥에 맞게 이해하고, 사용자가 원하는 정보를 즉시 찾을 수 있도록 검색 가능하게 만드는 것이 어렵습니다.</p>
+                </div>
+                <div class="text-2xl text-gray-400 transform rotate-90 md:rotate-0">→</div>
+                <div class="flex-1 w-full max-w-sm bg-white p-6 rounded-lg shadow-lg text-center border border-red-100">
+                    <div class="text-2xl font-bold text-red-600 mb-3" data-i18n-key="problem.p3.title">3. LLM 연동</div>
+                    <p class="text-gray-700" data-i18n-key="problem.p3.desc">검증된 내부 데이터를 기반으로 답변의 정확성을 보장(RAG)하고, '환각' 현상 없이 안정적으로 LLM 서비스를 제공하기는 매우 어렵습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="pt-24 -mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-900">DeepSearch의 해답: <span class="text-blue-600">Finorma</span></h2>
+            <p class="mt-4 text-lg text-gray-700 text-center max-w-3xl mx-auto" data-i18n-key="solution.desc">
+                딥서치는 이 모든 과정을 하나로 통합한 금융 AI 인프라 'Finorma'를 제공합니다.
+                고객사는 복잡한 기반 기술 구축 없이 즉시 AI 서비스를 개발할 수 있습니다.
+            </p>
+            <div class="mt-12 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-2xl border border-gray-100">
+                <div class="relative flex flex-col items-center">
+                    <div class="w-full bg-blue-100 border border-blue-200 p-6 rounded-lg text-center z-30">
+                        <h4 class="text-xl font-bold text-blue-800" data-i18n-key="solution.s1.title">LLM 서비스 (AI Agent)</h4>
+                        <p class="text-blue-700 mt-2" data-i18n-key="solution.s1.desc">RAG 기반 질의응답, 요약, 리스크 탐지 등</p>
+                    </div>
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-2 z-20 text-blue-500">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </div>
+                    <div class="w-full bg-blue-50 border border-blue-200 p-6 rounded-lg text-center mt-8 z-10">
+                        <h4 class="text-xl font-bold text-blue-700" data-i18n-key="solution.s2.title">검색 엔진 (Search Engine)</h4>
+                        <p class="text-blue-600 mt-2" data-i18n-key="solution.s2.desc">금융 컨텍스트를 이해하는 시맨틱 검색</p>
+                    </div>
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-2 z-0 text-blue-400">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </div>
+                    <div class="w-full bg-gray-100 border border-gray-300 p-6 rounded-lg text-center mt-8">
+                        <h4 class="text-xl font-bold text-gray-800" data-i18n-key="solution.s3.title">금융/기업 데이터 (Data Lake)</h4>
+                        <p class="text-gray-700 mt-2" data-i18n-key="solution.s3.desc">정제 및 표준화된 실시간 데이터 파이프라인</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="data" class="pt-24 -mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-900" data-i18n-key="data.title">AI 엔진의 연료: 핵심 데이터</h2>
+            <p class="mt-4 text-lg text-gray-700 text-center max-w-3xl mx-auto" data-i18n-key="data.desc">
+                Finorma는 투자 분석에 필요한 모든 데이터를 실시간으로 수집, 정제하여 제공합니다.
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-12 max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">🏢</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d1.title">한국/미국 기업</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d1.desc">상장/비상장 기업 정보, 재무</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">📰</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d2.title">뉴스</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d2.desc">국내외 실시간 뉴스, 시장 정보</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">📄</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d3.title">공시</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d3.desc">양국 규제 기관 공시, IR 자료</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">📞</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d4.title">어닝콜</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d4.desc">실적 발표 전문(Transcript), Q&A 분석</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">📈</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d5.title">ETF 및 펀드</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d5.desc">상장지수펀드, 가상자산</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">🌍</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d6.title">경제지표</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d6.desc">매크로 데이터, 원자재, 환율</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">💡</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d7.title">특허</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d7.desc">기업별 특허 등록 및 현황</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center border border-gray-100 transition hover:shadow-lg hover:border-blue-200">
+                    <span class="text-4xl">📊</span>
+                    <h4 class="text-lg font-semibold mt-3 text-gray-900" data-i18n-key="data.d8.title">산업 리포트</h4>
+                    <p class="text-sm text-gray-600" data-i18n-key="data.d8.desc">증권사 리포트, 산업 동향</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="pt-24 -mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-900" data-i18n-key="services.title">Finorma 기반의 AI 서비스</h2>
+            <p class="mt-4 text-lg text-gray-700 text-center max-w-3xl mx-auto" data-i18n-key="services.desc">
+                Finorma 인프라를 활용하여 즉시 사용 가능한 AI 서비스입니다.
+                고객사 시스템에 API로 간단하게 연동할 수 있습니다.
+            </p>
+
+            <div class="mt-10 max-w-5xl mx-auto">
+                <div class="border-b border-gray-300">
+                    <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg text-blue-600 border-blue-600" data-target="briefing" data-i18n-key="services.tab1">
+                            데일리 브리핑
+                        </button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300" data-target="risk" data-i18n-key="services.tab2">
+                            리스크 모니터링
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="mt-8">
+                    <div id="briefing" class="tab-pane">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900" data-i18n-key="services.briefing.title">데일리 브리핑</h3>
+                                <p class="mt-4 text-gray-700" data-i18n-key="services.briefing.desc">
+                                    매일 아침, AI가 수천 개의 뉴스와 데이터를 분석하여 시장의 흐름, 산업 동향, 
+                                    그리고 개별 기업의 주가 등락 원인을 요약하여 제공합니다. 
+                                    매일 반복되는 리서치 업무를 자동화하여 분석가가 더 중요한 인사이트에 집중할 수 있도록 합니다.
+                                </p>
+                                <p class="mt-3 text-gray-700" data-i18n-key="services.briefing.desc2">
+                                    생성된 브리핑은 텍스트는 물론, <span class="font-semibold text-blue-600" data-i18n-key="services.briefing.announcer">AI 아나운서</span>를 통해 
+                                    영상 콘텐츠로도 즉시 제공 가능합니다.
+                                </p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-xl border border-gray-100">
+                                <div class="bg-gray-800 rounded-t-lg p-3 flex items-center">
+                                    <span class="w-3 h-3 bg-red-500 rounded-full inline-block mr-2"></span>
+                                    <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block mr-2"></span>
+                                    <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
+                                    <span class="text-sm text-gray-300 ml-auto" data-i18n-key="services.briefing.cardTitle">AI Daily Briefing</span>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xl font-bold text-gray-900" data-i18n-key="services.briefing.stockName">올릭스</span>
+                                        <span class="text-lg font-bold text-red-600">+29.97%</span>
+                                    </div>
+                                    <div class="text-gray-600 text-sm">45,100원 (+10,400)</div>
+                                    <hr class="my-4">
+                                    <h5 class="font-semibold text-gray-800" data-i18n-key="services.briefing.summaryTitle">AI 분석 요약</h5>
+                                    <p class="text-sm text-gray-700 mt-2" data-i18n-key="services.briefing.summaryDesc">
+                                        일라이 릴리와의 9,100억 원 규모 기술 이전 계약 체결 소식에 기인하여 주가가 상한가를 기록했습니다. 
+                                        해당 계약은...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="risk" class="tab-pane hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900" data-i18n-key="services.risk.title">리스크 모니터링</h3>
+                                <p class="mt-4 text-gray-700" data-i18n-key="services.risk.desc">
+                                    포트폴리오에 편입된 기업이나 관심 기업에서 이슈가 발생했을 때,
+                                    AI가 24시간 실시간으로 데이터를 스캔하여 이를 탐지하고 즉시 알려줍니다.
+                                </p>
+                                <p class="mt-3 text-gray-700" data-i18n-key="services.risk.desc2">
+                                    소송, 규제, 사고, 공급망 문제, 경영진 변동 등 잠재적 리스크를 
+                                    시장이 반응하기 전에 파악하여 선제적으로 대응할 수 있습니다.
+                                </p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-xl border border-gray-100">
+                                <div class="bg-gray-800 rounded-t-lg p-3 flex items-center">
+                                    <span class="w-3 h-3 bg-red-500 rounded-full inline-block mr-2"></span>
+                                    <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block mr-2"></span>
+                                    <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
+                                    <span class="text-sm text-gray-300 ml-auto" data-i18n-key="services.risk.cardTitle">AI Risk Alert</span>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl p-3 bg-red-100 text-red-600 rounded-full">🔔</span>
+                                        <div class="ml-4">
+                                            <span class="text-sm bg-red-600 text-white font-bold py-1 px-2 rounded" data-i18n-key="services.risk.level">HIGH</span>
+                                            <h4 class="text-lg font-bold text-gray-900 mt-1" data-i18n-key="services.risk.stockName">Tesla (TSLA)</h4>
+                                        </div>
+                                    </div>
+                                    <hr class="my-4">
+                                    <h5 class="font-semibold text-gray-800" data-i18n-key="services.risk.summaryTitle">탐지된 리스크: 소송</h5>
+                                    <p class="text-sm text-gray-700 mt-2" data-i18n-key="services.risk.summaryDesc">
+                                        플로리다 마이애미 연방 법원에서 Tesla가 '오토파일럿' 기술 결함과
+                                        관련된 책임의 일부를 인정했습니다. 이는 자율주행 기능에 대한 잠재적 책임 리스크를...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 mt-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p data-i18n-key="footer.copy">&copy; 2025 DeepSearch Inc. All rights reserved.</p>
+            <p class="text-sm text-gray-400 mt-2" data-i18n-key="footer.demo">본 페이지는 데모용으로 작성되었습니다.</p>
+        </div>
+    </footer>
+
+    <script>
+        const i18n = {
+            'ko': {
+                lang: '한국어',
+                nav: {
+                    about: '소개',
+                    problem: '당면 과제',
+                    solution: '솔루션: Finorma',
+                    data: '핵심 데이터',
+                    services: 'AI 서비스'
+                },
+                hero: {
+                    title: 'DeepSearch',
+                    subtitle: '금융 AI 인프라의 표준',
+                    desc: '딥서치는 12년차 한국의 핀테크/AI 스타트업으로, 금융 AI 인프라를 제공합니다. 저희는 복잡하고 방대한 금융 데이터의 수집, 분석, 활용을 자동화하여 금융 기관이 더 빠르고 정확한 투자 결정을 내릴 수 있도록 돕습니다.'
+                },
+                stats: {
+                    y12: { num: '12년', text: '업력' },
+                    e30: { num: '30명+', text: '전문 인력' },
+                    r6b: { num: '60억+', text: '연 매출' },
+                    t100: { num: '100대', text: '한국 AI 기업' },
+                    trustTitle: '주요 금융 기관의 신뢰',
+                    trustDesc: '국민연금, 한국거래소(KRX)를 비롯한 대한민국 주요 은행, 증권사들이 딥서치의 기술력을 신뢰하고 있습니다.',
+                    trustLabel: '주요 금융기관 채택율',
+                    trustTooltip: '채택율',
+                    trustCaption: '주요 10대 은행, 증권사, 자산운용사 기준'
+                },
+                problem: {
+                    title: '금융 AI, 왜 이렇게 어려운가요?',
+                    desc: '금융 기관이 자체적으로 AI 투자 서비스를 개발할 때, 수많은 난관에 부딪힙니다. 데이터에서 실제 서비스까지의 과정은 복잡하고 비용이 많이 듭니다.',
+                    p1: { title: '1. 데이터 수집', desc: '방대하고 산재된 금융 데이터(뉴스, 공시, 어닝콜 등)를 실시간으로 수집하고 표준화하는 것은 거대한 엔지니어링 도전입니다.' },
+                    p2: { title: '2. 검색 및 색인', desc: '수집된 비정형 데이터를 금융 문맥에 맞게 이해하고, 사용자가 원하는 정보를 즉시 찾을 수 있도록 검색 가능하게 만드는 것이 어렵습니다.' },
+                    p3: { title: '3. LLM 연동', desc: "검증된 내부 데이터를 기반으로 답변의 정확성을 보장(RAG)하고, '환각' 현상 없이 안정적으로 LLM 서비스를 제공하기는 매우 어렵습니다." }
+                },
+                solution: {
+                    title: 'DeepSearch의 해답: Finorma',
+                    desc: "딥서치는 이 모든 과정을 하나로 통합한 금융 AI 인프라 'Finorma'를 제공합니다. 고객사는 복잡한 기반 기술 구축 없이 즉시 AI 서비스를 개발할 수 있습니다.",
+                    s1: { title: 'LLM 서비스 (AI Agent)', desc: 'RAG 기반 질의응답, 요약, 리스크 탐지 등' },
+                    s2: { title: '검색 엔진 (Search Engine)', desc: '금융 컨텍스트를 이해하는 시맨틱 검색' },
+                    s3: { title: '금융/기업 데이터 (Data Lake)', desc: '정제 및 표준화된 실시간 데이터 파이프라인' }
+                },
+                data: {
+                    title: 'AI 엔진의 연료: 핵심 데이터',
+                    desc: 'Finorma는 투자 분석에 필요한 모든 데이터를 실시간으로 수집, 정제하여 제공합니다.',
+                    d1: { title: '한국/미국 기업', desc: '상장/비상장 기업 정보, 재무' },
+                    d2: { title: '뉴스', desc: '국내외 실시간 뉴스, 시장 정보' },
+                    d3: { title: '공시', desc: '양국 규제 기관 공시, IR 자료' },
+                    d4: { title: '어닝콜', desc: '실적 발표 전문(Transcript), Q&A 분석' },
+                    d5: { title: 'ETF 및 펀드', desc: '상장지수펀드, 가상자산' },
+                    d6: { title: '경제지표', desc: '매크로 데이터, 원자재, 환율' },
+                    d7: { title: '특허', desc: '기업별 특허 등록 및 현황' },
+                    d8: { title: '산업 리포트', desc: '증권사 리포트, 산업 동향' }
+                },
+                services: {
+                    title: 'Finorma 기반의 AI 서비스',
+                    desc: 'Finorma 인프라를 활용하여 즉시 사용 가능한 AI 서비스입니다. 고객사 시스템에 API로 간단하게 연동할 수 있습니다.',
+                    tab1: '데일리 브리핑',
+                    tab2: '리스크 모니터링',
+                    briefing: {
+                        title: '데일리 브리핑',
+                        desc: '매일 아침, AI가 수천 개의 뉴스와 데이터를 분석하여 시장의 흐름, 산업 동향, 그리고 개별 기업의 주가 등락 원인을 요약하여 제공합니다. 매일 반복되는 리서치 업무를 자동화하여 분석가가 더 중요한 인사이트에 집중할 수 있도록 합니다.',
+                        desc2: '생성된 브리핑은 텍스트는 물론, <span class="font-semibold text-blue-600" data-i18n-key="services.briefing.announcer">AI 아나운서</span>를 통해 영상 콘텐츠로도 즉시 제공 가능합니다.',
+                        announcer: 'AI 아나운서',
+                        cardTitle: 'AI Daily Briefing',
+                        stockName: '올릭스',
+                        summaryTitle: 'AI 분석 요약',
+                        summaryDesc: '일라이 릴리와의 9,100억 원 규모 기술 이전 계약 체결 소식에 기인하여 주가가 상한가를 기록했습니다. 해당 계약은...'
+                    },
+                    risk: {
+                        title: '리스크 모니터링',
+                        desc: '포트폴리오에 편입된 기업이나 관심 기업에서 이슈가 발생했을 때, AI가 24시간 실시간으로 데이터를 스캔하여 이를 탐지하고 즉시 알려줍니다.',
+                        desc2: '소송, 규제, 사고, 공급망 문제, 경영진 변동 등 잠재적 리스크를 시장이 반응하기 전에 파악하여 선제적으로 대응할 수 있습니다.',
+                        cardTitle: 'AI Risk Alert',
+                        level: 'HIGH',
+                        stockName: 'Tesla (TSLA)',
+                        summaryTitle: '탐지된 리스크: 소송',
+                        summaryDesc: "플로리다 마이애미 연방 법원에서 Tesla가 '오토파일럿' 기술 결함과 관련된 책임의 일부를 인정했습니다. 이는 자율주행 기능에 대한 잠재적 책임 리스크를..."
+                    }
+                },
+                footer: {
+                    copy: '© 2025 DeepSearch Inc. All rights reserved.',
+                    demo: '본 페이지는 데모용으로 작성되었습니다.'
+                }
+            },
+            'en': {
+                lang: 'English',
+                nav: {
+                    about: 'About',
+                    problem: 'The Challenge',
+                    solution: 'Solution: Finorma',
+                    data: 'Core Data',
+                    services: 'AI Services'
+                },
+                hero: {
+                    title: 'DeepSearch',
+                    subtitle: 'The Standard for Financial AI Infrastructure',
+                    desc: 'DeepSearch is a 12-year-old Korean FinTech/AI startup providing financial AI infrastructure. We automate the collection, analysis, and utilization of complex, vast financial data to help financial institutions make faster, more accurate investment decisions.'
+                },
+                stats: {
+                    y12: { num: '12 Years', text: 'Experience' },
+                    e30: { num: '30+', text: 'Experts' },
+                    r6b: { num: '₩6B+', text: 'Annual Revenue' },
+                    t100: { num: 'Top 100', text: 'AI Companies in Korea' },
+                    trustTitle: 'Trusted by Major Financial Institutions',
+                    trustDesc: 'Major Korean banks, securities firms, and institutions like the National Pension Service (NPS) and Korea Exchange (KRX) trust DeepSearch\'s technology.',
+                    trustLabel: 'Adoption Rate by Major Financial Institutions',
+                    trustTooltip: 'Adoption Rate',
+                    trustCaption: 'Based on top 10 banks, securities firms, and asset managers'
+                },
+                problem: {
+                    title: 'Why is Financial AI So Difficult?',
+                    desc: 'When financial institutions try to develop their own AI investment services, they face numerous hurdles. The process from data to service is complex and costly.',
+                    p1: { title: '1. Data Collection', desc: 'Collecting and standardizing vast, scattered financial data (news, filings, earnings calls, etc.) in real-time is a massive engineering challenge.' },
+                    p2: { title: '2. Search & Indexing', desc: 'It is difficult to understand unstructured data in a financial context and make it instantly searchable for user queries.' },
+                    p3: { title: '3. LLM Integration', desc: 'Ensuring response accuracy (RAG) based on verified internal data and providing stable LLM services without \'hallucinations\' is extremely hard.' }
+                },
+                solution: {
+                    title: "DeepSearch's Answer: Finorma",
+                    desc: "DeepSearch provides 'Finorma', a financial AI infrastructure that integrates this entire process. Clients can immediately develop AI services without building complex foundational technology.",
+                    s1: { title: 'LLM Service (AI Agent)', desc: 'RAG-based Q&A, summarization, risk detection, etc.' },
+                    s2: { title: 'Search Engine', desc: 'Semantic search that understands financial context' },
+                    s3: { title: 'Financial/Corporate Data (Data Lake)', desc: 'Cleansed and standardized real-time data pipeline' }
+                },
+                data: {
+                    title: 'The Fuel for the AI Engine: Core Data',
+                    desc: 'Finorma collects, refines, and provides all data necessary for investment analysis in real-time.',
+                    d1: { title: 'KR/US Companies', desc: 'Listed/unlisted company info, financials' },
+                    d2: { title: 'News', desc: 'Real-time domestic & international news' },
+                    d3: { title: 'Filings', desc: 'Regulatory filings from both countries, IR materials' },
+                    d4: { title: 'Earnings Calls', desc: 'Transcripts, Q&A analysis' },
+                    d5: { title: 'ETFs & Funds', desc: 'ETFs, virtual assets' },
+                    d6: { title: 'Economic Indicators', desc: 'Macro data, commodities, exchange rates' },
+                    d7: { title: 'Patents', desc: 'Patent registrations and status by company' },
+                    d8: { title: 'Industry Reports', desc: 'Brokerage reports, industry trends' }
+                },
+                services: {
+                    title: 'AI Services Powered by Finorma',
+                    desc: 'Ready-to-use AI services built on the Finorma infrastructure. Easily integrate into your systems via API.',
+                    tab1: 'Daily Briefing',
+                    tab2: 'Risk Monitoring',
+                    briefing: {
+                        title: 'Daily Briefing',
+                        desc: 'Every morning, our AI analyzes thousands of news articles and data points to summarize market flows, industry trends, and the reasons behind individual stock price movements. It automates repetitive daily research, allowing analysts to focus on higher-value insights.',
+                        desc2: 'The generated briefing can be delivered not only as text but also instantly as video content via an <span class="font-semibold text-blue-600" data-i18n-key="services.briefing.announcer">AI Announcer</span>.',
+                        announcer: 'AI Announcer',
+                        cardTitle: 'AI Daily Briefing',
+                        stockName: 'OliX',
+                        summaryTitle: 'AI Analysis Summary',
+                        summaryDesc: 'Stock price hit the limit up (+29.97%) following the news of a ₩910B technology transfer agreement with Eli Lilly. This contract involves...'
+                    },
+                    risk: {
+                        title: 'Risk Monitoring',
+                        desc: 'When an issue arises with a company in your portfolio or on your watchlist, our AI scans data 24/7 to detect it and notify you immediately.',
+                        desc2: 'Proactively respond to potential risks such as lawsuits, regulations, accidents, supply chain issues, or executive changes before the market reacts.',
+                        cardTitle: 'AI Risk Alert',
+                        level: 'HIGH',
+                        stockName: 'Tesla (TSLA)',
+                        summaryTitle: 'Detected Risk: Lawsuit',
+                        summaryDesc: 'In a Miami federal court, Tesla admitted partial liability for a flaw in its \'Autopilot\' technology. This raises potential liability risks for autonomous driving features...'
+                    }
+                },
+                footer: {
+                    copy: '© 2025 DeepSearch Inc. All rights reserved.',
+                    demo: 'This page was created for demo purposes.'
+                }
+            },
+            'ja': {
+                lang: '日本語',
+                nav: {
+                    about: '概要',
+                    problem: '課題',
+                    solution: 'ソリューション: Finorma',
+                    data: '主なデータ',
+                    services: 'AIサービス'
+                },
+                hero: {
+                    title: 'DeepSearch',
+                    subtitle: '金融AIインフラの標準',
+                    desc: 'DeepSearchは、12年目の韓国フィンテック/AIスタートアップで、金融AIインフラを提供しています。複雑で膨大な金融データの収集、分析、活用を自動化し、金融機関がより迅速かつ正確な投資決定を下せるよう支援します。'
+                },
+                stats: {
+                    y12: { num: '12年', text: '業歴' },
+                    e30: { num: '30名+', text: '専門人材' },
+                    r6b: { num: '60億+', text: '年間売上' },
+                    t100: { num: '100大', text: '韓国AI企業' },
+                    trustTitle: '主要金融機関からの信頼',
+                    trustDesc: '国民年金、韓国取引所(KRX)をはじめ、大韓民国の主要銀行、証券会社がDeepSearchの技術力を信頼しています。',
+                    trustLabel: '主要金融機関の採用率',
+                    trustTooltip: '採用率',
+                    trustCaption: '主要10大銀行、証券会社、資産運用会社基準'
+                },
+                problem: {
+                    title: '金融AIは、なぜこれほど難しいのか？',
+                    desc: '金融機関が独自にAI投資サービスを開発しようとすると、多くの難関にぶつかります。データから実際のサービスまでのプロセスは複雑で、コストもかかります。',
+                    p1: { title: '1. データ収集', desc: '膨大で散在する金融データ（ニュース、開示、決算発表など）をリアルタイムで収集し、標準化することは、巨大なエンジニアリングの挑戦です。' },
+                    p2: { title: '2. 検索と索引', desc: '収集された非構造化データを金融の文脈で理解し、ユーザーが必要な情報を即座に見つけられるように検索可能にすることは困難です。' },
+                    p3: { title: '3. LLM連携', desc: '検証済みの内部データに基づき、回答の正確性を保証（RAG）し、「幻覚」現象なく安定的にLLMサービスを提供することは非常に困難です。' }
+                },
+                solution: {
+                    title: 'DeepSearchの答え: Finorma',
+                    desc: 'DeepSearchは、このすべてのプロセスを一つに統合した金融AIインフラ「Finorma」を提供します。顧客は複雑な基盤技術の構築なしに、即座にAIサービスを開発できます。',
+                    s1: { title: 'LLMサービス (AI Agent)', desc: 'RAGベースの質疑応答、要約、リスク検出など' },
+                    s2: { title: '検索エンジン (Search Engine)', desc: '金融コンテキストを理解するセマンティック検索' },
+                    s3: { title: '金融/企業データ (Data Lake)', desc: '精製および標準化されたリアルタイムデータパイプライン' }
+                },
+                data: {
+                    title: 'AIエンジンの燃料: 主なデータ',
+                    desc: 'Finormaは、投資分析に必要なすべてのデータをリアルタイムで収集、精製して提供します。',
+                    d1: { title: '韓/米企業', desc: '上場/非上場企業情報、財務' },
+                    d2: { title: 'ニュース', desc: '国内外のリアルタイムニュース、市場情報' },
+                    d3: { title: '開示', desc: '両国の規制機関開示、IR資料' },
+                    d4: { title: '決算発表', desc: '実績発表の全文(Transcript)、Q&A分析' },
+                    d5: { title: 'ETFおよびファンド', desc: '上場指数ファンド、仮想資産' },
+                    d6: { title: '経済指標', desc: 'マクロデータ、コモディティ、為替レート' },
+                    d7: { title: '特許', desc: '企業別特許登録および現況' },
+                    d8: { title: '産業レポート', desc: '証券会社レポート、産業動向' }
+                },
+                services: {
+                    title: 'FinormaベースのAIサービス',
+                    desc: 'Finormaインフラを活用し、すぐに使用可能なAIサービスです。顧客システムにAPIで簡単に連携できます。',
+                    tab1: 'デイリーブリーフィング',
+                    tab2: 'リスクモニタリング',
+                    briefing: {
+                        title: 'デイリーブリーフィング',
+                        desc: '毎朝、AIが数千のニュースとデータを分析し、市場の流れ、産業動向、そして個別企業の株価変動の要因を要約して提供します。日々繰り返されるリサーチ業務を自動化し、アナリストがより重要なインサイトに集中できるよう支援します。',
+                        desc2: '生成されたブリーフィングは、テキストはもちろん、<span class="font-semibold text-blue-600" data-i18n-key="services.briefing.announcer">AIアナウンサー</span>を通じて映像コンテンツとしても即座に提供可能です。',
+                        announcer: 'AIアナウンサー',
+                        cardTitle: 'AI Daily Briefing',
+                        stockName: 'OliX',
+                        summaryTitle: 'AI分析要約',
+                        summaryDesc: 'イーライリリーとの9100億ウォン規模の技術移転契約締結のニュースを受け、株価がストップ高を記録しました。この契約は...'
+                    },
+                    risk: {
+                        title: 'リスクモニタリング',
+                        desc: 'ポートフォリオに組み入れられた企業や関心のある企業で問題が発生した際、AIが24時間リアルタイムでデータをスキャンし、それを検出して即座に通知します。',
+                        desc2: '訴訟、規制、事故、サプライチェーンの問題、経営陣の変動など、潜在的なリスクを市場が反応する前に把握し、先制的に対応することができます。',
+                        cardTitle: 'AI Risk Alert',
+                        level: 'HIGH',
+                        stockName: 'Tesla (TSLA)',
+                        summaryTitle: '検出されたリスク：訴訟',
+                        summaryDesc: 'フロリダ州マイアミの連邦裁判所で、Teslaが「オートパイロット」技術の欠陥に関連する責任の一部を認めました。これは自動運転機能に対する潜在的な責任リスクを...'
+                    }
+                },
+                footer: {
+                    copy: '© 2025 DeepSearch Inc. All rights reserved.',
+                    demo: 'このページはデモ用に作成されました。'
+                }
+            },
+            'th': {
+                lang: 'ภาษาไทย',
+                nav: {
+                    about: 'เกี่ยวกับ',
+                    problem: 'ความท้าทาย',
+                    solution: 'โซลูชัน: Finorma',
+                    data: 'ข้อมูลหลัก',
+                    services: 'บริการ AI'
+                },
+                hero: {
+                    title: 'DeepSearch',
+                    subtitle: 'มาตรฐานโครงสร้างพื้นฐาน AI สำหรับการเงิน',
+                    desc: 'DeepSearch เป็นสตาร์ทอัพ FinTech/AI ของเกาหลีอายุ 12 ปี ที่ให้บริการโครงสร้างพื้นฐาน AI ทางการเงิน เราทำให้การรวบรวม วิเคราะห์ และใช้ประโยชน์จากข้อมูลทางการเงินที่ซับซ้อนและกว้างใหญ่เป็นไปโดยอัตโนมัติ เพื่อช่วยให้สถาบันการเงินตัดสินใจลงทุนได้รวดเร็วและแม่นยำยิ่งขึ้น'
+                },
+                stats: {
+                    y12: { num: '12 ปี', text: 'ประสบการณ์' },
+                    e30: { num: '30+', text: 'ผู้เชี่ยวชาญ' },
+                    r6b: { num: '6 พันล้าน+', text: 'รายได้ต่อปี' },
+                    t100: { num: '100 อันดับ', text: 'บริษัท AI เกาหลี' },
+                    trustTitle: 'ได้รับความไว้วางใจจากสถาบันการเงินชั้นนำ',
+                    trustDesc: 'ธนาคาร บริษัทหลักทรัพย์ และสถาบันสำคัญๆ ของเกาหลี เช่น National Pension Service (NPS) และ Korea Exchange (KRX) ต่างไว้วางใจในเทคโนโลยีของ DeepSearch',
+                    trustLabel: 'อัตราการยอมรับโดยสถาบันการเงินหลัก',
+                    trustTooltip: 'อัตราการยอมรับ',
+                    trustCaption: 'อ้างอิงจากธนาคาร, บริษัทหลักทรัพย์ และบริษัทจัดการสินทรัพย์ 10 อันดับแรก'
+                },
+                problem: {
+                    title: 'ทำไม AI ทางการเงินถึงยากนัก?',
+                    desc: 'เมื่อสถาบันการเงินพยายามพัฒนาบริการการลงทุน AI ด้วยตนเอง พวกเขาต้องเผชิญกับอุปสรรคมากมาย กระบวนการจากข้อมูลไปสู่บริการจริงนั้นซับซ้อนและมีค่าใช้จ่ายสูง',
+                    p1: { title: '1. การรวบรวมข้อมูล', desc: 'การรวบรวมและสร้างมาตรฐานข้อมูลทางการเงินที่กระจัดกระจายและกว้างใหญ่ (ข่าว, เอกสาร, earning calls ฯลฯ) แบบเรียลไทม์เป็นความท้าทายทางวิศวกรรมอย่างมาก' },
+                    p2: { title: '2. การค้นหาและจัดทำดัชนี', desc: 'เป็นเรื่องยากที่จะเข้าใจข้อมูลที่ไม่มีโครงสร้างในบริบททางการเงิน และทำให้สามารถค้นหาข้อมูลที่ผู้ใช้ต้องการได้ทันที' },
+                    p3: { title: '3. การเชื่อมต่อ LLM', desc: 'การรับประกันความแม่นยำของคำตอบ (RAG) โดยอิงจากข้อมูลภายในที่ตรวจสอบแล้ว และการให้บริการ LLM ที่มีเสถียรภาพโดยไม่มี \'ภาพหลอน\' นั้นยากอย่างยิ่ง' }
+                },
+                solution: {
+                    title: 'คำตอบของ DeepSearch: Finorma',
+                    desc: 'DeepSearch ขอเสนอ \'Finorma\' โครงสร้างพื้นฐาน AI ทางการเงินที่รวมกระบวนการทั้งหมดนี้ไว้ด้วยกัน ลูกค้าสามารถพัฒนาบริการ AI ได้ทันทีโดยไม่ต้องสร้างเทคโนโลยีพื้นฐานที่ซับซ้อน',
+                    s1: { title: 'บริการ LLM (AI Agent)', desc: 'ถาม-ตอบ แบบ RAG, การสรุป, การตรวจจับความเสี่ยง ฯลฯ' },
+                    s2: { title: 'เสิร์ชเอนจิ้น (Search Engine)', desc: 'การค้นหาเชิงความหมายที่เข้าใจบริบททางการเงิน' },
+                    s3: { title: 'ข้อมูลการเงิน/องค์กร (Data Lake)', desc: 'ไปป์ไลน์ข้อมูลเรียลไทม์ที่ผ่านการกลั่นกรองและสร้างมาตรฐาน' }
+                },
+                data: {
+                    title: 'เชื้อเพลิงสำหรับเครื่องมือ AI: ข้อมูลหลัก',
+                    desc: 'Finorma รวบรวม กลั่นกรอง และจัดเตรียมข้อมูลทั้งหมดที่จำเป็นสำหรับการวิเคราะห์การลงทุนแบบเรียลไทม์',
+                    d1: { title: 'บริษัทเกาหลี/สหรัฐฯ', desc: 'ข้อมูลบริษัทจดทะเบียน/นอกตลาด, งบการเงิน' },
+                    d2: { title: 'ข่าว', desc: 'ข่าวในประเทศและต่างประเทศแบบเรียลไทม์' },
+                    d3: { title: 'เอกสารยื่น', desc: 'เอกสารยื่นต่อหน่วยงานกำกับดูแลของทั้งสองประเทศ, เอกสาร IR' },
+                    d4: { title: 'Earning Calls', desc: 'บทถอดเสียง, การวิเคราะห์ ถาม-ตอบ' },
+                    d5: { title: 'ETF และกองทุน', desc: 'ETF, สินทรัพย์เสมือน' },
+                    d6: { title: 'ตัวชี้วัดเศรษฐกิจ', desc: 'ข้อมูลมาโคร, สินค้าโภคภัณฑ์, อัตราแลกเปลี่ยน' },
+                    d7: { title: 'สิทธิบัตร', desc: 'การจดสิทธิบัตรและสถานะของบริษัท' },
+                    d8: { title: 'รายงานอุตสาหกรรม', desc: 'รายงานจากโบรกเกอร์, แนวโน้มอุตสาหกรรม' }
+                },
+                services: {
+                    title: 'บริการ AI ที่ขับเคลื่อนโดย Finorma',
+                    desc: 'บริการ AI พร้อมใช้งานที่สร้างขึ้นบนโครงสร้างพื้นฐานของ Finorma สามารถรวมเข้ากับระบบของคุณได้อย่างง่ายดายผ่าน API',
+                    tab1: 'สรุปรายวัน',
+                    tab2: 'การติดตามความเสี่ยง',
+                    briefing: {
+                        title: 'สรุปรายวัน',
+                        desc: 'ทุกเช้า AI ของเราจะวิเคราะห์ข่าวสารและข้อมูลนับพันเพื่อสรุปกระแสตลาด แนวโน้มอุตสาหกรรม และเหตุผลเบื้องหลังการเคลื่อนไหวของราคาหุ้นแต่ละตัว ช่วยให้การวิจัยประจำวันที่ซ้ำซากเป็นไปโดยอัตโนมัติ ทำให้นักวิเคราะห์มีเวลาจดจ่อกับข้อมูลเชิงลึกที่มีมูลค่าสูงกว่า',
+                        desc2: 'สรุปที่สร้างขึ้นไม่เพียงแต่ส่งเป็นข้อความเท่านั้น แต่ยังสามารถส่งเป็นเนื้อหาวิดีโอได้ทันทีผ่าน <span class="font-semibold text-blue-600" data-i18n-key="services.briefing.announcer">ผู้ประกาศ AI</span>',
+                        announcer: 'ผู้ประกาศ AI',
+                        cardTitle: 'AI Daily Briefing',
+                        stockName: 'OliX',
+                        summaryTitle: 'สรุปวิเคราะห์โดย AI',
+                        summaryDesc: 'ราคาหุ้นชนเพดาน (+29.97%) หลังมีข่าวข้อตกลงถ่ายทอดเทคโนโลยีมูลค่า 9.1 แสนล้านวอนกับ Eli Lilly สัญญานี้เกี่ยวข้องกับ...'
+                    },
+                    risk: {
+                        title: 'การติดตามความเสี่ยง',
+                        desc: 'เมื่อเกิดปัญหากับบริษัทในพอร์ตโฟลิโอหรือใน watchlist ของคุณ AI ของเราจะสแกนข้อมูลตลอด 24 ชั่วโมงทุกวันเพื่อตรวจจับและแจ้งเตือนคุณทันที',
+                        desc2: 'ตอบสนองต่อความเสี่ยงที่อาจเกิดขึ้น เช่น การฟ้องร้อง, กฎระเบียบ, อุบัติเหตุ, ปัญหาซัพพลายเชน หรือการเปลี่ยนแปลงผู้บริหาร ก่อนที่ตลาดจะตอบสนอง',
+                        cardTitle: 'AI Risk Alert',
+                        level: 'สูง',
+                        stockName: 'Tesla (TSLA)',
+                        summaryTitle: 'ความเสี่ยงที่ตรวจพบ: การฟ้องร้อง',
+                        summaryDesc: 'ในศาลรัฐบาลกลางไมอามี Tesla ยอมรับความรับผิดบางส่วนสำหรับข้อบกพร่องในเทคโนโลยี \'Autopilot\' สิ่งนี้ทำให้เกิดความเสี่ยงด้านความรับผิดที่อาจเกิดขึ้นสำหรับคุณสมบัติการขับขี่อัตโนมัติ...'
+                    }
+                },
+                footer: {
+                    copy: '© 2025 DeepSearch Inc. สงวนลิขสิทธิ์',
+                    demo: 'หน้านี้สร้างขึ้นเพื่อการสาธิตเท่านั้น'
+                }
+            },
+            'ms': {
+                lang: 'Bahasa Melayu',
+                nav: {
+                    about: 'Tentang',
+                    problem: 'Cabaran',
+                    solution: 'Penyelesaian: Finorma',
+                    data: 'Data Teras',
+                    services: 'Perkhidmatan AI'
+                },
+                hero: {
+                    title: 'DeepSearch',
+                    subtitle: 'Standard untuk Infrastruktur AI Kewangan',
+                    desc: 'DeepSearch ialah sebuah syarikat permulaan FinTech/AI Korea berusia 12 tahun yang menyediakan infrastruktur AI kewangan. Kami mengautomasikan pengumpulan, analisis, dan penggunaan data kewangan yang kompleks dan luas untuk membantu institusi kewangan membuat keputusan pelaburan yang lebih pantas dan tepat.'
+                },
+                stats: {
+                    y12: { num: '12 Tahun', text: 'Pengalaman' },
+                    e30: { num: '30+', text: 'Pakar' },
+                    r6b: { num: '₩6B+', text: 'Hasil Tahunan' },
+                    t100: { num: '100 Teratas', text: 'Syarikat AI di Korea' },
+                    trustTitle: 'Dipercayai oleh Institusi Kewangan Utama',
+                    trustDesc: 'Bank-bank utama, firma sekuriti, dan institusi Korea seperti Perkhidmatan Pencen Kebangsaan (NPS) dan Bursa Korea (KRX) mempercayai teknologi DeepSearch.',
+                    trustLabel: 'Kadar Penerimaan oleh Institusi Kewangan Utama',
+                    trustTooltip: 'Kadar Penerimaan',
+                    trustCaption: 'Berdasarkan 10 bank, firma sekuriti, dan pengurus aset teratas'
+                },
+                problem: {
+                    title: 'Mengapa AI Kewangan Begitu Sukar?',
+                    desc: 'Apabila institusi kewangan cuba membangunkan perkhidmatan pelaburan AI mereka sendiri, mereka menghadapi banyak halangan. Proses dari data ke perkhidmatan adalah rumit dan mahal.',
+                    p1: { title: '1. Pengumpulan Data', desc: 'Mengumpul dan menyeragamkan data kewangan yang luas dan bertaburan (berita, pemfailan, panggilan pendapatan, dll.) dalam masa nyata adalah cabaran kejuruteraan yang besar.' },
+                    p2: { title: '2. Carian & Pengindeksan', desc: 'Sukar untuk memahami data tidak berstruktur dalam konteks kewangan dan menjadikannya boleh dicari serta-merta untuk pertanyaan pengguna.' },
+                    p3: { title: '3. Integrasi LLM', desc: 'Memastikan ketepatan respons (RAG) berdasarkan data dalaman yang disahkan dan menyediakan perkhidmatan LLM yang stabil tanpa \'halusinasi\' adalah amat sukar.' }
+                },
+                solution: {
+                    title: 'Jawapan DeepSearch: Finorma',
+                    desc: 'DeepSearch menyediakan \'Finorma\', infrastruktur AI kewangan yang mengintegrasikan keseluruhan proses ini. Pelanggan boleh membangunkan perkhidmatan AI dengan segera tanpa membina teknologi asas yang rumit.',
+                    s1: { title: 'Perkhidmatan LLM (AI Agent)', desc: 'Soal Jawab berasaskan RAG, ringkasan, pengesanan risiko, dll.' },
+                    s2: { title: 'Enjin Carian (Search Engine)', desc: 'Carian semantik yang memahami konteks kewangan' },
+                    s3: { title: 'Data Kewangan/Korporat (Data Lake)', desc: 'Saluran paip data masa nyata yang telah dibersihkan dan diseragamkan' }
+                },
+                data: {
+                    title: 'Bahan Api untuk Enjin AI: Data Teras',
+                    desc: 'Finorma mengumpul, menapis, dan menyediakan semua data yang diperlukan untuk analisis pelaburan dalam masa nyata.',
+                    d1: { title: 'Syarikat KR/AS', desc: 'Maklumat syarikat tersenarai/tidak tersenarai, kewangan' },
+                    d2: { title: 'Berita', desc: 'Berita domestik & antarabangsa masa nyata' },
+                    d3: { title: 'Pemfailan', desc: 'Pemfailan kawal selia dari kedua-dua negara, bahan IR' },
+                    d4: { title: 'Panggilan Pendapatan', desc: 'Transkrip, analisis Soal Jawab' },
+                    d5: { title: 'ETF & Dana', desc: 'ETF, aset maya' },
+                    d6: { title: 'Petunjuk Ekonomi', desc: 'Data makro, komoditi, kadar pertukaran' },
+                    d7: { title: 'Paten', desc: 'Pendaftaran paten dan status mengikut syarikat' },
+                    d8: { title: 'Laporan Industri', desc: 'Laporan broker, trend industri' }
+                },
+                services: {
+                    title: 'Perkhidmatan AI Dikuasakan oleh Finorma',
+                    desc: 'Perkhidmatan AI sedia untuk digunakan yang dibina di atas infrastruktur Finorma. Sepadukan dengan mudah ke dalam sistem anda melalui API.',
+                    tab1: 'Taklimat Harian',
+                    tab2: 'Pemantauan Risiko',
+                    briefing: {
+                        title: 'Taklimat Harian',
+                        desc: 'Setiap pagi, AI kami menganalisis beribu-ibu artikel berita dan data untuk meringkaskan aliran pasaran, trend industri, dan sebab di sebalik pergerakan harga saham individu. Ia mengautomasikan penyelidikan harian yang berulang, membolehkan penganalisis memberi tumpuan kepada pandangan bernilai tinggi.',
+                        desc2: 'Taklimat yang dijana boleh dihantar bukan sahaja sebagai teks tetapi juga serta-merta sebagai kandungan video melalui <span class="font-semibold text-blue-600" data-i18n-key="services.briefing.announcer">Penyampai AI</span>.',
+                        announcer: 'Penyampai AI',
+                        cardTitle: 'AI Daily Briefing',
+                        stockName: 'OliX',
+                        summaryTitle: 'Ringkasan Analisis AI',
+                        summaryDesc: 'Harga saham mencecah had naik (+29.97%) berikutan berita perjanjian pemindahan teknologi bernilai ₩910B dengan Eli Lilly. Kontrak ini melibatkan...'
+                    },
+                    risk: {
+                        title: 'Pemantauan Risiko',
+                        desc: 'Apabila timbul isu dengan syarikat dalam portfolio anda atau dalam senarai pantau anda, AI kami mengimbas data 24/7 untuk mengesannya dan memberitahu anda serta-merta.',
+                        desc2: 'Bertindak balas secara proaktif terhadap potensi risiko seperti tindakan undang-undang, peraturan, kemalangan, isu rantaian bekalan, atau perubahan eksekutif sebelum pasaran bertindak balas.',
+                        cardTitle: 'AI Risk Alert',
+                        level: 'TINGGI',
+                        stockName: 'Tesla (TSLA)',
+                        summaryTitle: 'Risiko Dikesan: Tuntutan Undang-undang',
+                        summaryDesc: 'Di mahkamah persekutuan Miami, Tesla mengaku liabiliti separa untuk kecacatan dalam teknologi \'Autopilot\'nya. Ini menimbulkan potensi risiko liabiliti untuk ciri pemanduan autonomi...'
+                    }
+                },
+                footer: {
+                    copy: '© 2025 DeepSearch Inc. Hak cipta terpelihara.',
+                    demo: 'Halaman ini dicipta untuk tujuan demo.'
+                }
+            }
+        };
+
+        let currentChart = null;
+
+        function createChart(lang) {
+            const strings = i18n[lang] || i18n['ko'];
+            const chartCtx = document.getElementById('marketTrustChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            currentChart = new Chart(chartCtx, {
+                type: 'bar',
+                data: {
+                    labels: [strings.stats.trustLabel],
+                    datasets: [{
+                        label: strings.stats.trustTooltip,
+                        data: [43.3],
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        barThickness: 60
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: '#4b5563',
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            },
+                            grid: {
+                                color: '#e5e7eb'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#1f2937',
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1f2937',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + strings.stats.trustTooltip + ': ' + context.raw.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setLanguage(lang) {
+            const strings = i18n[lang] || i18n['ko'];
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n-key]').forEach(element => {
+                const key = element.getAttribute('data-i18n-key');
+                let text = key.split('.').reduce((obj, k) => (obj && obj[k] !== 'undefined') ? obj[k] : key, strings);
+                
+                if (key === 'services.briefing.desc2') {
+                    element.innerHTML = text;
+                } else {
+                    element.innerText = text;
+                }
+            });
+            
+            document.title = strings.hero.title + ": " + strings.hero.subtitle;
+            
+            createChart(lang);
+            
+            document.getElementById('lang-selector').value = lang;
+            document.getElementById('lang-selector-mobile').value = lang;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const langSelectors = [document.getElementById('lang-selector'), document.getElementById('lang-selector-mobile')];
+            
+            langSelectors.forEach(selector => {
+                selector.addEventListener('change', (e) => {
+                    setLanguage(e.target.value);
+                });
+            });
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('text-blue-600', 'border-blue-600');
+                        btn.classList.add('text-gray-500', 'border-transparent', 'hover:text-gray-700', 'hover:border-gray-300');
+                    });
+
+                    button.classList.add('text-blue-600', 'border-blue-600');
+                    button.classList.remove('text-gray-500', 'border-transparent', 'hover:text-gray-700', 'hover:border-gray-300');
+
+                    tabPanes.forEach(pane => {
+                        if (pane.id === targetId) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                    if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.querySelector('svg.hidden').classList.add('hidden');
+                        mobileMenuButton.querySelector('svg.block').classList.remove('hidden');
+                    }
+                });
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                mobileMenuButton.querySelector('svg.block').classList.toggle('hidden');
+                mobileMenuButton.querySelector('svg.hidden').classList.toggle('hidden');
+            });
+
+            setLanguage('ko');
+        });
+    </script>
+</body>
+</html>
