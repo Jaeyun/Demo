@@ -6,11 +6,9 @@
     <title>DeepSearch: 금융 AI 인프라</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Calm Harmony (Light stone/ivory background, dark text, professional blue accent) -->
-    <!-- Application Structure Plan: A single-page, top-to-bottom narrative SPA. The flow guides the user from 'Who' (About + Stats), to 'Why' (The Problem), to 'How' (The Solution: Finorma), to 'What' (Data & AI Services). This structure was chosen because it mirrors a persuasive pitch, logically building a case for the product, which is more intuitive for a potential customer than a fragmented dashboard. Interactions (Chart, Tabs) are used to condense complex info (stats, product features) into digestible, clean UI elements. -->
-    <!-- Visualization & Content Choices: 1. Market Trust (Report Info) -> Goal: Inform/Credibility -> Viz: Horizontal Bar Chart (Chart.js) -> Interaction: Hover Tooltip -> Justification: Clearly shows 43.3% stat -> Library: Chart.js (Canvas). 2. Problem/Solution Flow (Report Info) -> Goal: Organize/Explain -> Viz: 3-step HTML/Tailwind diagrams -> Interaction: None (static) -> Justification: Visually maps problem to solution components simply. -> Library: HTML/Tailwind. 3. AI Services (Report Info) -> Goal: Compare/Organize -> Viz: Tabbed Interface -> Interaction: Click to toggle panes -> Justification: Standard, clean way to show 2 distinct products (Briefing, Risk) -> Library: Vanilla JS. 4. Service Examples (Report Info) -> Goal: Demonstrate -> Viz: HTML/Tailwind UI Mockups -> Interaction: None -> Justification: Makes abstract services tangible. -> Library: HTML/Tailwind. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <style>
+    
+
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TH:wght@400;500;700&display=swap');
         body {
             font-family: 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans TH', sans-serif;
@@ -52,10 +50,12 @@
                 <div class="hidden md:flex items-center">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="#about" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.about">소개</a>
+                        <a href="#why-ai" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.whyAI">왜 AI인가?</a>
                         <a href="#problem" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.problem">당면 과제</a>
                         <a href="#solution" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.solution">솔루션: Finorma</a>
                         <a href="#data" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.data">핵심 데이터</a>
                         <a href="#services" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.services">AI 서비스</a>
+                        <a href="#contact" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium" data-i18n-key="nav.contact">담당자 정보</a>
                     </div>
                     <div class="ml-6">
                         <select id="lang-selector" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 pr-10 py-2">
@@ -92,10 +92,12 @@
         <div class="md:hidden hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#about" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.about">소개</a>
+                <a href="#why-ai" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.whyAI">왜 AI인가?</a>
                 <a href="#problem" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.problem">당면 과제</a>
                 <a href="#solution" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.solution">솔루션: Finorma</a>
                 <a href="#data" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.data">핵심 데이터</a>
                 <a href="#services" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.services">AI 서비스</a>
+                <a href="#contact" class="nav-link text-gray-600 hover:bg-gray-50 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium" data-i18n-key="nav.contact">담당자 정보</a>
             </div>
         </div>
     </nav>
@@ -139,6 +141,47 @@
                     <canvas id="marketTrustChart"></canvas>
                 </div>
                 <p class="text-sm text-gray-500 mt-2" data-i18n-key="stats.trustCaption">주요 10대 은행, 증권사, 자산운용사 기준</p>
+            </div>
+        </section>
+
+        
+
+<section id="why-ai" class="pt-24 -mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-900" data-i18n-key="whyAI.title">AI 전환(AX)의 필요성</h2>
+            <p class="mt-4 text-lg text-gray-700 text-center max-w-3xl mx-auto" data-i18n-key="whyAI.desc">
+                아마 귀하의 금융 기관에서도 AI 서비스 도입을 고려하고 있거나, 이미 진행하고 있을 것입니다. 
+                이는 경쟁 우위를 확보하고, 리서치 효율을 높이며, 새로운 투자 기회를 발견하기 위한 자연스러운 흐름입니다. 
+                하지만, 많은 기관이 이 AI 전환(AX)이 생각처럼 쉽지 않다는 것을 깨닫고 있습니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-7xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="flex items-center">
+                        <span class="text-3xl">🏆</span>
+                        <h4 class="text-xl font-semibold text-gray-900 ml-3" data-i18n-key="whyAI.p1.title">경쟁 우위 확보</h4>
+                    </div>
+                    <p class="mt-3 text-gray-700" data-i18n-key="whyAI.p1.desc">AI를 활용해 새로운 알파(Alpha)를 찾고 리스크를 실시간으로 관리하는 것은 시장을 능가하기 위해 필수적입니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="flex items-center">
+                        <span class="text-3xl">⚙️</span>
+                        <h4 class="text-xl font-semibold text-gray-900 ml-3" data-i18n-key="whyAI.p2.title">운영 효율성 극대화</h4>
+                    </div>
+                    <p class="mt-3 text-gray-700" data-i18n-key="whyAI.p2.desc">반복적인 리서치, 데이터 분석 업무를 자동화하여 핵심 인력이 더 가치 있는 의사결정에 집중하게 합니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="flex items-center">
+                        <span class="text-3xl">💡</span>
+                        <h4 class="text-xl font-semibold text-gray-900 ml-3" data-i18n-key="whyAI.p3.title">새로운 기회 발굴</h4>
+                    </div>
+                    <p class="mt-3 text-gray-700" data-i18n-key="whyAI.p3.desc">AI는 방대한 비정형 데이터(뉴스, 어닝콜)를 분석하여 인간의 눈으로는 볼 수 없는 트렌드와 기회를 발굴합니다.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
+                    <div class="flex items-center">
+                        <span class="text-3xl">👤</span>
+                        <h4 class="text-xl font-semibold text-gray-900 ml-3" data-i18n-key="whyAI.p4.title">고객 니즈 충족</h4>
+                    </div>
+                    <p class="mt-3 text-gray-700" data-i18n-key="whyAI.p4.desc">AI 기반의 개인화된 금융 서비스를 통해 고객 경험을 혁신하고 만족도를 높여야 하는 시장의 요구가 커지고 있습니다.</p>
+                </div>
             </div>
         </section>
 
@@ -345,12 +388,46 @@
             </div>
         </section>
 
+        
+
+<section id="contact" class="pt-24 -mt-16 text-center">
+            <h2 class="text-3xl font-bold text-center text-gray-900" data-i18n-key="contact.title">담당자 정보</h2>
+            <p class="mt-4 text-lg text-gray-700 text-center max-w-3xl mx-auto" data-i18n-key="contact.desc">다음 단계를 통해 구체적인 협업을 논의해 보시죠. 궁금한 점은 아래 연락처로 문의해 주세요.</p>
+
+            <div class="mt-10 max-w-2xl mx-auto text-left bg-blue-50 border border-blue-200 p-6 rounded-lg shadow">
+                <h4 class="text-xl font-semibold text-gray-900 mb-4 text-center" data-i18n-key="contact.nextStepsTitle">다음 단계</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="text-blue-600 font-bold text-lg mr-3">1.</span>
+                        <span class="text-gray-700" data-i18n-key="contact.step1">관련 팀을 어레인지해서, 화상 회의로 보다 구체적인 논의를 진행합니다.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-600 font-bold text-lg mr-3">2.</span>
+                        <span class="text-gray-700" data-i18n-key="contact.step2">테스트용 API 키를 무료로 제공해 드립니다. 직접 기능을 테스트해 보세요.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mt-8 max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-100 text-left">
+                <h3 class="text-2xl font-bold text-gray-900 text-center">Jay Kim (김재윤 대표)</h3>
+                <div class="mt-6 space-y-4 text-lg">
+                    <div class="flex items-center">
+                        <span class="text-blue-600 w-6 text-center text-xl">📞</span>
+                        <a href="tel:82-10-5122-3415" class="ml-4 text-gray-700 hover:text-blue-600">82-10-5122-3415</a>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-blue-600 w-6 text-center text-xl">📧</span>
+                        <a href="mailto:jykim@deepsearch.com" class="ml-4 text-gray-700 hover:text-blue-600 underline">jykim@deepsearch.com</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="bg-gray-800 text-gray-300 mt-24">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
             <p data-i18n-key="footer.copy">&copy; 2025 DeepSearch Inc. All rights reserved.</p>
-            <p class="text-sm text-gray-400 mt-2" data-i18n-key="footer.demo">본 페이지는 데모용으로 작성되었습니다.</p>
         </div>
     </footer>
 
@@ -360,10 +437,12 @@
                 lang: '한국어',
                 nav: {
                     about: '소개',
+                    whyAI: '왜 AI인가?',
                     problem: '당면 과제',
                     solution: '솔루션: Finorma',
                     data: '핵심 데이터',
-                    services: 'AI 서비스'
+                    services: 'AI 서비스',
+                    contact: '담당자 정보'
                 },
                 hero: {
                     title: 'DeepSearch',
@@ -380,6 +459,14 @@
                     trustLabel: '주요 금융기관 채택율',
                     trustTooltip: '채택율',
                     trustCaption: '주요 10대 은행, 증권사, 자산운용사 기준'
+                },
+                whyAI: {
+                    title: 'AI 전환(AX)의 필요성',
+                    desc: '아마 귀하의 금융 기관에서도 AI 서비스 도입을 고려하고 있거나, 이미 진행하고 있을 것입니다. 이는 경쟁 우위를 확보하고, 리서치 효율을 높이며, 새로운 투자 기회를 발견하기 위한 자연스러운 흐름입니다. 하지만, 많은 기관이 이 AI 전환(AX)이 생각처럼 쉽지 않다는 것을 깨닫고 있습니다.',
+                    p1: { title: '경쟁 우위 확보', desc: 'AI를 활용해 새로운 알파(Alpha)를 찾고 리스크를 실시간으로 관리하는 것은 시장을 능가하기 위해 필수적입니다.' },
+                    p2: { title: '운영 효율성 극대화', desc: '반복적인 리서치, 데이터 분석 업무를 자동화하여 핵심 인력이 더 가치 있는 의사결정에 집중하게 합니다.' },
+                    p3: { title: '새로운 기회 발굴', desc: 'AI는 방대한 비정형 데이터(뉴스, 어닝콜)를 분석하여 인간의 눈으로는 볼 수 없는 트렌드와 기회를 발굴합니다.' },
+                    p4: { title: '고객 니즈 충족', desc: 'AI 기반의 개인화된 금융 서비스를 통해 고객 경험을 혁신하고 만족도를 높여야 하는 시장의 요구가 커지고 있습니다.' }
                 },
                 problem: {
                     title: '금융 AI, 왜 이렇게 어려운가요?',
@@ -433,19 +520,27 @@
                         summaryDesc: "플로리다 마이애미 연방 법원에서 Tesla가 '오토파일럿' 기술 결함과 관련된 책임의 일부를 인정했습니다. 이는 자율주행 기능에 대한 잠재적 책임 리스크를..."
                     }
                 },
+                contact: {
+                    title: "담당자 정보",
+                    desc: "다음 단계를 통해 구체적인 협업을 논의해 보시죠. 궁금한 점은 아래 연락처로 문의해 주세요.",
+                    nextStepsTitle: "다음 단계",
+                    step1: "관련 팀을 어레인지해서, 화상 회의로 보다 구체적인 논의를 진행합니다.",
+                    step2: "테스트용 API 키를 무료로 제공해 드립니다. 직접 기능을 테스트해 보세요."
+                },
                 footer: {
-                    copy: '© 2025 DeepSearch Inc. All rights reserved.',
-                    demo: '본 페이지는 데모용으로 작성되었습니다.'
+                    copy: '© 2025 DeepSearch Inc. All rights reserved.'
                 }
             },
             'en': {
                 lang: 'English',
                 nav: {
                     about: 'About',
-                    problem: 'The Challenge',
+                    whyAI: 'Why AI?',
+                    problem: 'The Problem',
                     solution: 'Solution: Finorma',
                     data: 'Core Data',
-                    services: 'AI Services'
+                    services: 'AI Services',
+                    contact: 'Contact'
                 },
                 hero: {
                     title: 'DeepSearch',
@@ -462,6 +557,14 @@
                     trustLabel: 'Adoption Rate by Major Financial Institutions',
                     trustTooltip: 'Adoption Rate',
                     trustCaption: 'Based on top 10 banks, securities firms, and asset managers'
+                },
+                whyAI: {
+                    title: 'The Need for AI Transformation (AX)',
+                    desc: 'Your institution is likely already considering or implementing AI services. This is a natural step to gain a competitive edge, enhance research efficiency, and discover new investment opportunities. However, many find that this AI transformation (AX) is not as easy as it seems.',
+                    p1: { title: 'Competitive Advantage', desc: 'Using AI to find new Alpha and manage risk in real-time is essential for outperforming the market.' },
+                    p2: { title: 'Operational Efficiency', desc: 'Automating repetitive research and data analysis tasks allows your core personnel to focus on high-value decision-making.' },
+                    p3: { title: 'New Opportunities', desc: 'AI can analyze vast, unstructured data (news, calls) to uncover trends and opportunities that are invisible to human analysis.' },
+                    p4: { title: 'Meet Customer Needs', desc: 'There is a growing market demand to innovate customer experience and increase satisfaction with AI-based personalized financial services.' }
                 },
                 problem: {
                     title: 'Why is Financial AI So Difficult?',
@@ -515,19 +618,27 @@
                         summaryDesc: 'In a Miami federal court, Tesla admitted partial liability for a flaw in its \'Autopilot\' technology. This raises potential liability risks for autonomous driving features...'
                     }
                 },
+                contact: {
+                    title: "Contact Information",
+                    desc: "Let's discuss concrete collaboration through the next steps. Please use the contact information below for any questions.",
+                    nextStepsTitle: "Next Steps",
+                    step1: "Let's arrange a video meeting with the relevant teams to discuss in more detail.",
+                    step2: "We will provide a free API key for testing. Please try out the features yourself."
+                },
                 footer: {
-                    copy: '© 2025 DeepSearch Inc. All rights reserved.',
-                    demo: 'This page was created for demo purposes.'
+                    copy: '© 2025 DeepSearch Inc. All rights reserved.'
                 }
             },
             'ja': {
                 lang: '日本語',
                 nav: {
-                    about: '概要',
+                    about: '紹介',
+                    whyAI: 'なぜAIか？',
                     problem: '課題',
-                    solution: 'ソリューション: Finorma',
+                    solution: '解決策: Finorma',
                     data: '主なデータ',
-                    services: 'AIサービス'
+                    services: 'AIサービス',
+                    contact: '連絡先'
                 },
                 hero: {
                     title: 'DeepSearch',
@@ -544,6 +655,14 @@
                     trustLabel: '主要金融機関の採用率',
                     trustTooltip: '採用率',
                     trustCaption: '主要10大銀行、証券会社、資産運用会社基準'
+                },
+                whyAI: {
+                    title: 'AI変革(AX)の必要性',
+                    desc: 'おそらく貴機関でもAIサービスの導入を検討されているか、すでに進めていることでしょう。これは競争優位性を確保し、リサーチ効率を高め、新たな投資機会を発見するための自然な流れです。しかし、多くの機関がこのAI変革(AX)が思ったほど容易ではないことに気づいています。',
+                    p1: { title: '競争優位性の確保', desc: 'AIを活用して新たなアルファ(Alpha)を見つけ、リスクをリアルタイムで管理することは、市場を上回るために不可欠です。' },
+                    p2: { title: '業務効率の最大化', desc: '反復的なリサーチやデータ分析業務を自動化し、中核となる人材がより価値の高い意思決定に集中できるようにします。' },
+                    p3: { title: '新たな機会の発見', desc: 'AIは膨大な非構造化データ（ニュース、決算発表）を分析し、人間の目では見えないトレンドや機会を発見します。' },
+                    p4: { title: '顧客ニーズの充足', desc: 'AIベースのパーソナライズされた金融サービスを通じて、顧客体験を革新し満足度を高めるという市場の要求が高まっています。' }
                 },
                 problem: {
                     title: '金融AIは、なぜこれほど難しいのか？',
@@ -569,7 +688,7 @@
                     d5: { title: 'ETFおよびファンド', desc: '上場指数ファンド、仮想資産' },
                     d6: { title: '経済指標', desc: 'マクロデータ、コモディティ、為替レート' },
                     d7: { title: '特許', desc: '企業別特許登録および現況' },
-                    d8: { title: '産業レポート', desc: '証券会社レポート、産業動向' }
+                    d8: { title: '産業レポート', desc: '証券会社レポート、産業動향' }
                 },
                 services: {
                     title: 'FinormaベースのAIサービス',
@@ -597,19 +716,27 @@
                         summaryDesc: 'フロリダ州マイアミの連邦裁判所で、Teslaが「オートパイロット」技術の欠陥に関連する責任の一部を認めました。これは自動運転機能に対する潜在的な責任リスクを...'
                     }
                 },
+                contact: {
+                    title: "連絡先情報",
+                    desc: "次のステップを通じて具体的な協業をご相談ください。ご不明な点は下記までお問い合わせください。",
+                    nextStepsTitle: "次のステップ",
+                    step1: "関連チームとビデオ会議を設定し、より具体的な議論を進めましょう。",
+                    step2: "テスト用のAPIキーを無料で提供いたします。直接機能をお試しください。"
+                },
                 footer: {
-                    copy: '© 2025 DeepSearch Inc. All rights reserved.',
-                    demo: 'このページはデモ用に作成されました。'
+                    copy: '© 2025 DeepSearch Inc. All rights reserved.'
                 }
             },
             'th': {
                 lang: 'ภาษาไทย',
                 nav: {
                     about: 'เกี่ยวกับ',
+                    whyAI: 'ทำไมต้อง AI?',
                     problem: 'ความท้าทาย',
                     solution: 'โซลูชัน: Finorma',
                     data: 'ข้อมูลหลัก',
-                    services: 'บริการ AI'
+                    services: 'บริการ AI',
+                    contact: 'ติดต่อ'
                 },
                 hero: {
                     title: 'DeepSearch',
@@ -626,6 +753,14 @@
                     trustLabel: 'อัตราการยอมรับโดยสถาบันการเงินหลัก',
                     trustTooltip: 'อัตราการยอมรับ',
                     trustCaption: 'อ้างอิงจากธนาคาร, บริษัทหลักทรัพย์ และบริษัทจัดการสินทรัพย์ 10 อันดับแรก'
+                },
+                whyAI: {
+                    title: 'ความจำเป็นในการปฏิรูปด้วย AI (AX)',
+                    desc: 'สถาบันของคุณอาจกำลังพิจารณาหรือนำบริการ AI มาใช้อยู่แล้ว นี่เป็นขั้นตอนธรรมชาติเพื่อสร้างความได้เปรียบในการแข่งขัน เพิ่มประสิทธิภาพการวิจัย และค้นพบโอกาสการลงทุนใหม่ๆ อย่างไรก็ตาม หลายแห่งพบว่าการปฏิรูปด้วย AI (AX) นี้ไม่ง่ายอย่างที่คิด',
+                    p1: { title: 'ความได้เปรียบในการแข่งขัน', desc: 'การใช้ AI เพื่อค้นหา Alpha ใหม่และจัดการความเสี่ยงแบบเรียลไทม์เป็นสิ่งจำเป็นสำหรับการเอาชนะตลาด' },
+                    p2: { title: 'ประสิทธิภาพการดำเนินงาน', desc: 'การทำงานวิจัยและวิเคราะห์ข้อมูลที่ซ้ำซากเป็นอัตโนมัติ ช่วยให้บุคลากรหลักของคุณสามารถมุ่งเน้นไปที่การตัดสินใจที่มีมูลค่าสูง' },
+                    p3: { title: 'การค้นพบโอกาสใหม่', desc: 'AI สามารถวิเคราะห์ข้อมูลที่ไม่มีโครงสร้างจำนวนมหาศาล (ข่าว, earning calls) เพื่อค้นพบแนวโน้มและโอกาสที่การวิเคราะห์โดยมนุษย์มองไม่เห็น' },
+                    p4: { title: 'ตอบสนองความต้องการของลูกค้า', desc: 'มีความต้องการของตลาดที่เพิ่มขึ้นในการสร้างนวัตกรรมประสบการณ์ลูกค้าและเพิ่มความพึงพอใจด้วยบริการทางการเงินส่วนบุคคลที่ใช้ AI' }
                 },
                 problem: {
                     title: 'ทำไม AI ทางการเงินถึงยากนัก?',
@@ -679,19 +814,27 @@
                         summaryDesc: 'ในศาลรัฐบาลกลางไมอามี Tesla ยอมรับความรับผิดบางส่วนสำหรับข้อบกพร่องในเทคโนโลยี \'Autopilot\' สิ่งนี้ทำให้เกิดความเสี่ยงด้านความรับผิดที่อาจเกิดขึ้นสำหรับคุณสมบัติการขับขี่อัตโนมัติ...'
                     }
                 },
+                contact: {
+                    title: "ข้อมูลติดต่อ",
+                    desc: "มาหารือเกี่ยวกับความร่วมมือที่เป็นรูปธรรมผ่านขั้นตอนต่อไป โปรดติดต่อเราตามข้อมูลด้านล่างหากมีข้อสงสัย",
+                    nextStepsTitle: "ขั้นตอนถัดไป",
+                    step1: "นัดหมายการประชุมทางวิดีโอกับทีมที่เกี่ยวข้องเพื่อหารือในรายละเอียดเพิ่มเติม",
+                    step2: "เราจะให้ API key สำหรับทดสอบฟรี โปรดทดลองใช้ฟังก์ชันด้วยตัวคุณเอง"
+                },
                 footer: {
-                    copy: '© 2025 DeepSearch Inc. สงวนลิขสิทธิ์',
-                    demo: 'หน้านี้สร้างขึ้นเพื่อการสาธิตเท่านั้น'
+                    copy: '© 2025 DeepSearch Inc. สงวนลิขสิทธิ์'
                 }
             },
             'ms': {
                 lang: 'Bahasa Melayu',
                 nav: {
                     about: 'Tentang',
+                    whyAI: 'Mengapa AI?',
                     problem: 'Cabaran',
                     solution: 'Penyelesaian: Finorma',
                     data: 'Data Teras',
-                    services: 'Perkhidmatan AI'
+                    services: 'Perkhidmatan AI',
+                    contact: 'Hubungi'
                 },
                 hero: {
                     title: 'DeepSearch',
@@ -708,6 +851,14 @@
                     trustLabel: 'Kadar Penerimaan oleh Institusi Kewangan Utama',
                     trustTooltip: 'Kadar Penerimaan',
                     trustCaption: 'Berdasarkan 10 bank, firma sekuriti, dan pengurus aset teratas'
+                },
+                whyAI: {
+                    title: 'Keperluan Transformasi AI (AX)',
+                    desc: 'Institusi anda berkemungkinan besar sedang mempertimbangkan atau melaksanakan perkhidmatan AI. Ini adalah langkah semula jadi untuk mendapatkan kelebihan daya saing, meningkatkan kecekapan penyelidikan, dan menemui peluang pelaburan baru. Walau bagaimanapun, ramai yang mendapati bahawa transformasi AI (AX) ini tidak semudah yang disangka.',
+                    p1: { title: 'Kelebihan Daya Saing', desc: 'Menggunakan AI untuk mencari Alpha baru dan mengurus risiko dalam masa nyata adalah penting untuk mengatasi pasaran.' },
+                    p2: { title: 'Kecekapan Operasi', desc: 'Mengautomasikan tugas penyelidikan dan analisis data yang berulang membolehkan kakitangan teras anda memberi tumpuan kepada pembuatan keputusan bernilai tinggi.' },
+                    p3: { title: 'Penemuan Peluang Baru', desc: 'AI boleh menganalisis data tidak berstruktur yang luas (berita, panggilan pendapatan) untuk mendedahkan trend dan peluang yang tidak dapat dilihat oleh analisis manusia.' },
+                    p4: { title: 'Memenuhi Keperluan Pelanggan', desc: 'Terdapat permintaan pasaran yang semakin meningkat untuk menginovasi pengalaman pelanggan dan meningkatkan kepuasan dengan perkhidmatan kewangan peribadi berasaskan AI.' }
                 },
                 problem: {
                     title: 'Mengapa AI Kewangan Begitu Sukar?',
@@ -761,9 +912,15 @@
                         summaryDesc: 'Di mahkamah persekutuan Miami, Tesla mengaku liabiliti separa untuk kecacatan dalam teknologi \'Autopilot\'nya. Ini menimbulkan potensi risiko liabiliti untuk ciri pemanduan autonomi...'
                     }
                 },
+                contact: {
+                    title: "Maklumat Hubungan",
+                    desc: "Mari bincangkan kerjasama konkrit melalui langkah seterusnya. Sila hubungi kami menggunakan maklumat di bawah untuk sebarang pertanyaan.",
+                    nextStepsTitle: "Langkah Seterusnya",
+                    step1: "Mari kita aturkan mesyuarat video dengan pasukan yang berkaitan untuk berbincang dengan lebih terperinci.",
+                    step2: "Kami akan menyediakan kunci API percuma untuk ujian. Sila cuba sendiri ciri-cirinya."
+                },
                 footer: {
-                    copy: '© 2025 DeepSearch Inc. Hak cipta terpelihara.',
-                    demo: 'Halaman ini dicipta untuk tujuan demo.'
+                    copy: '© 2025 DeepSearch Inc. Hak cipta terpelihara.'
                 }
             }
         };
