@@ -1,0 +1,407 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Send, 
+  Bot, 
+  User, 
+  Search, 
+  MoreVertical, 
+  Share2, 
+  Copy, 
+  ThumbsUp, 
+  ThumbsDown,
+  TrendingUp,
+  FileText,
+  Newspaper,
+  Cpu,
+  ArrowRight
+} from 'lucide-react';
+
+// --- Provided Data (JSON) ---
+const apiResponse = {
+  "detail": {
+    "message": "success",
+    "code": "SUCCESS",
+    "ok": true
+  },
+  "data": {
+    "report": "# 반도체 산업 보고서\n\n## 1. 산업 개요 및 특성  \n### 산업 정의 및 주요 특징  \n- **정의** : 반도체는 전자·통신·자동차·AI·데이터센터 등 모든 디지털 산업의 핵심 소자이며, 메모리칩·시스템반도체·파운드리·웨이퍼·포토레지스트 등을 포함한다.  \n- **핵심 기술** : 3nm 이하 초미세 공정, 고효율 발열 관리, NPU(신경망처리장치) 등 AI 전용 회로, 450mm 웨이퍼 기반 대량 생산.  \n- **주요 제품·서비스** : DRAM·NAND Flash(메모리), CIS·LDI·Analog(비메모리), 파운드리 위탁 생산, 반도체 패키징·테스트.  \n\n### 기술·시장·정책적 배경  \n- **기술** : 삼성 파운드리의 ‘발열 억제 기술’이 모바일 AP 수주 확대의 핵심으로 부각(검색결과 1). AI‑NPU 전용 파운드리 구축(검색결과 5) 등 AI‑칩 수요 급증.  \n- **시장** : 2025 년 3분기 전 세계 반도체 매출 2163 억 달러(≈ 318 조 원)로 사상 최고(검색결과 7). 한국은 메모리·시스템반도체에서 글로벌 1~2위 유지.  \n- **정책** : ‘K‑문샷 프로젝트’(검색결과 9·10) 통해 2030년까지 메모리·AI·양자·바이오 등 5대 분야를 미국 대비 85 % 수준까지 끌어올릴 목표. 정부는 AI 모델·GPU 3.7만대 확보(검색결과 4) 등 인프라 투자 확대.  \n\n### 산업 성장 동인 및 리스크 요인  \n- **성장 동인** \n  1. AI·데이터센터 수요 확대 → NPU·GPU·고성능 시스템반도체 수요 급증.  \n  2. 자동차 전동화·자율주행 → MCU·센서·CIS 수요 증가.  \n  3. 정부·민관 협력 투자(700조 원 규모)와 파운드리·팹리스 협업 생태계 조성.  \n- **리스크** \n  1. 글로벌 경기 둔화(미·중 수출 감소)와 반도체 장비 투자 둔화(경제전망 보고서).  \n  2. 기술 격차 확대 위험(TSMC·인텔·삼성 간 파운드리 경쟁 심화).  \n  3. 공급망 차질(포토레지스트·고순도 가스 등 원자재 가격 변동).  \n\n## 2. 산업 규모 및 동향  \n### 시장 규모 및 성장률  \n| 구분 | 2025 년 9월 말(억원) | 전년 대비 성장률 |\n|------|-------------------|----------------|\n| 전체 반도체 매출(국내) | 2,397,686 (삼성) + 643,200 (SK 하이닉스) + 142,868 (LG 이노텍) + 10,094 (DB하이텍) + 10,844 (하나마이크론) + 7,900 (이수페타시스) ≈ **3,212,592 억원** | 2024 년 대비 약 8 % (글로벌 20 % 성장에 비해 다소 저조) |\n| 메모리(삼성+하이닉스) | 3,040,886 억원 | 10 % 이상 성장 (DRAM·NAND 가격 회복) |\n| 비메모리(기타) | 1,171,706 억원 | 5 % 성장 (AI·자동차용 비메모리 확대) |\n\n### 주요 정책 및 제도 변화  \n- **‘K‑문샷’**: 메모리·AI·양자·바이오·희토류 5대 분야에 2030년까지 700조 원 규모 R&D 투자.  \n- **AI NPU 파운드리**: 정부 예산 1.2조 원 투입, 민관 합동 파운드리 구축(검색결과 5).  \n- **상생 파운드리**: 4.5조 원 투입해 팹리스 10배 확대(검색결과 4).  \n\n### 투자 동향  \n- **글로벌**: TSMC·인텔 등 해외 파운드리 200~300조 원 규모 신규 투자(검색결과 2).  \n- **국내**: 삼성·SK 하이닉스는 기존 설비 확대와 AI 전용 라인 구축에 집중, 정부·민관 협력 펀드 조성.  \n\n### 최근 뉴스 트렌드  \n1. **발열 억제 기술** – 모바일 AP 수주 확대(검색결과 1).  \n2. **AI NPU 파운드리** – 첫 민관 합동 파운드리(검색결과 5).  \n3. **K‑문샷** – 2030년 목표와 2026년 AI·양자·바이오 전략 발표(검색결과 9·10).  \n4. **시장 규모 사상 최고** – 3분기 매출 318 조 원 돌파(검색결과 7).  \n\n## 3. 전후방산업 관계  \n### 전방산업 (고객/수요처)  \n- **스마트폰·태블릿** – 삼성·LG 이노텍의 카메라·디스플레이 모듈.  \n- **데이터센터·클라우드** – 메모리·시스템반도체 수요 급증.  \n- **자동차** – MCU·CIS·센서 수요 확대 (현대모비스·LG 이노텍 연계).  \n- **AI·로보틱스** – NPU·GPU 수요가 팹리스·파운드리와 직접 연결.  \n\n### 후방산업 (공급/지원)  \n- **반도체 장비** – 세메스·ASML 등 고정비 비중 높은 장비 공급.  \n- **소재·부품** – 포토레지스트·웨이퍼·고순도 가스 등.  \n- **패키징·테스트** – 하나마이크론·DB하이텍이 핵심 역할 수행.  \n\n### 산업 생태계 (Value Chain)  \n1. **설계(Fabless/팹리스)** – NPU·AI·GPU 설계 기업.  \n2. **파운드리** – 삼성·SK 하이닉스·DB하이텍(8인치 비메모리).  \n3. **패키징·테스트** – 하나마이크론·DB하이텍.  \n4. **시스템 통합** – 스마트폰·자동차 OEM(삼성·LG·현대모비스).  \n\n## 4. 주요 기업 현황  \n### 주요 기업 리스트 및 분석 테이블  \n\n| 기업명 | 사업영역 | 주요 제품/서비스 | 특징 및 성장동력 | 재무 정보 (2025‑09‑30) |\n|--------|----------|------------------|------------------|------------------------|\n| 삼성전자 | 메모리·시스템반도체·파운드리·디스플레이 | DRAM·NAND·AP·GPU·OLED | 발열 억제 기술·AI NPU 파운드리 투자 | 매출 2,397,686 억원 / 영업이익 235,274 억원 |\n| SK하이닉스 | 메모리·비메모리·CIS | DRAM·NAND·CIS | 메모리 가격 회복·비메모리 CIS 재진출 | 매출 643,200 억원 / 영업이익 280,367 억원 |\n| LG이노텍 | 광학솔루션·반도체 기판·전장부품 | 카메라 모듈·포토마스크·PCB | 자동차·VR·XR용 고부가가치 모듈 확대 | 매출 142,868 억원 / 영업이익 3,403 억원 |\n| DB하이텍 | 8인치 비메모리 파운드리·브랜드 IC | LDI·Analog·CIS·Logic | 고정비 구조·특수 공정 역량 | 매출 10,094 억원 / 영업이익 2,069 억원 |\n| 하나마이크론 | 반도체 패키징·테스트 | 450mm 테스트 웨이퍼·패키징 | 파운드리·팹리스 연계 확대 | 매출 10,844 억원 / 영업이익 803 억원 |\n| 이수페타시스 | 고다층 PCB(MLB) | 고다층 PCB | 통신·네트워크·휴대폰용 고밀도 PCB | 매출 7,900 억원 / 영업이익 1,482 억원 |\n\n### 기업별 주요 동향  \n- **삼성전자**: 모바일 AP 발열 억제 기술 적용으로 2025 년 모바일 파운드리 수주 확대. AI NPU 전용 라인 구축 계획 발표.  \n- **SK하이닉스**: 메모리 가격 회복과 동시에 비메모리 CIS 사업 재진출, 2026 년까지 CIS 매출 30 % 성장 목표.  \n- **LG이노텍**: 자동차 전장 부품 수주 확대, XR·VR용 카메라 모듈 신제품 라인업 발표.  \n- **DB하이텍**: 8인치 파운드리 수주 증가, 2025 년 말까지 연간 생산량 1.2 배 확대 목표.  \n- **하나마이크론**: 450mm 테스트 웨이퍼·패키징 라인 투자, 팹리스와의 장기 공급 계약 체결.  \n- **이수페타시스**: 고다층 PCB 수출 비중 85 % 달성, AI·데이터센터용 고밀도 PCB 신규 주문 증가.  \n\n## 5. 산업 영향 및 시사점  \n### 주요 영향 요인  \n- **정책**: ‘K‑문샷’과 AI NPU 파운드리 투자로 정부 주도 R&D 확대가 지속될 전망.  \n- **기술**: 발열 억제·450mm 웨이퍼·AI 전용 NPU 등 차세대 공정·설계 기술이 경쟁우위 결정.  \n- **글로벌**: TSMC·인텔의 대규모 투자와 미국·중국 수출 둔화가 시장 변동성을 높임.  \n\n### 투자자 시사점  \n- **기회**: 메모리·AI NPU 파운드리, 고부가가치 패키징·테스트, 고다층 PCB 등 성장세가 뚜렷함.  \n- **주의**: 글로벌 경기·수출 둔화, 원자재·장비 가격 상승, 기술 격차 확대 위험에 대비 필요.  \n\n### 기업 시사점  \n- **전략**: 파운드리와 팹리스 간 협업(‘상생 파운드리’) 강화, AI·자동차용 비메모리 라인 확대, 발열·전력 효율 기술 선점.  \n- **리스크 관리**: 공급망 다변화(포토레지스트·고순도 가스), R&D 비용 효율화, ESG·탄소중립 대응.  \n\n### 리스크 및 기회 요인  \n- **단기**(2025‑2026): AI·데이터센터 수요 급증 → 비메모리·NPU 성장, 그러나 경기 둔화와 수출 불확실성 지속.  \n- **중장기**(2027‑2032): ‘K‑문샷’ 목표 달성 시 메모리·AI·양자 분야에서 글로벌 2위 도약 가능, 다만 기술 격차와 인재 확보가 핵심 변수.  \n\n## 6. 결론  \n반도체 산업은 AI·자동차·데이터센터 수요가 견인하는 성장 국면에 있으며, 정부의 ‘K‑문샷’·AI NPU 파운드리 투자와 삼성·SK 하이닉스의 발열 억제·비메모리 재진출이 핵심 동력이다. 그러나 글로벌 경기 둔화와 원자재·장비 비용 상승이 리스크로 작용한다. 투자자는 메모리·AI NPU 파운드리, 고부가가치 패키징·테스트, 고다층 PCB에 집중하고, 기업은 파운드리·팹리스 협업과 발열·전력 효율 기술을 선점함으로써 2030 년까지 세계 2위 반도체 강국으로 도약할 수 있다.",
+    "news_list": [
+      {
+        "title": "경쟁률 16:1 '벤처·창업진흥 유공 포상'…넥스틴 금탑산업훈장 수상",
+        "created_at": "2025-12-12T15:30:00.000000",
+        "publisher": "머니투데이",
+        "summary": "중소벤처기업부와 벤처기업협회는 서울 코엑스에서 컴업2025 '2025 벤처·창업진흥 유공 포상' 시상식을 개최했다고 12일 밝혔다.\n\n벤처·창업진흥 유공 포상 시상식은 벤처산업 발전과 혁신성장에 기여한 유공자를 포상하는 행사로 1999년부터 개최GO 올해로 27회째를 맞고 있다.\n\n이번 유공 포상은 벤처 30주년을 맞는 뜻깊은 해라는 점을 고려해 시상식을 두 차례로 나누어 개최했다.",
+        "content_url": "https://www.mt.co.kr/future/2025/12/12/2025121213523813491"
+      },
+      {
+        "title": "한투운용, ACE 구글밸류체인액티브 ETF 순자산액 1천억 돌파",
+        "created_at": "2025-12-12T15:25:13.000000",
+        "publisher": "한국경제TV",
+        "summary": "한국투자신탁운용은 ACE 구글밸류체인액티브 상장지수펀드(ETF)의 순자산총액이 1천억원을 돌파했다고 밝혔다.\n\nACE 구글밸류체인액티브 ETF는 그래픽 처리 장치(GPU) 중심의 경쟁 구도에서, 구글이 독자적으로 구축하고 있는 텐서처리장치(TPU) 기반 생태계까지 주목하는 것이 특징이다.\n\n현재 구글은 자체 인공지능(AI) 칩인 TPU를 통해 엔비디아와 차별화된 생태계를 확장하고 있으며, 이러한 밸류체인과 투자 네트워크가 해당 ETF의 포트폴리오에 적절히 반영됐다는 평가를 받고 있다.",
+        "content_url": "http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202512120421&t=NN"
+      },
+      {
+        "title": "스페이스X '기대감'…코스피 나흘 만에 상승",
+        "created_at": "2025-12-12T15:06:00.000000",
+        "publisher": "SBS Biz",
+        "summary": "기관이 1조 원 넘게 사들이면서 상승을 이끌고 있는데요.\n\n최윤하 기자, 코스피가 오랜만에 상승하고 있군요?\n\n외국인과 개인이 팔고 있지만 기관이 1조 1,500억 원 넘게 사들이면서 상승을 주도하고 있습니다.",
+        "content_url": "https://biz.sbs.co.kr/article_hub/20000278195"
+      },
+      {
+        "title": "\"GPU 3.7만장 확보, K-문샷 착수… 과기정통부, 내년 혁신 전략 발표",
+        "created_at": "2025-12-12T14:47:00.000000",
+        "publisher": "머니투데이",
+        "summary": "과학기술정보통신부는 2026년을 'AI(인공지능)와 과학기술로 대도약하는 원년'으로 삼고, 국산 AI 모델 공개, 초격차 기술 확보, 지역 전략산업 육성을 골자로 한 4대 전략, 12대 과제를 발표했다.\n\n우선, 정부는 국산 AI 파운데이션 모델 프로젝트 1차 개발을 내년 1월 완료하고, 상반기 중 오픈소스로 제공한다.\n\n정부는 2026년까지 GPU(그래픽처리장치) 3만7000장을 확보해 국가 프로젝트, 대국민 AI 서비스, 산업 및 벤처 스타트업, 지역AX(인공지능 전환) 등에 우선순위를 고려해 전략적으로 배분한다.",
+        "content_url": "https://www.mt.co.kr/tech/2025/12/12/2025121214085694915"
+      },
+      {
+        "title": "엔비디아·메모리 3사 성장에 반도체 시장 분기 매출 ‘사상 최대’… “대전환기 준비해야”",
+        "created_at": "2025-12-12T14:43:08.000000",
+        "publisher": "조선비즈",
+        "summary": "12일 시장조사업체 옴디아에 따르면 올 3분기 세계 반도체 시장 매출은 직전 분기 대비 14.5% 증가한 2163억달러(약 318조4370억원)로 사상 최대치를 경신했다.\n\n세계 반도체 시장 매출이 단일 분기에 2000억달러를 넘어선 건 이번이 처음이다.\n\n작년 세계 반도체 시장 규모는 전년 대비 20% 이상 성장해 6500억달러(약 957조5150억원)를 돌파했다.",
+        "content_url": "https://biz.chosun.com/it-science/ict/2025/12/12/VBEZQUTJ5NAZVINIRWX4LFMJ74/?utm_medium=original&utm_campaign=biz"
+      },
+    ],
+    "related_industries": [
+      "전자기기",
+      "통신장비",
+      "자동차",
+      "AI/데이터센터",
+      "소재/부품"
+    ],
+    "related_sectors": [
+      "C2611 - 전자집적회로 제조업",
+      "K64992 - 금융지주회사",
+      "C26112 - 비메모리용 및 기타 전자집적회로 제조업",
+      "C3399 - 그외 기타 분류안된 제품 제조업",
+      "C26299 - 그외 기타 전자부품 제조업",
+      "C26422 - 이동전화기 제조업",
+      "C2612 - 다이오드, 트랜지스터 및 유사 반도체소자 제조업",
+      "C26223 - 연성 및 기타 인쇄회로기판 제조업",
+      "K66121 - 증권 중개업"
+    ],
+    "related_items": [
+      "메모리칩",
+      "시스템반도체",
+      "파운드리",
+      "웨이퍼",
+      "포토레지스트"
+    ]
+  }
+};
+
+// --- Helper Functions ---
+const formatRelativeTime = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = now - date;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  
+  if (hours < 1) return '방금 전';
+  if (hours < 24) return `${hours}시간 전`;
+  return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+};
+
+// --- Components ---
+
+// 1. Simple Markdown Parser for Report
+const MarkdownRenderer = ({ content }) => {
+  if (!content) return null;
+
+  // Split by newlines but keep them to process blocks
+  const lines = content.split('\n');
+  const renderedContent = [];
+  
+  let inTable = false;
+  let tableRows = [];
+  let listStack = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Detect Tables
+    if (line.trim().startsWith('|')) {
+      inTable = true;
+      tableRows.push(line);
+      continue;
+    } else if (inTable) {
+      // Process collected table
+      renderedContent.push(
+        <div key={`table-${i}`} className="overflow-x-auto my-6 border border-gray-200 rounded-lg shadow-sm bg-white">
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <thead>
+              {tableRows[0].split('|').filter(c => c.trim()).map((header, idx) => (
+                <th key={idx} className="px-4 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                  {header.trim()}
+                </th>
+              ))}
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {tableRows.slice(2).map((row, rIdx) => (
+                <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  {row.split('|').filter(c => c.trim()).map((cell, cIdx) => (
+                    <td key={cIdx} className="px-4 py-3 text-gray-700 whitespace-pre-wrap">
+                      <span dangerouslySetInnerHTML={{ __html: parseInline(cell.trim()) }} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      inTable = false;
+      tableRows = [];
+    }
+
+    // Headers
+    if (line.startsWith('### ')) {
+      renderedContent.push(<h3 key={i} className="text-lg font-bold text-gray-800 mt-6 mb-3 flex items-center"><div className="w-1 h-5 bg-indigo-500 mr-2 rounded-full"></div>{line.replace('### ', '')}</h3>);
+    } else if (line.startsWith('## ')) {
+      renderedContent.push(<h2 key={i} className="text-xl font-bold text-gray-900 mt-8 mb-4 border-b pb-2">{line.replace('## ', '')}</h2>);
+    } else if (line.startsWith('# ')) {
+      renderedContent.push(<h1 key={i} className="text-2xl font-extrabold text-gray-900 mb-6">{line.replace('# ', '')}</h1>);
+    } 
+    // Lists
+    else if (line.trim().match(/^(\d+\.|-)\s/)) {
+        const isOrdered = /^\d+\./.test(line.trim());
+        const content = line.replace(/^(\d+\.|-)\s/, '');
+        renderedContent.push(
+            <div key={i} className="flex items-start mb-2 ml-2">
+                <span className={`mr-2 flex-shrink-0 ${isOrdered ? 'text-indigo-600 font-bold' : 'text-gray-400'}`}>
+                    {isOrdered ? line.trim().match(/^\d+\./)[0] : '•'}
+                </span>
+                <span className="text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: parseInline(content) }} />
+            </div>
+        );
+    }
+    // Empty lines
+    else if (line.trim() === '') {
+      renderedContent.push(<div key={i} className="h-2"></div>);
+    }
+    // Paragraphs
+    else {
+      renderedContent.push(
+        <p key={i} className="text-gray-700 leading-relaxed mb-2" dangerouslySetInnerHTML={{ __html: parseInline(line) }} />
+      );
+    }
+  }
+
+  return <div className="prose max-w-none font-sans">{renderedContent}</div>;
+};
+
+// Simple inline parser for **bold** and (text)
+const parseInline = (text) => {
+  let parsed = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900 font-semibold">$1</strong>')
+    .replace(/\((검색결과.*?)\)/g, '<span class="text-xs text-blue-500 bg-blue-50 px-1 py-0.5 rounded ml-1 cursor-pointer hover:bg-blue-100">$1</span>');
+  return parsed;
+};
+
+
+// 2. News Card Component
+const NewsCard = ({ news }) => (
+  <a href={news.content_url} target="_blank" rel="noopener noreferrer" className="block group">
+    <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow duration-200 h-full flex flex-col">
+      <div className="flex justify-between items-start mb-2">
+        <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">{news.publisher}</span>
+        <span className="text-xs text-gray-400">{formatRelativeTime(news.created_at)}</span>
+      </div>
+      <h4 className="text-sm font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+        {news.title}
+      </h4>
+      <p className="text-xs text-gray-500 line-clamp-3 mb-3 flex-grow leading-relaxed">
+        {news.summary}
+      </p>
+      <div className="flex items-center text-xs text-gray-400 mt-auto">
+        <span className="group-hover:translate-x-1 transition-transform duration-200 flex items-center">
+            원문 보기 <ArrowRight className="w-3 h-3 ml-1" />
+        </span>
+      </div>
+    </div>
+  </a>
+);
+
+// 3. Chip Component
+const Chip = ({ label, type = 'default' }) => {
+    const styles = {
+        default: "bg-gray-100 text-gray-600 hover:bg-gray-200",
+        industry: "bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100",
+        sector: "bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100",
+        item: "bg-purple-50 text-purple-700 border border-purple-100 hover:bg-purple-100",
+    };
+    
+    return (
+        <span className={`px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-colors ${styles[type]}`}>
+            {label}
+        </span>
+    );
+};
+
+export default function App() {
+  const [loading, setLoading] = useState(false); // Simulated, data is static
+  const [activeTab, setActiveTab] = useState('report'); // report | news
+
+  const { report, news_list, related_industries, related_sectors, related_items } = apiResponse.data;
+
+  return (
+    <div className="flex flex-col h-screen bg-gray-50 text-gray-900 font-sans">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
+            <Bot size={20} />
+          </div>
+          <h1 className="text-lg font-bold text-gray-800">AI Market Analyst</h1>
+        </div>
+        <div className="flex items-center gap-4 text-gray-500">
+          <Search size={20} className="cursor-pointer hover:text-gray-800" />
+          <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">
+            <User size={18} />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Area - Scrollable */}
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 max-w-5xl mx-auto w-full">
+        
+        {/* User Question Bubble */}
+        <div className="flex justify-end mb-8">
+            <div className="bg-gray-800 text-white px-6 py-4 rounded-2xl rounded-tr-none max-w-[80%] md:max-w-2xl shadow-sm">
+                <p className="text-base md:text-lg font-medium">반도체 산업의 최근 상황이 어때?</p>
+            </div>
+        </div>
+
+        {/* AI Answer Container */}
+        <div className="flex gap-4">
+            <div className="flex-shrink-0 mt-1 hidden md:block">
+                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 border border-indigo-200">
+                    <TrendingUp size={20} />
+                </div>
+            </div>
+
+            <div className="flex-1 min-w-0">
+                {/* AI Response Card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    
+                    {/* Toolbar / Tabs */}
+                    <div className="flex items-center justify-between border-b border-gray-100 px-4 py-2 bg-gray-50/50">
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={() => setActiveTab('report')}
+                                className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${activeTab === 'report' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                            >
+                                <FileText size={14} />
+                                상세 분석
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('news')}
+                                className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${activeTab === 'news' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                            >
+                                <Newspaper size={14} />
+                                관련 뉴스
+                                <span className="bg-indigo-100 text-indigo-700 px-1.5 rounded-full text-[10px]">{news_list.length}</span>
+                            </button>
+                        </div>
+                        <div className="flex gap-2">
+                            <button className="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors" title="복사">
+                                <Copy size={16} />
+                            </button>
+                            <button className="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors" title="공유">
+                                <Share2 size={16} />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Content Body */}
+                    <div className="p-6 md:p-8">
+                        {activeTab === 'report' ? (
+                            <div className="animate-fadeIn">
+                                <MarkdownRenderer content={report} />
+                                
+                                {/* Quick Links to News within Report view */}
+                                <div className="mt-10 pt-6 border-t border-gray-100">
+                                    <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">최신 뉴스 하이라이트</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {news_list.slice(0, 2).map((news, idx) => (
+                                            <NewsCard key={idx} news={news} />
+                                        ))}
+                                    </div>
+                                    <button 
+                                        onClick={() => setActiveTab('news')}
+                                        className="mt-4 text-sm text-indigo-600 font-medium hover:underline flex items-center"
+                                    >
+                                        뉴스 더보기 <ArrowRight size={14} className="ml-1" />
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="animate-fadeIn">
+                                <h3 className="text-xl font-bold text-gray-900 mb-6">관련 뉴스 브리핑</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {news_list.map((news, idx) => (
+                                        <NewsCard key={idx} news={news} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer: Related Chips */}
+                    <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
+                        <div className="flex flex-col gap-3">
+                            <div className="flex items-start gap-2">
+                                <span className="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">관련 산업</span>
+                                <div className="flex flex-wrap gap-2">
+                                    {related_industries.map((tag, i) => <Chip key={i} label={tag} type="industry" />)}
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <span className="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">주요 품목</span>
+                                <div className="flex flex-wrap gap-2">
+                                    {related_items.map((tag, i) => <Chip key={i} label={tag} type="item" />)}
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <span className="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">세부 섹터</span>
+                                <div className="flex flex-wrap gap-2">
+                                    {related_sectors.slice(0, 4).map((tag, i) => <Chip key={i} label={tag.split(' - ')[1] || tag} type="sector" />)}
+                                    {related_sectors.length > 4 && <span className="text-xs text-gray-400 flex items-center px-2">+{related_sectors.length - 4} 더보기</span>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Feedback Actions */}
+                <div className="flex items-center gap-4 mt-4 ml-2">
+                    <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+                        <ThumbsUp size={16} /> 도움이 됨
+                    </button>
+                    <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+                        <ThumbsDown size={16} /> 수정 제안
+                    </button>
+                    <div className="flex-1"></div>
+                    <span className="text-xs text-gray-400">생성 시간: 0.8s</span>
+                </div>
+            </div>
+        </div>
+      </main>
+
+      {/* Input Area */}
+      <div className="bg-white border-t border-gray-200 p-4 sticky bottom-0">
+        <div className="max-w-4xl mx-auto relative">
+          <input 
+            type="text" 
+            placeholder="추가 질문을 입력하세요..." 
+            className="w-full bg-gray-100 text-gray-900 rounded-full py-4 pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-sm"
+          />
+          <button className="absolute right-2 top-2 p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors shadow-md">
+            <Send size={20} />
+          </button>
+        </div>
+        <p className="text-center text-xs text-gray-400 mt-2">AI는 실수를 할 수 있습니다. 중요한 정보는 확인이 필요합니다.</p>
+      </div>
+    </div>
+  );
+}
