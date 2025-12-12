@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 반도체 산업 보고서</title>
+    <title>AI 산업 분석 보고서</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -17,132 +17,218 @@
             to { opacity: 1; transform: translateY(0); }
         }
         /* Custom Scrollbar for better look */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 flex flex-col h-screen overflow-hidden">
+<body class="bg-gray-50 text-gray-900 h-screen overflow-hidden flex">
 
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
+    <!-- Sidebar (Left Panel) -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-20">
+        <!-- Logo / Brand -->
+        <div class="px-6 py-5 border-b border-gray-100 flex items-center gap-2">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-sm">
                 <i data-lucide="bot" width="20"></i>
             </div>
-            <h1 class="text-lg font-bold text-gray-800">AI Market Analyst</h1>
-        </div>
-        <div class="flex items-center gap-4 text-gray-500">
-            <i data-lucide="search" width="20" class="cursor-pointer hover:text-gray-800"></i>
-            <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">
-                <i data-lucide="user" width="18"></i>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full max-w-5xl mx-auto" id="main-container">
-        
-        <!-- User Question -->
-        <div class="flex justify-end mb-8">
-            <div class="bg-gray-800 text-white px-6 py-4 rounded-2xl rounded-tr-none max-w-[80%] md:max-w-2xl shadow-sm">
-                <p class="text-base md:text-lg font-medium">반도체 산업의 최근 상황이 어때?</p>
-            </div>
+            <h1 class="text-lg font-bold text-gray-800 tracking-tight">AI Analyst</h1>
         </div>
 
-        <!-- AI Answer Container -->
-        <div class="flex gap-4">
-            <!-- Bot Avatar -->
-            <div class="flex-shrink-0 mt-1 hidden md:block">
-                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 border border-indigo-200">
-                    <i data-lucide="trending-up" width="20"></i>
-                </div>
-            </div>
-
-            <div class="flex-1 min-w-0">
-                <!-- Response Card -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                    
-                    <!-- Toolbar / Tabs -->
-                    <div class="flex items-center justify-between border-b border-gray-100 px-4 py-2 bg-gray-50/50">
-                        <div class="flex gap-2" id="tab-container">
-                            <button onclick="switchTab('report')" id="tab-report" class="px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors bg-white text-indigo-600 shadow-sm">
-                                <i data-lucide="file-text" width="14"></i> 상세 분석
-                            </button>
-                            <button onclick="switchTab('news')" id="tab-news" class="px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors text-gray-500 hover:text-gray-700">
-                                <i data-lucide="newspaper" width="14"></i> 관련 뉴스
-                                <span class="bg-indigo-100 text-indigo-700 px-1.5 rounded-full text-[10px]" id="news-count">0</span>
-                            </button>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors" title="복사">
-                                <i data-lucide="copy" width="16"></i>
-                            </button>
-                            <button class="p-1.5 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors" title="공유">
-                                <i data-lucide="share-2" width="16"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content Body -->
-                    <div class="p-6 md:p-8" id="content-body">
-                        <!-- Dynamic Content Goes Here -->
-                    </div>
-
-                    <!-- Footer: Related Chips -->
-                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
-                        <div class="flex flex-col gap-3" id="chips-container">
-                            <!-- Chips go here -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Feedback Actions -->
-                <div class="flex items-center gap-4 mt-4 ml-2">
-                    <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-                        <i data-lucide="thumbs-up" width="16"></i> 도움이 됨
-                    </button>
-                    <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-                        <i data-lucide="thumbs-down" width="16"></i> 수정 제안
-                    </button>
-                    <div class="flex-1"></div>
-                    <span class="text-xs text-gray-400">생성 시간: 0.8s</span>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Input Area -->
-    <div class="bg-white border-t border-gray-200 p-4 sticky bottom-0 z-40">
-        <div class="max-w-4xl mx-auto relative">
-            <input type="text" placeholder="추가 질문을 입력하세요..." class="w-full bg-gray-100 text-gray-900 rounded-full py-4 pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-sm">
-            <button class="absolute right-2 top-2 p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors shadow-md">
-                <i data-lucide="send" width="20"></i>
+        <!-- New Chat Button -->
+        <div class="p-4">
+            <button class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl px-4 py-3 text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm border border-indigo-100">
+                <i data-lucide="plus" width="16"></i> 새 분석 요청
             </button>
         </div>
-        <p class="text-center text-xs text-gray-400 mt-2">AI는 실수를 할 수 있습니다. 중요한 정보는 확인이 필요합니다.</p>
+
+        <!-- History List -->
+        <div class="flex-1 overflow-y-auto px-3 py-2">
+            <h3 class="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">최근 대화</h3>
+            <div class="space-y-1" id="sidebar-list">
+                <!-- Sidebar items will be injected here -->
+            </div>
+        </div>
+
+        <!-- User Profile -->
+        <div class="p-4 border-t border-gray-100">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                    <i data-lucide="user" width="16"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">User</p>
+                    <p class="text-xs text-gray-500 truncate">Free Plan</p>
+                </div>
+                <i data-lucide="more-horizontal" width="16" class="text-gray-400"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Layout (Right Panel) -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-gray-50 relative">
+        
+        <!-- Mobile Header -->
+        <header class="bg-white border-b border-gray-200 px-4 py-3 flex md:hidden items-center justify-between sticky top-0 z-50">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="bot" width="20"></i>
+                </div>
+                <h1 class="text-lg font-bold text-gray-800">AI Analyst</h1>
+            </div>
+            <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
+                <i data-lucide="menu" width="20"></i>
+            </button>
+        </header>
+
+        <!-- Desktop Header (Search & Utils) -->
+        <header class="hidden md:flex bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4 items-center justify-between sticky top-0 z-10">
+            <h2 class="text-lg font-bold text-gray-800" id="header-title">산업 분석 보고서</h2>
+            <div class="flex items-center gap-4 text-gray-500">
+                <div class="relative group">
+                    <i data-lucide="search" width="18" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                    <input type="text" placeholder="보고서 내 검색..." class="bg-gray-100/50 hover:bg-white focus:bg-white border border-transparent focus:border-indigo-200 rounded-full py-2 pl-10 pr-4 text-sm w-64 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-50 focus:w-80">
+                </div>
+                <div class="h-4 w-px bg-gray-300 mx-1"></div>
+                <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" title="알림">
+                    <i data-lucide="bell" width="18"></i>
+                </button>
+                <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" title="설정">
+                    <i data-lucide="settings" width="18"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full max-w-5xl mx-auto scroll-smooth" id="main-container">
+            
+            <!-- User Question Bubble -->
+            <div class="flex justify-end mb-8 animate-fadeIn">
+                <div class="bg-gray-800 text-white px-6 py-4 rounded-2xl rounded-tr-none max-w-[85%] md:max-w-2xl shadow-sm">
+                    <p class="text-base md:text-lg font-medium leading-relaxed" id="user-question-text">반도체 산업의 최근 상황이 어때?</p>
+                </div>
+            </div>
+
+            <!-- AI Answer Container -->
+            <div class="flex gap-4 animate-fadeIn" style="animation-delay: 0.1s;">
+                <!-- Bot Avatar -->
+                <div class="flex-shrink-0 mt-1 hidden md:block">
+                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 border border-indigo-200 shadow-sm">
+                        <i data-lucide="sparkles" width="20"></i>
+                    </div>
+                </div>
+
+                <div class="flex-1 min-w-0 pb-20">
+                    <!-- Response Card -->
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden ring-1 ring-gray-100">
+                        
+                        <!-- Tabs Header -->
+                        <div class="flex items-center justify-between border-b border-gray-100 px-4 py-2 bg-gray-50/50">
+                            <div class="flex gap-2" id="tab-container">
+                                <button onclick="switchTab('report')" id="tab-report" class="px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors bg-white text-indigo-600 shadow-sm ring-1 ring-gray-200">
+                                    <i data-lucide="file-text" width="14"></i> 상세 분석
+                                </button>
+                                <button onclick="switchTab('news')" id="tab-news" class="px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors text-gray-500 hover:text-gray-700 hover:bg-gray-100/80">
+                                    <i data-lucide="newspaper" width="14"></i> 관련 뉴스
+                                    <span class="bg-gray-200 text-gray-600 px-1.5 rounded-full text-[10px] min-w-[1.2rem] text-center" id="news-count">0</span>
+                                </button>
+                            </div>
+                            <div class="flex gap-1">
+                                <button class="p-1.5 text-gray-400 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors" title="텍스트 복사">
+                                    <i data-lucide="copy" width="16"></i>
+                                </button>
+                                <button class="p-1.5 text-gray-400 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors" title="PDF 내보내기">
+                                    <i data-lucide="download" width="16"></i>
+                                </button>
+                                <button class="p-1.5 text-gray-400 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors" title="공유하기">
+                                    <i data-lucide="share-2" width="16"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Content Body -->
+                        <div class="p-6 md:p-8 min-h-[400px]" id="content-body">
+                            <!-- Dynamic Content Goes Here -->
+                            <div class="flex items-center justify-center h-full text-gray-400">
+                                <div class="flex flex-col items-center">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-2"></div>
+                                    <p class="text-sm">보고서를 불러오는 중입니다...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer: Related Chips -->
+                        <div class="bg-gray-50/80 px-6 py-4 border-t border-gray-100 backdrop-blur-sm">
+                            <div class="flex flex-col gap-3" id="chips-container">
+                                <!-- Chips go here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Actions -->
+                    <div class="flex items-center gap-4 mt-4 ml-2">
+                        <button class="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-indigo-600 transition-colors bg-white px-3 py-1.5 rounded-full border border-gray-200 hover:border-indigo-200 shadow-sm">
+                            <i data-lucide="thumbs-up" width="14"></i> 도움이 됨
+                        </button>
+                        <button class="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors bg-white px-3 py-1.5 rounded-full border border-gray-200 hover:border-red-200 shadow-sm">
+                            <i data-lucide="thumbs-down" width="14"></i> 수정 제안
+                        </button>
+                        <div class="flex-1"></div>
+                        <span class="text-xs text-gray-400 font-mono">Generated in 0.8s</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="bg-white border-t border-gray-200 p-4 sticky bottom-0 z-40">
+            <div class="max-w-4xl mx-auto relative group">
+                <input type="text" placeholder="이어서 질문하기..." class="w-full bg-gray-50 text-gray-900 rounded-2xl py-4 pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white focus:border-indigo-500 border border-gray-200 transition-all shadow-sm">
+                <button class="absolute right-3 top-3 p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg active:scale-95">
+                    <i data-lucide="send" width="18"></i>
+                </button>
+            </div>
+            <p class="text-center text-[10px] text-gray-400 mt-2">AI는 실수를 할 수 있습니다. 중요한 정보는 확인이 필요합니다.</p>
+        </div>
     </div>
 
     <script>
-        // --- Data ---
-        const apiResponse = {
-            "data": {
-                "report": "# 반도체 산업 보고서\n\n## 1. 산업 개요 및 특성  \n### 산업 정의 및 주요 특징  \n- **정의** : 반도체는 전자·통신·자동차·AI·데이터센터 등 모든 디지털 산업의 핵심 소자이며, 메모리칩·시스템반도체·파운드리·웨이퍼·포토레지스트 등을 포함한다.  \n- **핵심 기술** : 3nm 이하 초미세 공정, 고효율 발열 관리, NPU(신경망처리장치) 등 AI 전용 회로, 450mm 웨이퍼 기반 대량 생산.  \n- **주요 제품·서비스** : DRAM·NAND Flash(메모리), CIS·LDI·Analog(비메모리), 파운드리 위탁 생산, 반도체 패키징·테스트.  \n\n### 기술·시장·정책적 배경  \n- **기술** : 삼성 파운드리의 ‘발열 억제 기술’이 모바일 AP 수주 확대의 핵심으로 부각(검색결과 1). AI‑NPU 전용 파운드리 구축(검색결과 5) 등 AI‑칩 수요 급증.  \n- **시장** : 2025 년 3분기 전 세계 반도체 매출 2163 억 달러(≈ 318 조 원)로 사상 최고(검색결과 7). 한국은 메모리·시스템반도체에서 글로벌 1~2위 유지.  \n- **정책** : ‘K‑문샷 프로젝트’(검색결과 9·10) 통해 2030년까지 메모리·AI·양자·바이오 등 5대 분야를 미국 대비 85 % 수준까지 끌어올릴 목표. 정부는 AI 모델·GPU 3.7만대 확보(검색결과 4) 등 인프라 투자 확대.  \n\n### 산업 성장 동인 및 리스크 요인  \n- **성장 동인** \n  1. AI·데이터센터 수요 확대 → NPU·GPU·고성능 시스템반도체 수요 급증.  \n  2. 자동차 전동화·자율주행 → MCU·센서·CIS 수요 증가.  \n  3. 정부·민관 협력 투자(700조 원 규모)와 파운드리·팹리스 협업 생태계 조성.  \n- **리스크** \n  1. 글로벌 경기 둔화(미·중 수출 감소)와 반도체 장비 투자 둔화(경제전망 보고서).  \n  2. 기술 격차 확대 위험(TSMC·인텔·삼성 간 파운드리 경쟁 심화).  \n  3. 공급망 차질(포토레지스트·고순도 가스 등 원자재 가격 변동).  \n\n## 2. 산업 규모 및 동향  \n### 시장 규모 및 성장률  \n| 구분 | 2025 년 9월 말(억원) | 전년 대비 성장률 |\n|------|-------------------|----------------|\n| 전체 반도체 매출(국내) | 2,397,686 (삼성) + 643,200 (SK 하이닉스) + 142,868 (LG 이노텍) + 10,094 (DB하이텍) + 10,844 (하나마이크론) + 7,900 (이수페타시스) ≈ **3,212,592 억원** | 2024 년 대비 약 8 % (글로벌 20 % 성장에 비해 다소 저조) |\n| 메모리(삼성+하이닉스) | 3,040,886 억원 | 10 % 이상 성장 (DRAM·NAND 가격 회복) |\n| 비메모리(기타) | 1,171,706 억원 | 5 % 성장 (AI·자동차용 비메모리 확대) |\n\n### 주요 정책 및 제도 변화  \n- **‘K‑문샷’**: 메모리·AI·양자·바이오·희토류 5대 분야에 2030년까지 700조 원 규모 R&D 투자.  \n- **AI NPU 파운드리**: 정부 예산 1.2조 원 투입, 민관 합동 파운드리 구축(검색결과 5).  \n- **상생 파운드리**: 4.5조 원 투입해 팹리스 10배 확대(검색결과 4).  \n\n### 투자 동향  \n- **글로벌**: TSMC·인텔 등 해외 파운드리 200~300조 원 규모 신규 투자(검색결과 2).  \n- **국내**: 삼성·SK 하이닉스는 기존 설비 확대와 AI 전용 라인 구축에 집중, 정부·민관 협력 펀드 조성.  \n\n### 최근 뉴스 트렌드  \n1. **발열 억제 기술** – 모바일 AP 수주 확대(검색결과 1).  \n2. **AI NPU 파운드리** – 첫 민관 합동 파운드리(검색결과 5).  \n3. **K‑문샷** – 2030년 목표와 2026년 AI·양자·바이오 전략 발표(검색결과 9·10).  \n4. **시장 규모 사상 최고** – 3분기 매출 318 조 원 돌파(검색결과 7).  \n\n## 3. 전후방산업 관계  \n### 전방산업 (고객/수요처)  \n- **스마트폰·태블릿** – 삼성·LG 이노텍의 카메라·디스플레이 모듈.  \n- **데이터센터·클라우드** – 메모리·시스템반도체 수요 급증.  \n- **자동차** – MCU·CIS·센서 수요 확대 (현대모비스·LG 이노텍 연계).  \n- **AI·로보틱스** – NPU·GPU 수요가 팹리스·파운드리와 직접 연결.  \n\n### 후방산업 (공급/지원)  \n- **반도체 장비** – 세메스·ASML 등 고정비 비중 높은 장비 공급.  \n- **소재·부품** – 포토레지스트·웨이퍼·고순도 가스 등.  \n- **패키징·테스트** – 하나마이크론·DB하이텍이 핵심 역할 수행.  \n\n### 산업 생태계 (Value Chain)  \n1. **설계(Fabless/팹리스)** – NPU·AI·GPU 설계 기업.  \n2. **파운드리** – 삼성·SK 하이닉스·DB하이텍(8인치 비메모리).  \n3. **패키징·테스트** – 하나마이크론·DB하이텍.  \n4. **시스템 통합** – 스마트폰·자동차 OEM(삼성·LG·현대모비스).  \n\n## 4. 주요 기업 현황  \n### 주요 기업 리스트 및 분석 테이블  \n\n| 기업명 | 사업영역 | 주요 제품/서비스 | 특징 및 성장동력 | 재무 정보 (2025‑09‑30) |\n|--------|----------|------------------|------------------|------------------------|\n| 삼성전자 | 메모리·시스템반도체·파운드리·디스플레이 | DRAM·NAND·AP·GPU·OLED | 발열 억제 기술·AI NPU 파운드리 투자 | 매출 2,397,686 억원 / 영업이익 235,274 억원 |\n| SK하이닉스 | 메모리·비메모리·CIS | DRAM·NAND·CIS | 메모리 가격 회복·비메모리 CIS 재진출 | 매출 643,200 억원 / 영업이익 280,367 억원 |\n| LG이노텍 | 광학솔루션·반도체 기판·전장부품 | 카메라 모듈·포토마스크·PCB | 자동차·VR·XR용 고부가가치 모듈 확대 | 매출 142,868 억원 / 영업이익 3,403 억원 |\n| DB하이텍 | 8인치 비메모리 파운드리·브랜드 IC | LDI·Analog·CIS·Logic | 고정비 구조·특수 공정 역량 | 매출 10,094 억원 / 영업이익 2,069 억원 |\n| 하나마이크론 | 반도체 패키징·테스트 | 450mm 테스트 웨이퍼·패키징 | 파운드리·팹리스 연계 확대 | 매출 10,844 억원 / 영업이익 803 억원 |\n| 이수페타시스 | 고다층 PCB(MLB) | 고다층 PCB | 통신·네트워크·휴대폰용 고밀도 PCB | 매출 7,900 억원 / 영업이익 1,482 억원 |\n\n### 기업별 주요 동향  \n- **삼성전자**: 모바일 AP 발열 억제 기술 적용으로 2025 년 모바일 파운드리 수주 확대. AI NPU 전용 라인 구축 계획 발표.  \n- **SK하이닉스**: 메모리 가격 회복과 동시에 비메모리 CIS 사업 재진출, 2026 년까지 CIS 매출 30 % 성장 목표.  \n- **LG이노텍**: 자동차 전장 부품 수주 확대, XR·VR용 카메라 모듈 신제품 라인업 발표.  \n- **DB하이텍**: 8인치 파운드리 수주 증가, 2025 년 말까지 연간 생산량 1.2 배 확대 목표.  \n- **하나마이크론**: 450mm 테스트 웨이퍼·패키징 라인 투자, 팹리스와의 장기 공급 계약 체결.  \n- **이수페타시스**: 고다층 PCB 수출 비중 85 % 달성, AI·데이터센터용 고밀도 PCB 신규 주문 증가.  \n\n## 5. 산업 영향 및 시사점  \n### 주요 영향 요인  \n- **정책**: ‘K‑문샷’과 AI NPU 파운드리 투자로 정부 주도 R&D 확대가 지속될 전망.  \n- **기술**: 발열 억제·450mm 웨이퍼·AI 전용 NPU 등 차세대 공정·설계 기술이 경쟁우위 결정.  \n- **글로벌**: TSMC·인텔의 대규모 투자와 미국·중국 수출 둔화가 시장 변동성을 높임.  \n\n### 투자자 시사점  \n- **기회**: 메모리·AI NPU 파운드리, 고부가가치 패키징·테스트, 고다층 PCB 등 성장세가 뚜렷함.  \n- **주의**: 글로벌 경기·수출 둔화, 원자재·장비 가격 상승, 기술 격차 확대 위험에 대비 필요.  \n\n### 기업 시사점  \n- **전략**: 파운드리와 팹리스 간 협업(‘상생 파운드리’) 강화, AI·자동차용 비메모리 라인 확대, 발열·전력 효율 기술 선점.  \n- **리스크 관리**: 공급망 다변화(포토레지스트·고순도 가스), R&D 비용 효율화, ESG·탄소중립 대응.  \n\n### 리스크 및 기회 요인  \n- **단기**(2025‑2026): AI·데이터센터 수요 급증 → 비메모리·NPU 성장, 그러나 경기 둔화와 수출 불확실성 지속.  \n- **중장기**(2027‑2032): ‘K‑문샷’ 목표 달성 시 메모리·AI·양자 분야에서 글로벌 2위 도약 가능, 다만 기술 격차와 인재 확보가 핵심 변수.  \n\n## 6. 결론  \n반도체 산업은 AI·자동차·데이터센터 수요가 견인하는 성장 국면에 있으며, 정부의 ‘K‑문샷’·AI NPU 파운드리 투자와 삼성·SK 하이닉스의 발열 억제·비메모리 재진출이 핵심 동력이다. 그러나 글로벌 경기 둔화와 원자재·장비 비용 상승이 리스크로 작용한다. 투자자는 메모리·AI NPU 파운드리, 고부가가치 패키징·테스트, 고다층 PCB에 집중하고, 기업은 파운드리·팹리스 협업과 발열·전력 효율 기술을 선점함으로써 2030 년까지 세계 2위 반도체 강국으로 도약할 수 있다.",
-                "news_list": [
-                    { "title": "경쟁률 16:1 '벤처·창업진흥 유공 포상'…넥스틴 금탑산업훈장 수상", "created_at": "2025-12-12T15:30:00.000000", "publisher": "머니투데이", "summary": "중소벤처기업부와 벤처기업협회는 서울 코엑스에서 컴업2025 '2025 벤처·창업진흥 유공 포상' 시상식을 개최했다고 12일 밝혔다.\n\n벤처·창업진흥 유공 포상 시상식은 벤처산업 발전과 혁신성장에 기여한 유공자를 포상하는 행사로 1999년부터 개최GO 올해로 27회째를 맞고 있다.\n\n이번 유공 포상은 벤처 30주년을 맞는 뜻깊은 해라는 점을 고려해 시상식을 두 차례로 나누어 개최했다.", "content_url": "https://www.mt.co.kr/future/2025/12/12/2025121213523813491" },
-                    { "title": "한투운용, ACE 구글밸류체인액티브 ETF 순자산액 1천억 돌파", "created_at": "2025-12-12T15:25:13.000000", "publisher": "한국경제TV", "summary": "한국투자신탁운용은 ACE 구글밸류체인액티브 상장지수펀드(ETF)의 순자산총액이 1천억원을 돌파했다고 밝혔다.\n\nACE 구글밸류체인액티브 ETF는 그래픽 처리 장치(GPU) 중심의 경쟁 구도에서, 구글이 독자적으로 구축하고 있는 텐서처리장치(TPU) 기반 생태계까지 주목하는 것이 특징이다.\n\n현재 구글은 자체 인공지능(AI) 칩인 TPU를 통해 엔비디아와 차별화된 생태계를 확장하고 있으며, 이러한 밸류체인과 투자 네트워크가 해당 ETF의 포트폴리오에 적절히 반영됐다는 평가를 받고 있다.", "content_url": "http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202512120421&t=NN" },
-                    { "title": "스페이스X '기대감'…코스피 나흘 만에 상승", "created_at": "2025-12-12T15:06:00.000000", "publisher": "SBS Biz", "summary": "기관이 1조 원 넘게 사들이면서 상승을 이끌고 있는데요.\n\n최윤하 기자, 코스피가 오랜만에 상승하고 있군요?\n\n외국인과 개인이 팔고 있지만 기관이 1조 1,500억 원 넘게 사들이면서 상승을 주도하고 있습니다.", "content_url": "https://biz.sbs.co.kr/article_hub/20000278195" },
-                    { "title": "\"GPU 3.7만장 확보, K-문샷 착수… 과기정통부, 내년 혁신 전략 발표", "created_at": "2025-12-12T14:47:00.000000", "publisher": "머니투데이", "summary": "과학기술정보통신부는 2026년을 'AI(인공지능)와 과학기술로 대도약하는 원년'으로 삼고, 국산 AI 모델 공개, 초격차 기술 확보, 지역 전략산업 육성을 골자로 한 4대 전략, 12대 과제를 발표했다.\n\n우선, 정부는 국산 AI 파운데이션 모델 프로젝트 1차 개발을 내년 1월 완료하고, 상반기 중 오픈소스로 제공한다.\n\n정부는 2026년까지 GPU(그래픽처리장치) 3만7000장을 확보해 국가 프로젝트, 대국민 AI 서비스, 산업 및 벤처 스타트업, 지역AX(인공지능 전환) 등에 우선순위를 고려해 전략적으로 배분한다.", "content_url": "https://www.mt.co.kr/tech/2025/12/12/2025121214085694915" },
-                    { "title": "엔비디아·메모리 3사 성장에 반도체 시장 분기 매출 ‘사상 최대’… “대전환기 준비해야”", "created_at": "2025-12-12T14:43:08.000000", "publisher": "조선비즈", "summary": "12일 시장조사업체 옴디아에 따르면 올 3분기 세계 반도체 시장 매출은 직전 분기 대비 14.5% 증가한 2163억달러(약 318조4370억원)로 사상 최대치를 경신했다.\n\n세계 반도체 시장 매출이 단일 분기에 2000억달러를 넘어선 건 이번이 처음이다.\n\n작년 세계 반도체 시장 규모는 전년 대비 20% 이상 성장해 6500억달러(약 957조5150억원)를 돌파했다.", "content_url": "https://biz.chosun.com/it-science/ict/2025/12/12/VBEZQUTJ5NAZVINIRWX4LFMJ74/?utm_medium=original&utm_campaign=biz" }
-                ],
-                "related_industries": ["전자기기", "통신장비", "자동차", "AI/데이터센터", "소재/부품"],
-                "related_sectors": ["C2611 - 전자집적회로 제조업", "K64992 - 금융지주회사", "C26112 - 비메모리용 및 기타 전자집적회로 제조업", "C3399 - 그외 기타 분류안된 제품 제조업", "C26299 - 그외 기타 전자부품 제조업", "C26422 - 이동전화기 제조업", "C2612 - 다이오드, 트랜지스터 및 유사 반도체소자 제조업", "C26223 - 연성 및 기타 인쇄회로기판 제조업", "K66121 - 증권 중개업"],
-                "related_items": ["메모리칩", "시스템반도체", "파운드리", "웨이퍼", "포토레지스트"]
+        // --- Database ---
+        const reportsDatabase = {
+            "semiconductor": {
+                id: "semiconductor",
+                navTitle: "반도체 산업 동향",
+                userQuestion: "반도체 산업의 최근 상황이 어때?",
+                data: {
+                    "report": "# 반도체 산업 보고서\n\n## 1. 산업 개요 및 특성  \n### 산업 정의 및 주요 특징  \n- **정의** : 반도체는 전자·통신·자동차·AI·데이터센터 등 모든 디지털 산업의 핵심 소자이며, 메모리칩·시스템반도체·파운드리·웨이퍼·포토레지스트 등을 포함한다.  \n- **핵심 기술** : 3nm 이하 초미세 공정, 고효율 발열 관리, NPU(신경망처리장치) 등 AI 전용 회로, 450mm 웨이퍼 기반 대량 생산.  \n- **주요 제품·서비스** : DRAM·NAND Flash(메모리), CIS·LDI·Analog(비메모리), 파운드리 위탁 생산, 반도체 패키징·테스트.  \n\n### 기술·시장·정책적 배경  \n- **기술** : 삼성 파운드리의 ‘발열 억제 기술’이 모바일 AP 수주 확대의 핵심으로 부각(검색결과 1). AI‑NPU 전용 파운드리 구축(검색결과 5) 등 AI‑칩 수요 급증.  \n- **시장** : 2025 년 3분기 전 세계 반도체 매출 2163 억 달러(≈ 318 조 원)로 사상 최고(검색결과 7). 한국은 메모리·시스템반도체에서 글로벌 1~2위 유지.  \n- **정책** : ‘K‑문샷 프로젝트’(검색결과 9·10) 통해 2030년까지 메모리·AI·양자·바이오 등 5대 분야를 미국 대비 85 % 수준까지 끌어올릴 목표. 정부는 AI 모델·GPU 3.7만대 확보(검색결과 4) 등 인프라 투자 확대.  \n\n### 산업 성장 동인 및 리스크 요인  \n- **성장 동인** \n  1. AI·데이터센터 수요 확대 → NPU·GPU·고성능 시스템반도체 수요 급증.  \n  2. 자동차 전동화·자율주행 → MCU·센서·CIS 수요 증가.  \n  3. 정부·민관 협력 투자(700조 원 규모)와 파운드리·팹리스 협업 생태계 조성.  \n- **리스크** \n  1. 글로벌 경기 둔화(미·중 수출 감소)와 반도체 장비 투자 둔화(경제전망 보고서).  \n  2. 기술 격차 확대 위험(TSMC·인텔·삼성 간 파운드리 경쟁 심화).  \n  3. 공급망 차질(포토레지스트·고순도 가스 등 원자재 가격 변동).  \n\n## 2. 산업 규모 및 동향  \n### 시장 규모 및 성장률  \n| 구분 | 2025 년 9월 말(억원) | 전년 대비 성장률 |\n|------|-------------------|----------------|\n| 전체 반도체 매출(국내) | 2,397,686 (삼성) + 643,200 (SK 하이닉스) + 142,868 (LG 이노텍) + 10,094 (DB하이텍) + 10,844 (하나마이크론) + 7,900 (이수페타시스) ≈ **3,212,592 억원** | 2024 년 대비 약 8 % (글로벌 20 % 성장에 비해 다소 저조) |\n| 메모리(삼성+하이닉스) | 3,040,886 억원 | 10 % 이상 성장 (DRAM·NAND 가격 회복) |\n| 비메모리(기타) | 1,171,706 억원 | 5 % 성장 (AI·자동차용 비메모리 확대) |\n\n### 주요 정책 및 제도 변화  \n- **‘K‑문샷’**: 메모리·AI·양자·바이오·희토류 5대 분야에 2030년까지 700조 원 규모 R&D 투자.  \n- **AI NPU 파운드리**: 정부 예산 1.2조 원 투입, 민관 합동 파운드리 구축(검색결과 5).  \n- **상생 파운드리**: 4.5조 원 투입해 팹리스 10배 확대(검색결과 4).  \n\n### 투자 동향  \n- **글로벌**: TSMC·인텔 등 해외 파운드리 200~300조 원 규모 신규 투자(검색결과 2).  \n- **국내**: 삼성·SK 하이닉스는 기존 설비 확대와 AI 전용 라인 구축에 집중, 정부·민관 협력 펀드 조성.  \n\n### 최근 뉴스 트렌드  \n1. **발열 억제 기술** – 모바일 AP 수주 확대(검색결과 1).  \n2. **AI NPU 파운드리** – 첫 민관 합동 파운드리(검색결과 5).  \n3. **K‑문샷** – 2030년 목표와 2026년 AI·양자·바이오 전략 발표(검색결과 9·10).  \n4. **시장 규모 사상 최고** – 3분기 매출 318 조 원 돌파(검색결과 7).  \n\n## 3. 전후방산업 관계  \n### 전방산업 (고객/수요처)  \n- **스마트폰·태블릿** – 삼성·LG 이노텍의 카메라·디스플레이 모듈.  \n- **데이터센터·클라우드** – 메모리·시스템반도체 수요 급증.  \n- **자동차** – MCU·CIS·센서 수요 확대 (현대모비스·LG 이노텍 연계).  \n- **AI·로보틱스** – NPU·GPU 수요가 팹리스·파운드리와 직접 연결.  \n\n### 후방산업 (공급/지원)  \n- **반도체 장비** – 세메스·ASML 등 고정비 비중 높은 장비 공급.  \n- **소재·부품** – 포토레지스트·웨이퍼·고순도 가스 등.  \n- **패키징·테스트** – 하나마이크론·DB하이텍이 핵심 역할 수행.  \n\n### 산업 생태계 (Value Chain)  \n1. **설계(Fabless/팹리스)** – NPU·AI·GPU 설계 기업.  \n2. **파운드리** – 삼성·SK 하이닉스·DB하이텍(8인치 비메모리).  \n3. **패키징·테스트** – 하나마이크론·DB하이텍.  \n4. **시스템 통합** – 스마트폰·자동차 OEM(삼성·LG·현대모비스).  \n\n## 4. 주요 기업 현황  \n### 주요 기업 리스트 및 분석 테이블  \n\n| 기업명 | 사업영역 | 주요 제품/서비스 | 특징 및 성장동력 | 재무 정보 (2025‑09‑30) |\n|--------|----------|------------------|------------------|------------------------|\n| 삼성전자 | 메모리·시스템반도체·파운드리·디스플레이 | DRAM·NAND·AP·GPU·OLED | 발열 억제 기술·AI NPU 파운드리 투자 | 매출 2,397,686 억원 / 영업이익 235,274 억원 |\n| SK하이닉스 | 메모리·비메모리·CIS | DRAM·NAND·CIS | 메모리 가격 회복·비메모리 CIS 재진출 | 매출 643,200 억원 / 영업이익 280,367 억원 |\n| LG이노텍 | 광학솔루션·반도체 기판·전장부품 | 카메라 모듈·포토마스크·PCB | 자동차·VR·XR용 고부가가치 모듈 확대 | 매출 142,868 억원 / 영업이익 3,403 억원 |\n| DB하이텍 | 8인치 비메모리 파운드리·브랜드 IC | LDI·Analog·CIS·Logic | 고정비 구조·특수 공정 역량 | 매출 10,094 억원 / 영업이익 2,069 억원 |\n| 하나마이크론 | 반도체 패키징·테스트 | 450mm 테스트 웨이퍼·패키징 | 파운드리·팹리스 연계 확대 | 매출 10,844 억원 / 영업이익 803 억원 |\n| 이수페타시스 | 고다층 PCB(MLB) | 고다층 PCB | 통신·네트워크·휴대폰용 고밀도 PCB | 매출 7,900 억원 / 영업이익 1,482 억원 |\n\n### 기업별 주요 동향  \n- **삼성전자**: 모바일 AP 발열 억제 기술 적용으로 2025 년 모바일 파운드리 수주 확대. AI NPU 전용 라인 구축 계획 발표.  \n- **SK하이닉스**: 메모리 가격 회복과 동시에 비메모리 CIS 사업 재진출, 2026 년까지 CIS 매출 30 % 성장 목표.  \n- **LG이노텍**: 자동차 전장 부품 수주 확대, XR·VR용 카메라 모듈 신제품 라인업 발표.  \n- **DB하이텍**: 8인치 파운드리 수주 증가, 2025 년 말까지 연간 생산량 1.2 배 확대 목표.  \n- **하나마이크론**: 450mm 테스트 웨이퍼·패키징 라인 투자, 팹리스와의 장기 공급 계약 체결.  \n- **이수페타시스**: 고다층 PCB 수출 비중 85 % 달성, AI·데이터센터용 고밀도 PCB 신규 주문 증가.  \n\n## 5. 산업 영향 및 시사점  \n### 주요 영향 요인  \n- **정책**: ‘K‑문샷’과 AI NPU 파운드리 투자로 정부 주도 R&D 확대가 지속될 전망.  \n- **기술**: 발열 억제·450mm 웨이퍼·AI 전용 NPU 등 차세대 공정·설계 기술이 경쟁우위 결정.  \n- **글로벌**: TSMC·인텔의 대규모 투자와 미국·중국 수출 둔화가 시장 변동성을 높임.  \n\n### 투자자 시사점  \n- **기회**: 메모리·AI NPU 파운드리, 고부가가치 패키징·테스트, 고다층 PCB 등 성장세가 뚜렷함.  \n- **주의**: 글로벌 경기·수출 둔화, 원자재·장비 가격 상승, 기술 격차 확대 위험에 대비 필요.  \n\n### 기업 시사점  \n- **전략**: 파운드리와 팹리스 간 협업(‘상생 파운드리’) 강화, AI·자동차용 비메모리 라인 확대, 발열·전력 효율 기술 선점.  \n- **리스크 관리**: 공급망 다변화(포토레지스트·고순도 가스), R&D 비용 효율화, ESG·탄소중립 대응.  \n\n### 리스크 및 기회 요인  \n- **단기**(2025‑2026): AI·데이터센터 수요 급증 → 비메모리·NPU 성장, 그러나 경기 둔화와 수출 불확실성 지속.  \n- **중장기**(2027‑2032): ‘K‑문샷’ 목표 달성 시 메모리·AI·양자 분야에서 글로벌 2위 도약 가능, 다만 기술 격차와 인재 확보가 핵심 변수.  \n\n## 6. 결론  \n반도체 산업은 AI·자동차·데이터센터 수요가 견인하는 성장 국면에 있으며, 정부의 ‘K‑문샷’·AI NPU 파운드리 투자와 삼성·SK 하이닉스의 발열 억제·비메모리 재진출이 핵심 동력이다. 그러나 글로벌 경기 둔화와 원자재·장비 비용 상승이 리스크로 작용한다. 투자자는 메모리·AI NPU 파운드리, 고부가가치 패키징·테스트, 고다층 PCB에 집중하고, 기업은 파운드리·팹리스 협업과 발열·전력 효율 기술을 선점함으로써 2030 년까지 세계 2위 반도체 강국으로 도약할 수 있다.",
+                    "news_list": [
+                        { "title": "경쟁률 16:1 '벤처·창업진흥 유공 포상'…넥스틴 금탑산업훈장 수상", "created_at": "2025-12-12T15:30:00.000000", "publisher": "머니투데이", "summary": "중소벤처기업부와 벤처기업협회는 서울 코엑스에서 컴업2025 '2025 벤처·창업진흥 유공 포상' 시상식을 개최했다고 12일 밝혔다.\n\n벤처·창업진흥 유공 포상 시상식은 벤처산업 발전과 혁신성장에 기여한 유공자를 포상하는 행사로 1999년부터 개최GO 올해로 27회째를 맞고 있다.\n\n이번 유공 포상은 벤처 30주년을 맞는 뜻깊은 해라는 점을 고려해 시상식을 두 차례로 나누어 개최했다.", "content_url": "https://www.mt.co.kr/future/2025/12/12/2025121213523813491" },
+                        { "title": "한투운용, ACE 구글밸류체인액티브 ETF 순자산액 1천억 돌파", "created_at": "2025-12-12T15:25:13.000000", "publisher": "한국경제TV", "summary": "한국투자신탁운용은 ACE 구글밸류체인액티브 상장지수펀드(ETF)의 순자산총액이 1천억원을 돌파했다고 밝혔다.\n\nACE 구글밸류체인액티브 ETF는 그래픽 처리 장치(GPU) 중심의 경쟁 구도에서, 구글이 독자적으로 구축하고 있는 텐서처리장치(TPU) 기반 생태계까지 주목하는 것이 특징이다.\n\n현재 구글은 자체 인공지능(AI) 칩인 TPU를 통해 엔비디아와 차별화된 생태계를 확장하고 있으며, 이러한 밸류체인과 투자 네트워크가 해당 ETF의 포트폴리오에 적절히 반영됐다는 평가를 받고 있다.", "content_url": "http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202512120421&t=NN" },
+                        { "title": "스페이스X '기대감'…코스피 나흘 만에 상승", "created_at": "2025-12-12T15:06:00.000000", "publisher": "SBS Biz", "summary": "기관이 1조 원 넘게 사들이면서 상승을 이끌고 있는데요.\n\n최윤하 기자, 코스피가 오랜만에 상승하고 있군요?\n\n외국인과 개인이 팔고 있지만 기관이 1조 1,500억 원 넘게 사들이면서 상승을 주도하고 있습니다.", "content_url": "https://biz.sbs.co.kr/article_hub/20000278195" },
+                        { "title": "\"GPU 3.7만장 확보, K-문샷 착수… 과기정통부, 내년 혁신 전략 발표", "created_at": "2025-12-12T14:47:00.000000", "publisher": "머니투데이", "summary": "과학기술정보통신부는 2026년을 'AI(인공지능)와 과학기술로 대도약하는 원년'으로 삼고, 국산 AI 모델 공개, 초격차 기술 확보, 지역 전략산업 육성을 골자로 한 4대 전략, 12대 과제를 발표했다.\n\n우선, 정부는 국산 AI 파운데이션 모델 프로젝트 1차 개발을 내년 1월 완료하고, 상반기 중 오픈소스로 제공한다.\n\n정부는 2026년까지 GPU(그래픽처리장치) 3만7000장을 확보해 국가 프로젝트, 대국민 AI 서비스, 산업 및 벤처 스타트업, 지역AX(인공지능 전환) 등에 우선순위를 고려해 전략적으로 배분한다.", "content_url": "https://www.mt.co.kr/tech/2025/12/12/2025121214085694915" },
+                        { "title": "엔비디아·메모리 3사 성장에 반도체 시장 분기 매출 ‘사상 최대’… “대전환기 준비해야”", "created_at": "2025-12-12T14:43:08.000000", "publisher": "조선비즈", "summary": "12일 시장조사업체 옴디아에 따르면 올 3분기 세계 반도체 시장 매출은 직전 분기 대비 14.5% 증가한 2163억달러(약 318조4370억원)로 사상 최대치를 경신했다.\n\n세계 반도체 시장 매출이 단일 분기에 2000억달러를 넘어선 건 이번이 처음이다.\n\n작년 세계 반도체 시장 규모는 전년 대비 20% 이상 성장해 6500억달러(약 957조5150억원)를 돌파했다.", "content_url": "https://biz.chosun.com/it-science/ict/2025/12/12/VBEZQUTJ5NAZVINIRWX4LFMJ74/?utm_medium=original&utm_campaign=biz" }
+                    ],
+                    "related_industries": ["전자기기", "통신장비", "자동차", "AI/데이터센터", "소재/부품"],
+                    "related_sectors": ["C2611 - 전자집적회로 제조업", "K64992 - 금융지주회사", "C26112 - 비메모리용 및 기타 전자집적회로 제조업", "C3399 - 그외 기타 분류안된 제품 제조업", "C26299 - 그외 기타 전자부품 제조업", "C26422 - 이동전화기 제조업", "C2612 - 다이오드, 트랜지스터 및 유사 반도체소자 제조업", "C26223 - 연성 및 기타 인쇄회로기판 제조업", "K66121 - 증권 중개업"],
+                    "related_items": ["메모리칩", "시스템반도체", "파운드리", "웨이퍼", "포토레지스트"]
+                }
+            },
+            "gasvalve": {
+                id: "gasvalve",
+                navTitle: "가스밸브 산업 동향",
+                userQuestion: "가스밸브 산업에 대한 내용도 알려줘.",
+                data: {
+                    "report": "# 가스밸브 산업 보고서  \n\n## 1. 산업 개요 및 특성  \n\n### 산업 정의 및 주요 특징  \n- **정의** : 가스·액체·고압 가스(예: LNG, 액화수소) 운송·저장·분배 설비에 사용되는 압력조절·차단·안전장치.  \n- **핵심 제품** : 가스차단밸브, 압력조절기, 가스유량계, 초저온 매뉴버러블 스윙 체크 밸브 등.  \n- **특징** : 고압·저온 환경에서도 누출 방지·역류 차단이 필수이며, 최근 스마트홈·IoT 연계 가스밸브 제어 기능이 추가되고 있음.  \n\n### 기술/시장/정책적 배경  \n- **기술** : 초저온(‑253℃) 환경에서도 작동 가능한 스윙 체크 밸브 국산화, 매뉴버러블(수동 핸들) 기능을 통한 비상 개방 기술 등.  \n- **정책** : 한국가스안전공사, 319억 원 투자 ‘액화수소 시험·인증센터’ 설립(2023‑24) → 액화수소 설비(밸브 포함) 인증 의무화.  \n- **시장** : LNG·수소 인프라 확대와 스마트홈 보급이 가스밸브 수요를 동시에 확대하고 있음.  \n\n### 산업 성장 동인 및 리스크 요인  \n| 성장 동인 | 설명 |\n|---|---|\n| 수소·액화수소 인프라 확대 | 정부·민간 투자 확대 → 고압·초저온 밸브 수요 급증 |\n| LNG 수송·벙커링 증가 | 국제 LNG 수요 회복 → 내·외부 차단밸브 교체·신규 설치 |\n| 스마트홈·IoT 연계 | 가스밸브 원격 제어·안전 모니터링 기능 수요 증가 |\n| 인증·안전 규제 강화 | 시험·인증센터 운영 → 인증 획득이 시장 진입 필수조건 |\n\n| 리스크 요인 | 설명 |\n|---|---|\n| 고도화 R&D 비용 | 초저온·고압 기술 확보에 막대한 투자 필요 |\n| 해외 다국적 기업 경쟁 | Parker·Emerson·Honeywell 등과의 가격·기술 경쟁 |\n| 규제 변동성 | 안전 기준 강화·인증 절차 변화 시 적응 비용 증가 |\n| 원자재 가격 변동 | 황동·스테인리스 등 핵심 소재 가격 상승 압박 |\n\n## 2. 산업 규모 및 동향  \n\n### 시장 규모 및 성장률  \n- 구체적인 매출 규모는 공개되지 않았지만, **에쎈테크(043340)**가 2025년 3분기 기준 **406.4억 원**(매출)·**8.85억 원**(영업이익)을 기록, 전년 동기 대비 매출 성장률 약 48%(전분기 대비) 수준으로 가스밸브 부문의 성장성을 시사.  \n\n### 주요 정책 및 제도 변화  \n- 2023년 한국가스안전공사, 액화수소 시험·인증센터 가동(투자 319억 원) → 액화수소 전용 밸브·안전장치 인증 의무화.  \n- 정부, ‘수소경제 로드맵’에 따라 2030년까지 수소 충전소 1,000곳 이상 구축 목표, 이에 따라 고압·초저온 밸브 수요가 급증할 전망.  \n\n### 투자 동향  \n- 현재 공개된 VC·기관 투자 데이터는 없으나, **수소·액화수소 설비 인증센터** 설립과 정부 보조금 확대가 관련 기업(밸브 제조업체) 투자 매력도를 높이고 있음.  \n\n### 최근 뉴스 트렌드  \n1. **초저온 매뉴버러블 스윙 체크 밸브 국산화** – PK밸브가 LNG·수소 이송 시 비상 개방 가능 기술 확보, 조기 상용화 목표.  \n2. **액화수소 시험·인증센터 개소** – 국내 최초 액화수소 저장·운송 설비(밸브 포함) 인증 체계 구축, 시장 진입 장벽 상승.  \n\n## 3. 전후방산업 관계  \n\n### 전방산업 (고객/수요처)  \n- **가스·전력·수소 충전소** : 가스·수소 공급망 운영업체, LNG 터미널, 수소 충전소 운영사.  \n- **스마트홈 OEM** : 가스밸브 원격 제어·안전 모니터링을 통합하는 IoT 플랫폼 업체.  \n\n### 후방산업 (공급/지원)  \n- **원자재** : 황동, 스테인리스, 특수 합금 등.  \n- **가공·단조** : 황동단조·볼밸브 전문 업체(에쎈테크 등).  \n- **시험·인증** : 한국가스안전공사·액화수소 시험센터.  \n\n### 산업 생태계 (Value Chain)  \n1. **원자재 공급** → 2. **단조·가공·조립**(에쎈테크, 황동볼밸브 업체) → 3. **시험·인증**(가스안전공사) → 4. **시스템 통합**(스마트홈·IoT 기업) → 5. **최종 사용자**(주거·산업·수소 충전소).  \n\n## 4. 주요 기업 현황  \n\n### 주요 기업 리스트 및 분석 테이블  \n\n| 기업명 | 사업영역 | 주요 제품/서비스 | 특징 및 성장동력 | 재무 정보 (2025년 3Q) |\n|--------|----------|------------------|------------------|------------------------|\n| **에쎈테크** (043340) | 황동단조·가공·조립 | 황동볼밸브, 냉동볼밸브, LPG밸브, 가스차단밸브 | 일관된 연속 생산체제 → 외부 의존도 낮음, 다국적 기업(Parker·Emerson·Honeywell)과 장기 공급계약 | 매출 406.4억 원, 영업이익 8.85억 원 |\n| **경동나비엔 계열 – 타임기연아시아(주)** | 가스밸브 제조 | 가스보일러용 가스밸브, 고압·저온 밸브 | 수소·액화수소 설비 인증 연계, 그룹 내 열교환·버너와 시너지 | (재무 공개 없음) |\n| **PK밸브** (언급된 기업) | 초저온 스윙 체크 밸브 | 매뉴버러블 스윙 체크 밸브(초저온) | LNG·수소 이송 시 비상 개방 기능, 국산화 성공 | (재무 공개 없음) |\n\n### 기업별 주요 동향  \n- **에쎈테크**: 2025년 3분기 매출 급증, 다국적 기업과의 장기 공급 계약 지속 확대, 수소·액화수소 전용 밸브 라인업 개발 착수.  \n- **타임기연아시아(주)**: 경동나비엔 그룹의 수소·액화수소 인증센터와 연계해 신규 인증 밸브 생산 예정, 해외(북미·중국) 시장 진출 검토.  \n- **PK밸브**: 초저온 매뉴버러블 스윙 체크 밸브 국산화 성공, 2024‑25년 내 LNG·수소 운송 라인에 적용 목표.  \n\n## 5. 산업 영향 및 시사점  \n\n### 주요 영향 요인  \n- **정책·규제**: 액화수소 인증제도 도입 → 인증 획득 기업에 대한 시장 독점 가능성.  \n- **기술 트렌드**: 초저온·고압 밸브, 매뉴버러블 비상 개방, IoT 연계 원격 제어.  \n- **글로벌 시장**: LNG·수소 수출 확대와 함께 해외 인증(ISO, API) 요구 증가.  \n\n### 투자자 시사점  \n- **투자 기회**: 수소·액화수소 전용 고압·초저온 밸브 시장은 2025‑2030년 연평균 12% 이상 성장 전망. 인증센터와 연계된 기업은 진입 장벽이 높아 장기적 수익성 확보 가능.  \n- **주의 사항**: 기술 개발 비용 회수 기간이 길고, 다국적 기업과의 가격 경쟁이 심화될 수 있음.  \n\n### 기업 시사점  \n- **사업 기회**: 인증센터와 협업해 ‘인증 전용 밸브’ 라인업 구축, 스마트홈·IoT 연계 원격 제어 기능 추가.  \n- **전략적 고려사항**: 원자재 가격 변동에 대비한 장기 계약, 해외 인증 획득, R&D 투자 확대.  \n\n### 리스크 및 기회 요인  \n- **단기(1‑2년)**: 인증센터 가동에 따른 신규 주문 급증, 하지만 인증 절차 지연 시 공급 차질 위험.  \n- **중장기(3‑5년)**: 수소 충전소·액화수소 운송 인프라 확대에 따라 지속적인 수요 증가, 다국적 기업과의 협업·공동 개발 기회 확대.  \n\n## 6. 결론  \n가스밸브 산업은 **수소·액화수소 인프라 확대**, **초저온·고압 기술 국산화**, **스마트홈 연계**라는 세 축을 중심으로 급격히 성장하고 있다. 정부의 인증제도와 수소경제 로드맵이 시장 진입 장벽을 높이는 동시에 인증을 획득한 기업에게는 **높은 진입 장벽과 안정적인 수익 구조**를 제공한다. 에쎈테크와 같은 국내 제조업체가 **다국적 기업과의 공급 계약** 및 **R&D 투자**를 지속한다면, 향후 5년간 **수소·액화수소 전용 고성능 밸브 시장**에서 선도적 위치를 확보할 가능성이 크다. 투자자는 **인증 획득 기업**에 집중하고, 기업은 **기술·인증·스마트연계** 전략을 동시에 추진하는 것이 핵심 성공 요인이다.",
+                    "news_list": [],
+                    "related_industries": ["가스설비", "에너지", "화학", "자동차", "건설"],
+                    "related_sectors": ["C29133 - 탭, 밸브 및 유사장치 제조업"],
+                    "related_items": ["압력조절기", "가스유량계", "가스배관", "가스차단밸브", "가스안전장치"]
+                }
             }
         };
 
-        const { report, news_list, related_industries, related_sectors, related_items } = apiResponse.data;
+        let currentReportId = 'semiconductor';
+        let currentTab = 'report';
 
         // --- Helper Functions ---
         const formatRelativeTime = (dateString) => {
@@ -163,7 +249,6 @@
         };
 
         // --- Renderer Functions ---
-
         const renderMarkdown = (content) => {
             const lines = content.split('\n');
             let html = '<div class="prose max-w-none font-sans">';
@@ -176,14 +261,12 @@
                     tableRows.push(line);
                 } else {
                     if (inTable) {
-                        // Render Table
                         html += '<div class="overflow-x-auto my-6 border border-gray-200 rounded-lg shadow-sm bg-white"><table class="min-w-full divide-y divide-gray-200 text-sm"><thead><tr>';
                         const headers = tableRows[0].split('|').filter(c => c.trim());
                         headers.forEach(h => {
                             html += `<th class="px-4 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">${h.trim()}</th>`;
                         });
                         html += '</tr></thead><tbody class="bg-white divide-y divide-gray-200">';
-                        
                         tableRows.slice(2).forEach((row, idx) => {
                             html += `<tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">`;
                             row.split('|').filter(c => c.trim()).forEach(cell => {
@@ -214,6 +297,18 @@
                     }
                 }
             });
+            if(inTable) { // End table if file ends with table
+                html += '<div class="overflow-x-auto my-6 border border-gray-200 rounded-lg shadow-sm bg-white"><table class="min-w-full divide-y divide-gray-200 text-sm"><thead><tr>';
+                const headers = tableRows[0].split('|').filter(c => c.trim());
+                headers.forEach(h => { html += `<th class="px-4 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">${h.trim()}</th>`; });
+                html += '</tr></thead><tbody class="bg-white divide-y divide-gray-200">';
+                tableRows.slice(2).forEach((row, idx) => {
+                    html += `<tr class="${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">`;
+                    row.split('|').filter(c => c.trim()).forEach(cell => { html += `<td class="px-4 py-3 text-gray-700 whitespace-pre-wrap"><span>${parseInline(cell.trim())}</span></td>`; });
+                    html += '</tr>';
+                });
+                html += '</tbody></table></div>';
+            }
             html += '</div>';
             return html;
         };
@@ -251,67 +346,136 @@
             return `<span class="px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-colors ${styles[type]}">${label}</span>`;
         };
 
+        const renderSidebarItem = (id, title, isActive) => {
+            const bgClass = isActive ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'hover:bg-gray-50 text-gray-600 border-transparent';
+            const iconColor = isActive ? 'text-indigo-500' : 'text-gray-400';
+            
+            return `
+            <div onclick="loadReport('${id}')" class="flex items-center gap-3 px-3 py-2.5 rounded-xl border cursor-pointer transition-all ${bgClass} group">
+                <i data-lucide="message-square" width="16" class="${iconColor} group-hover:text-indigo-500"></i>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium truncate">${title}</p>
+                    <p class="text-[10px] text-gray-400 truncate mt-0.5">Today</p>
+                </div>
+                ${isActive ? '<div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>' : ''}
+            </div>`;
+        };
+
         // --- View Logic ---
+        function loadReport(reportId) {
+            currentReportId = reportId;
+            const reportData = reportsDatabase[reportId];
+            
+            // 1. Update Sidebar
+            const sidebarList = document.getElementById('sidebar-list');
+            sidebarList.innerHTML = Object.keys(reportsDatabase).map(key => 
+                renderSidebarItem(key, reportsDatabase[key].navTitle, key === currentReportId)
+            ).join('');
+
+            // 2. Update User Question
+            document.getElementById('user-question-text').innerText = reportData.userQuestion;
+            
+            // 3. Update Header
+            // document.getElementById('header-title').innerText = reportData.navTitle + " 보고서";
+
+            // 4. Render Content
+            switchTab(currentTab); // Re-renders content based on current tab preference
+
+            // 5. Scroll to top
+            document.getElementById('main-container').scrollTop = 0;
+            
+            lucide.createIcons();
+        }
 
         function switchTab(tab) {
+            currentTab = tab;
             const contentDiv = document.getElementById('content-body');
             const tabReport = document.getElementById('tab-report');
             const tabNews = document.getElementById('tab-news');
-            
+            const activeData = reportsDatabase[currentReportId].data;
+            const newsList = activeData.news_list || [];
+
+            // Style Tabs
+            const activeClass = "px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors bg-white text-indigo-600 shadow-sm ring-1 ring-gray-200";
+            const inactiveClass = "px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors text-gray-500 hover:text-gray-700 hover:bg-gray-100/80";
+
             if (tab === 'report') {
-                tabReport.className = "px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors bg-white text-indigo-600 shadow-sm";
-                tabNews.className = "px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors text-gray-500 hover:text-gray-700";
+                tabReport.className = activeClass;
+                tabNews.className = inactiveClass;
                 
-                let html = `<div class="animate-fadeIn">` + renderMarkdown(report);
-                html += `
-                    <div class="mt-10 pt-6 border-t border-gray-100">
-                        <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">최신 뉴스 하이라이트</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${news_list.slice(0, 2).map(renderNewsCard).join('')}
-                        </div>
-                        <button onclick="switchTab('news')" class="mt-4 text-sm text-indigo-600 font-medium hover:underline flex items-center">
-                            뉴스 더보기 <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
-                        </button>
-                    </div></div>`;
+                let html = `<div class="animate-fadeIn">` + renderMarkdown(activeData.report);
+                
+                // Show mini news section in report if news exists
+                if (newsList.length > 0) {
+                    html += `
+                        <div class="mt-10 pt-6 border-t border-gray-100">
+                            <h4 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <i data-lucide="zap" width="14" class="text-yellow-500"></i> 최신 뉴스 하이라이트
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                ${newsList.slice(0, 2).map(renderNewsCard).join('')}
+                            </div>
+                            <button onclick="switchTab('news')" class="mt-4 text-sm text-indigo-600 font-medium hover:underline flex items-center group">
+                                뉴스 더보기 <i data-lucide="arrow-right" class="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div></div>`;
+                } else {
+                    html += `</div>`; // Close fadein div
+                }
                 contentDiv.innerHTML = html;
             } else {
-                tabReport.className = "px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors text-gray-500 hover:text-gray-700";
-                tabNews.className = "px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors bg-white text-indigo-600 shadow-sm";
+                tabReport.className = inactiveClass;
+                tabNews.className = activeClass;
                 
-                contentDiv.innerHTML = `
-                    <div class="animate-fadeIn">
-                        <h3 class="text-xl font-bold text-gray-900 mb-6">관련 뉴스 브리핑</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            ${news_list.map(renderNewsCard).join('')}
-                        </div>
-                    </div>`;
+                if (newsList.length > 0) {
+                    contentDiv.innerHTML = `
+                        <div class="animate-fadeIn">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                <span class="w-1 h-6 bg-indigo-500 rounded-full"></span> 관련 뉴스 브리핑
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                ${newsList.map(renderNewsCard).join('')}
+                            </div>
+                        </div>`;
+                } else {
+                    contentDiv.innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-64 text-gray-400 animate-fadeIn">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="newspaper" width="32" class="text-gray-300"></i>
+                            </div>
+                            <p>관련된 최신 뉴스가 없습니다.</p>
+                        </div>`;
+                }
             }
+
+            // Update Chips
+            const chipContainer = document.getElementById('chips-container');
+            let chipsHtml = '';
+            
+            if (activeData.related_industries) {
+                chipsHtml += `<div class="flex items-start gap-2"><span class="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">관련 산업</span><div class="flex flex-wrap gap-2">` + 
+                    activeData.related_industries.map(t => renderChip(t, 'industry')).join('') + `</div></div>`;
+            }
+            if (activeData.related_items) {
+                chipsHtml += `<div class="flex items-start gap-2"><span class="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">주요 품목</span><div class="flex flex-wrap gap-2">` + 
+                    activeData.related_items.map(t => renderChip(t, 'item')).join('') + `</div></div>`;
+            }
+            if (activeData.related_sectors) {
+                chipsHtml += `<div class="flex items-start gap-2"><span class="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">세부 섹터</span><div class="flex flex-wrap gap-2">` + 
+                    activeData.related_sectors.slice(0, 4).map(t => renderChip(t.split(' - ')[1] || t, 'sector')).join('') + 
+                    (activeData.related_sectors.length > 4 ? `<span class="text-xs text-gray-400 flex items-center px-2">+${activeData.related_sectors.length - 4} 더보기</span>` : '') + 
+                    `</div></div>`;
+            }
+            chipContainer.innerHTML = chipsHtml;
+
+            // Update News Count Badge
+            document.getElementById('news-count').innerText = newsList.length;
+
             lucide.createIcons();
         }
 
         function init() {
-            // Init Chips
-            const chipContainer = document.getElementById('chips-container');
-            let chipsHtml = '';
-            
-            chipsHtml += `<div class="flex items-start gap-2"><span class="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">관련 산업</span><div class="flex flex-wrap gap-2">` + 
-                related_industries.map(t => renderChip(t, 'industry')).join('') + `</div></div>`;
-                
-            chipsHtml += `<div class="flex items-start gap-2"><span class="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">주요 품목</span><div class="flex flex-wrap gap-2">` + 
-                related_items.map(t => renderChip(t, 'item')).join('') + `</div></div>`;
-                
-            chipsHtml += `<div class="flex items-start gap-2"><span class="text-xs font-bold text-gray-400 uppercase mt-1.5 w-16">세부 섹터</span><div class="flex flex-wrap gap-2">` + 
-                related_sectors.slice(0, 4).map(t => renderChip(t.split(' - ')[1] || t, 'sector')).join('') + 
-                (related_sectors.length > 4 ? `<span class="text-xs text-gray-400 flex items-center px-2">+${related_sectors.length - 4} 더보기</span>` : '') + 
-                `</div></div>`;
-
-            chipContainer.innerHTML = chipsHtml;
-
-            // Init News Count
-            document.getElementById('news-count').innerText = news_list.length;
-
-            // Initial Render
-            switchTab('report');
+            loadReport('semiconductor'); // Default load
         }
 
         // Run Init
