@@ -52,6 +52,13 @@
             height: 3px;
             background-color: #2563eb;
         }
+
+        /* Mobile Nav Active State */
+        .mobile-nav-link.active {
+            background-color: #eff6ff; /* blue-50 */
+            border-left-color: #2563eb; /* blue-600 */
+            color: #1e40af; /* blue-800 */
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -93,7 +100,7 @@
                 <!-- Right Side Actions -->
                 <div class="flex items-center space-x-4">
                     <!-- Search Icon (Optional) -->
-                    <button class="text-gray-400 hover:text-gray-600">
+                    <button class="text-gray-400 hover:text-gray-600 hidden sm:block">
                         <i class="fas fa-search"></i>
                     </button>
                     
@@ -116,11 +123,23 @@
                     
                     <!-- Mobile menu button -->
                     <div class="flex items-center md:hidden">
-                         <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                         <button type="button" id="mobile-menu-btn" class="text-gray-400 hover:text-gray-500 focus:outline-none p-2" aria-controls="mobile-menu" aria-expanded="false">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div class="md:hidden hidden bg-white border-t border-gray-200 absolute w-full left-0 shadow-lg" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1 px-4">
+                <a href="#" onclick="loadModule('deal')" id="mobile-nav-deal" class="mobile-nav-link active block pl-3 pr-4 py-3 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition">딜 소싱</a>
+                <a href="#" onclick="loadModule('finance')" id="mobile-nav-finance" class="mobile-nav-link block pl-3 pr-4 py-3 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition">자금 조달</a>
+                <a href="#" onclick="loadModule('tech')" id="mobile-nav-tech" class="mobile-nav-link block pl-3 pr-4 py-3 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition">기술 이전</a>
+                <a href="#" onclick="loadModule('edu')" id="mobile-nav-edu" class="mobile-nav-link block pl-3 pr-4 py-3 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition">교육</a>
+                <a href="#" onclick="loadModule('policy')" id="mobile-nav-policy" class="mobile-nav-link block pl-3 pr-4 py-3 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition">지원</a>
+                <a href="#" onclick="loadModule('community')" id="mobile-nav-community" class="mobile-nav-link block pl-3 pr-4 py-3 border-l-4 text-base font-medium border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition">커뮤니티</a>
             </div>
         </div>
     </header>
@@ -860,6 +879,14 @@
         // Initialize with Deal Sourcing (Default)
         document.getElementById('content-area').innerHTML = contentTemplates.deal;
 
+        // Mobile Menu Toggle Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
         // Navigation Logic
         function loadModule(moduleId) {
             // 1. Update Content with Fade Animation
@@ -869,13 +896,28 @@
             container.innerHTML = contentTemplates[moduleId] || '<p class="text-center p-10 text-gray-500">준비 중인 페이지입니다.</p>';
             container.classList.add('animate-fade-in');
 
-            // 2. Update Nav Styling
+            // 2. Update Desktop Nav Styling
             document.querySelectorAll('.nav-link').forEach(el => {
                 el.classList.remove('active');
             });
             const activeNav = document.getElementById('nav-' + moduleId);
             if(activeNav) {
                 activeNav.classList.add('active');
+            }
+
+            // 3. Update Mobile Nav Styling & Close Menu
+            document.querySelectorAll('.mobile-nav-link').forEach(el => {
+                el.classList.remove('active');
+                el.classList.remove('bg-blue-50', 'border-blue-600', 'text-blue-800'); // Clean up manual classes if any
+            });
+            const activeMobileNav = document.getElementById('mobile-nav-' + moduleId);
+            if(activeMobileNav) {
+                activeMobileNav.classList.add('active');
+            }
+            
+            // Close mobile menu after selection
+            if(mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
             }
         }
     </script>
