@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인수 창업 지원 서비스 - All in One Platform</title>
+    <title>Listing - 인수창업(ETA) 지원 플랫폼</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -15,23 +17,7 @@
             background-color: #f8f9fc;
         }
 
-        /* Flippa-like Blue Color Variables */
-        :root {
-            --primary-blue: #2563eb;
-            --hover-blue: #1d4ed8;
-        }
-
-        .tab-btn.active {
-            border-color: var(--primary-blue);
-            color: var(--primary-blue);
-            background-color: #eff6ff;
-        }
-
-        .tab-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        
-        /* Custom Scrollbar for Tabs on mobile */
+        /* Scrollbar hiding */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -39,415 +25,869 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Navigation Active State */
+        .nav-link {
+            position: relative;
+            color: #4b5563; /* gray-600 */
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: #2563eb; /* blue-600 */
+        }
+
+        .nav-link.active {
+            color: #2563eb; /* blue-600 */
+            font-weight: 700;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -24px; /* Header height adjustment */
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #2563eb;
+        }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-    <header class="pt-16 pb-12 text-center px-4">
-        <p class="text-gray-600 font-medium mb-2">Listing.co M&A Extension</p>
-        <h1 class="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
-            성공적인 인수 창업의 모든 것.
-        </h1>
-        <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
-            교육부터 자금, 딜 클로징까지 원스톱 지원
-        </h2>
-        <p class="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
-            이미 좋은 매물을 찾으셨나요? 혹은 찾고 계신가요? <br>
-            인수 창업에 특화된 7가지 핵심 서비스를 통해 안전하고 확실하게 거래를 완료하세요.
-        </p>
-        <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition shadow-lg text-lg">
-            지금 시작하기 <i class="fas fa-arrow-right ml-2"></i>
-        </button>
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo & Menu -->
+                <div class="flex">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="loadModule('deal')">
+                        <span class="text-2xl font-bold text-gray-900 tracking-tight">Listing<span class="text-blue-600">.</span></span>
+                    </div>
+                    
+                    <!-- Desktop Nav Menu -->
+                    <div class="hidden md:ml-10 md:flex md:space-x-8 h-16 items-center">
+                        <a href="#" onclick="loadModule('deal')" id="nav-deal" class="nav-link active inline-flex items-center px-1 pt-1 text-sm">
+                            딜 소싱
+                        </a>
+                        <a href="#" onclick="loadModule('finance')" id="nav-finance" class="nav-link inline-flex items-center px-1 pt-1 text-sm">
+                            자금 조달
+                        </a>
+                        <a href="#" onclick="loadModule('tech')" id="nav-tech" class="nav-link inline-flex items-center px-1 pt-1 text-sm">
+                            기술 이전
+                        </a>
+                        <a href="#" onclick="loadModule('edu')" id="nav-edu" class="nav-link inline-flex items-center px-1 pt-1 text-sm">
+                            교육
+                        </a>
+                         <a href="#" onclick="loadModule('policy')" id="nav-policy" class="nav-link inline-flex items-center px-1 pt-1 text-sm">
+                            지원
+                        </a>
+                        <a href="#" onclick="loadModule('community')" id="nav-community" class="nav-link inline-flex items-center px-1 pt-1 text-sm">
+                            커뮤니티
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Side Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search Icon (Optional) -->
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Notification -->
+                    <button class="relative p-1 text-gray-400 hover:text-blue-600 transition">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                    </button>
+
+                    <!-- User Profile -->
+                    <div class="relative ml-3 flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-xs font-bold text-gray-900">홍길동</p>
+                            <p class="text-[10px] text-blue-600">인증 창업가</p>
+                        </div>
+                        <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
+                             <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile menu button -->
+                    <div class="flex items-center md:hidden">
+                         <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <div class="max-w-6xl mx-auto px-4 mb-8">
-        <div class="flex overflow-x-auto no-scrollbar space-x-4 py-2" id="tab-container">
-            <button onclick="switchTab('education')" id="btn-education" class="tab-btn active flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-graduation-cap mr-2"></i> 교육
-            </button>
-            <button onclick="switchTab('deal')" id="btn-deal" class="tab-btn flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-handshake mr-2"></i> 딜 소싱
-            </button>
-            <button onclick="switchTab('tech')" id="btn-tech" class="tab-btn flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-microchip mr-2"></i> 기술 이전
-            </button>
-            <button onclick="switchTab('fund')" id="btn-fund" class="tab-btn flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-coins mr-2"></i> 자금 지원
-            </button>
-            <button onclick="switchTab('dd')" id="btn-dd" class="tab-btn flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-search-dollar mr-2"></i> 실사
-            </button>
-            <button onclick="switchTab('escrow')" id="btn-escrow" class="tab-btn flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-shield-alt mr-2"></i> 에스크로
-            </button>
-            <button onclick="switchTab('legal')" id="btn-legal" class="tab-btn flex items-center min-w-max px-6 py-3 bg-white border border-gray-200 rounded-lg text-gray-600 hover:border-blue-300 font-medium shadow-sm">
-                <i class="fas fa-gavel mr-2"></i> 법률 지원
-            </button>
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <!-- Dynamic Content Injected Here -->
+        <div id="content-area" class="animate-fade-in">
+            <!-- Content loads here -->
         </div>
-    </div>
+    </main>
 
-    <div class="max-w-6xl mx-auto px-4 pb-20">
-        
-        <div id="content-education" class="content-section grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-graduation-cap mr-3"></i> <span>인수 창업 교육</span>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="flex justify-center md:justify-start space-x-6 md:order-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-500 text-sm">이용약관</a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500 text-sm">개인정보처리방침</a>
                 </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">준비된 CEO를 위한<br>온/오프라인 통합 과정</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    인수 창업은 일반 창업과 다릅니다. 매물 분석부터 협상, PMI(인수 후 통합)까지 전문가의 노하우를 전수해 드립니다. 온라인 VOD와 오프라인 워크샵을 선택하세요.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>인수 창업 A to Z 온라인 마스터 클래스</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>현직 M&A 전문가와 함께하는 오프라인 부트캠프</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>성공한 인수 창업가 초청 네트워킹</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">교육 커리큘럼 보기 &rarr;</a>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100">
-                <div class="border-b pb-4 mb-4">
-                    <h4 class="font-bold text-lg">수강 신청 대시보드</h4>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <div class="bg-blue-100 text-blue-600 p-3 rounded-lg mr-4"><i class="fas fa-play"></i></div>
-                        <div class="flex-1">
-                            <p class="font-bold text-sm">기초: 좋은 매물 보는 법</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold text-blue-600 ml-2">75%</span>
-                    </div>
-                    <div class="flex items-center p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-500 cursor-pointer transition">
-                        <div class="bg-red-100 text-red-600 p-3 rounded-lg mr-4"><i class="fas fa-users"></i></div>
-                        <div class="flex-1">
-                            <p class="font-bold text-sm">12월 오프라인 워크샵</p>
-                            <p class="text-xs text-gray-500">강남구 테헤란로 | 12/28(토)</p>
-                        </div>
-                        <button class="text-xs bg-gray-900 text-white px-3 py-1 rounded">신청하기</button>
-                    </div>
+                <div class="mt-8 md:mt-0 md:order-1">
+                    <p class="text-center text-xs text-gray-400">
+                        &copy; 2025 Listing.co. All rights reserved. <br>
+                        본 플랫폼은 중소벤처기업부, 금융위원회와 함께합니다.
+                    </p>
                 </div>
             </div>
         </div>
-
-        <div id="content-deal" class="content-section hidden grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-handshake mr-3"></i> <span>프리미엄 딜 소싱</span>
-                </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">Listing.co 데이터 기반<br>엄선된 인수 창업 매물</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    수많은 매물 중 인수 창업에 적합한 알짜 기업만 추려내 제안합니다. 안정적인 현금 흐름과 성장 잠재력을 가진 기업을 만나보세요.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>Listing.co 검증 매물 독점 제공</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>산업별/예산별 맞춤 큐레이션</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>매도자와의 1:1 미팅 주선</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">추천 딜 보러가기 &rarr;</a>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100">
-                <h4 class="font-bold text-lg mb-4">금주의 추천 딜 (SaaS)</h4>
-                <div class="bg-white border rounded-lg p-4 mb-4 shadow-sm">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">검증 완료</span>
-                        <span class="text-gray-400 text-xs">ID: #40291</span>
-                    </div>
-                    <h5 class="font-bold text-lg mb-1">HR 자동화 SaaS 플랫폼</h5>
-                    <p class="text-gray-500 text-sm mb-4">안정적인 구독 매출, 낮은 이탈률</p>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <p class="text-gray-500 text-xs">연 매출</p>
-                            <p class="font-bold">₩ 450,000,000</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 text-xs">영업 이익</p>
-                            <p class="font-bold text-blue-600">₩ 120,000,000</p>
-                        </div>
-                    </div>
-                    <button class="w-full mt-4 bg-blue-600 text-white py-2 rounded font-bold text-sm">상세 정보 보기</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="content-tech" class="content-section hidden grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-microchip mr-3"></i> <span>대학 기술 이전</span>
-                </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">인수한 기업에<br>혁신 기술을 더하다</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    기업 인수 후 R&D가 고민이신가요? 국내 유수 대학이 보유한 핵심 기술을 검색하고, 쉽고 빠르게 기술 이전을 신청하여 기업 가치를 높이세요.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>전국 대학 보유 특허 통합 검색</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>복잡한 기술 이전 계약 대행</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>교수진/연구실 기술 자문 연계</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">기술 검색하기 &rarr;</a>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100 relative overflow-hidden">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 bg-yellow-100 rounded-full p-8 opacity-50"></div>
-                <h4 class="font-bold text-lg mb-4">기술 매칭 서비스</h4>
-                <div class="flex items-center bg-gray-100 rounded p-2 mb-4">
-                    <i class="fas fa-search text-gray-400 ml-2"></i>
-                    <input type="text" value="인공지능 데이터 분석" class="bg-transparent border-none outline-none ml-2 text-sm w-full" disabled>
-                </div>
-                <div class="space-y-3">
-                    <div class="border rounded-lg p-3 hover:bg-blue-50 cursor-pointer">
-                        <div class="flex justify-between">
-                            <h5 class="font-bold text-sm">AI 기반 수요 예측 알고리즘</h5>
-                            <i class="fas fa-university text-gray-400"></i>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">K대학교 산학협력단 | 기술성숙도(TRL) 7단계</p>
-                    </div>
-                    <div class="border rounded-lg p-3 hover:bg-blue-50 cursor-pointer">
-                        <div class="flex justify-between">
-                            <h5 class="font-bold text-sm">고효율 배터리 패키징 기술</h5>
-                            <i class="fas fa-university text-gray-400"></i>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">S대학교 공과대학 | 특허 등록 완료</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="content-fund" class="content-section hidden grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-coins mr-3"></i> <span>인수 자금 솔루션</span>
-                </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">은행부터 VC까지<br>최적의 자금 조달 믹스</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    자금 부족으로 좋은 딜을 놓치지 마세요. 개인의 신용과 매물의 현금 흐름을 분석하여 가장 유리한 자금 조달 구조(Capital Structure)를 설계해 드립니다.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>제1금융권 인수 금융(Loan) 연계</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>VC 및 전략적 투자자 매칭</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>개인투자조합 결성 및 LP 모집 지원</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">자금 한도 조회하기 &rarr;</a>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100">
-                <h4 class="font-bold text-lg mb-6">자금 조달 시뮬레이터</h4>
-                
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-medium">인수 필요 자금</span>
-                    <span class="font-bold">10억 원</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-3 mb-6 flex overflow-hidden">
-                    <div class="bg-blue-600 h-3" style="width: 50%"></div> <div class="bg-purple-500 h-3" style="width: 30%"></div> <div class="bg-gray-400 h-3" style="width: 20%"></div> </div>
-
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-3 border rounded-lg">
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 bg-blue-600 rounded-full mr-2"></div>
-                            <span class="text-sm">은행 대출 (50%)</span>
-                        </div>
-                        <span class="font-bold text-sm">5억 원</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3 border rounded-lg">
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
-                            <span class="text-sm">VC/조합 투자 (30%)</span>
-                        </div>
-                        <span class="font-bold text-sm">3억 원</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
-                            <span class="text-sm text-gray-500">자기 자본 (20%)</span>
-                        </div>
-                        <span class="font-bold text-sm text-gray-500">2억 원</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="content-dd" class="content-section hidden grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-search-dollar mr-3"></i> <span>전문 실사 지원</span>
-                </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">숨겨진 리스크 제로<br>철저한 재무/법률 실사</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    장부상의 숫자만 믿지 마세요. 업계 최고의 회계법인 및 전문 위원들과 함께 기업의 실제 가치와 잠재적 우발 채무까지 꼼꼼하게 파헤칩니다.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>최근 3개년 재무제표 정밀 감사</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>인사/노무 및 법적 분쟁 리스크 점검</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>IT 시스템 및 코드 자산 기술 실사</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">실사 체크리스트 받기 &rarr;</a>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100">
-                <h4 class="font-bold text-lg mb-4">실사 리포트 샘플</h4>
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <p class="text-sm text-gray-500">종합 등급</p>
-                        <p class="text-2xl font-bold text-green-600">Grade A</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500">리스크 발견</p>
-                        <p class="text-xl font-bold text-gray-800">2 건 <span class="text-xs font-normal text-gray-400">(해소 가능)</span></p>
-                    </div>
-                </div>
-                <hr class="border-gray-100 mb-4">
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-medium"><i class="fas fa-file-invoice-dollar text-blue-500 mr-2"></i>재무 건전성</span>
-                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">적정</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-medium"><i class="fas fa-code text-purple-500 mr-2"></i>기술 자산</span>
-                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">우수</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-medium"><i class="fas fa-users-cog text-orange-500 mr-2"></i>노무 리스크</span>
-                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">주의 필요</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="content-escrow" class="content-section hidden grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-shield-alt mr-3"></i> <span>안심 에스크로</span>
-                </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">먹튀 걱정 없는<br>안전한 대금 보호 시스템</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    계약금부터 잔금까지, 모든 자금은 에스크로 계좌에 안전하게 보관됩니다. 자산 이전과 검수(Inspection)가 완료된 후에만 매도자에게 대금이 지급됩니다.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>금융위원회 등록 에스크로 사업자 제휴</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>단계별 대금 지급(Milestone) 설정 가능</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>업계 최저 수수료 (0.5%~)</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">에스크로 절차 안내 &rarr;</a>
-            </div>
-            <div class="bg-white p-8 rounded-xl shadow-xl border border-gray-100">
-                <h4 class="font-bold text-lg mb-6">Payment & Asset Transfer</h4>
-                
-                <div class="flex gap-4 mb-8">
-                    <div class="flex-1 border-2 border-blue-600 bg-blue-50 p-3 rounded-lg flex items-center justify-between cursor-pointer">
-                        <div class="flex items-center">
-                            <i class="fas fa-wallet text-blue-600 mr-2"></i>
-                            <span class="font-bold text-sm">Standard Escrow</span>
-                        </div>
-                        <i class="fas fa-check-circle text-blue-600"></i>
-                    </div>
-                    <div class="flex-1 border p-3 rounded-lg flex items-center justify-between opacity-50 cursor-not-allowed">
-                        <div class="flex items-center">
-                            <i class="fas fa-university text-gray-500 mr-2"></i>
-                            <span class="font-bold text-sm text-gray-500">Direct Wire</span>
-                        </div>
-                        <div class="w-4 h-4 rounded-full border"></div>
-                    </div>
-                </div>
-
-                <div class="space-y-4 mb-8">
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-600">인수 금액 (Purchase Price)</span>
-                        <span class="font-bold">₩ 300,000,000</span>
-                    </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-600">에스크로 수수료 (0.50%)</span>
-                        <span class="font-bold">₩ 1,500,000</span>
-                    </div>
-                    <div class="flex items-center">
-                         <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Promotion Applied</span>
-                    </div>
-                    <hr class="border-gray-200">
-                    <div class="flex justify-between items-center text-lg">
-                        <span class="font-bold text-gray-900">총 결제 금액 (Total)</span>
-                        <span class="font-bold text-gray-900">₩ 301,500,000</span>
-                    </div>
-                </div>
-
-                <button class="w-full border border-blue-600 text-blue-600 font-bold py-3 rounded-lg hover:bg-blue-50 transition">
-                    안심 결제 시작하기
-                </button>
-            </div>
-        </div>
-
-         <div id="content-legal" class="content-section hidden grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <div class="flex items-center text-blue-600 font-bold text-xl mb-4">
-                    <i class="fas fa-gavel mr-3"></i> <span>법률 자문 서비스</span>
-                </div>
-                <h3 class="text-3xl font-bold mb-4 text-gray-900">복잡한 계약서 작성<br>전문 변호사가 대행</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    주식 양수도 계약서(SPA)부터 비밀유지서약서(NDA)까지. M&A 전문 변호사가 법적 효력이 확실한 계약서를 작성하고 검토해 드립니다. 추후 분쟁 소지를 원천 차단하세요.
-                </p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>M&A 전문 변호사 1:1 매칭</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>표준 계약서 템플릿 무료 제공</span></li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i> <span>등기 이전 등 행정 절차 대행</span></li>
-                </ul>
-                <a href="#" class="text-blue-600 font-bold hover:underline">법률 상담 예약하기 &rarr;</a>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100 text-center">
-                <div class="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden">
-                    <i class="fas fa-user-tie text-4xl text-gray-400 mt-4"></i>
-                </div>
-                <h4 class="font-bold text-lg">김법률 변호사</h4>
-                <p class="text-sm text-gray-500 mb-4">IT/스타트업 M&A 전문</p>
-                
-                <div class="bg-gray-50 p-4 rounded-lg text-left mb-4">
-                    <div class="flex items-start mb-3">
-                        <i class="fas fa-quote-left text-blue-200 text-2xl mr-2"></i>
-                        <p class="text-sm text-gray-600 italic">
-                            계약서의 독소 조항 3가지를 발견하여 수정 제안 드렸습니다. 이대로 진행 시 매수자에게 불리할 수 있으니...
-                        </p>
-                    </div>
-                    <p class="text-xs text-right text-gray-400">2023.12.17 검토 완료</p>
-                </div>
-                <button class="w-full bg-gray-900 text-white py-2 rounded font-bold text-sm">자문 요청하기</button>
-            </div>
-        </div>
-
-    </div>
-
-    <section class="bg-blue-600 py-16 text-center text-white px-4">
-        <h2 class="text-3xl font-bold mb-4">인수 창업, 혼자 고민하지 마세요.</h2>
-        <p class="mb-8 text-blue-100 max-w-xl mx-auto">
-            전문가 팀이 교육부터 자금 조달, 안전한 계약까지 모든 과정을 함께합니다.
-        </p>
-        <button class="bg-white text-blue-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition">
-            무료 상담 신청하기
-        </button>
-    </section>
-
-    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
-        <p>&copy; 2024 Listing.co M&A Extension. All rights reserved.</p>
     </footer>
 
+    <!-- Content Templates (Hidden) -->
     <script>
-        function switchTab(tabId) {
-            // 1. Remove active class from all buttons
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('active', 'bg-blue-50', 'border-blue-500', 'text-blue-600');
-                // Reset to default style (can be simplified if strictly using classes above)
-                btn.classList.remove('active'); 
+        // Data & Templates mimicking the Proposal
+        const contentTemplates = {
+            
+            // 1. Deal Sourcing (Default View)
+            deal: `
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">딜 소싱 (Deal Sourcing)</h2>
+                        <p class="text-gray-500 text-sm mt-1">Listing의 AI 기술과 지역 파트너(TP/CCEI)가 검증한 우량 매물을 만나보세요.</p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                         <select class="bg-white border border-gray-300 text-sm rounded-lg px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+                            <option>전국 전체</option>
+                            <option>수도권 (서울/경기)</option>
+                            <option>부울경 (부산/울산/경남)</option>
+                            <option>대경권 (대구/경북)</option>
+                         </select>
+                         <button class="bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition flex items-center justify-center min-w-max">
+                            <i class="fas fa-sliders-h mr-2"></i>상세 필터
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Deal Stats / Banner -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white mb-8 shadow-lg flex flex-col md:flex-row items-center justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <span class="bg-blue-500 bg-opacity-30 border border-blue-400 text-xs px-2 py-1 rounded-full mb-2 inline-block">New Arrival</span>
+                        <h3 class="text-xl font-bold">이번 주 신규 등록된 우량 매물 <span class="text-yellow-300">42건</span></h3>
+                        <p class="text-blue-100 text-sm mt-1">지역 제조 혁신 기업 특별관이 오픈되었습니다.</p>
+                    </div>
+                    <button class="bg-white text-blue-700 px-6 py-2 rounded-full font-bold text-sm hover:bg-blue-50 transition shadow">
+                        매물 보러가기
+                    </button>
+                </div>
+
+                <!-- Deal Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Deal Card 1 -->
+                    <div class="group bg-white rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-lg transition cursor-pointer overflow-hidden flex flex-col h-full">
+                        <div class="h-48 bg-gray-100 relative flex items-center justify-center">
+                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold z-10">Listing 인증</div>
+                            <div class="absolute bottom-3 right-3 bg-gray-900 bg-opacity-70 text-white text-[10px] px-2 py-1 rounded flex items-center z-10">
+                                <i class="fas fa-map-marker-alt mr-1"></i> 경남 창원
+                            </div>
+                            <i class="fas fa-industry text-5xl text-gray-300 group-hover:scale-110 transition duration-300"></i>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-blue-600 transition">[#2041] 정밀 자동차 부품 제조</h3>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-blue-600 font-bold text-sm">94%</span>
+                                    <span class="text-[10px] text-gray-400">AI 매칭</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 text-sm mb-4 line-clamp-2">20년 업력의 1차 벤더. 공장 자동화 도입 시 이익률 개선 가능. 고령 은퇴 희망.</p>
+                            
+                            <div class="mt-auto pt-4 border-t border-gray-100 grid grid-cols-2 gap-y-2 text-sm">
+                                <div>
+                                    <p class="text-xs text-gray-400">연 매출</p>
+                                    <p class="font-bold text-gray-800">120억 원</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-400">희망 매도가</p>
+                                    <p class="font-bold text-blue-600">45억 원</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400">영업이익</p>
+                                    <p class="font-bold text-gray-800">15억 원</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-400">EBITDA</p>
+                                    <p class="font-bold text-gray-800">3.5x</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal Card 2 -->
+                    <div class="group bg-white rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-lg transition cursor-pointer overflow-hidden flex flex-col h-full">
+                        <div class="h-48 bg-gray-100 relative flex items-center justify-center">
+                            <div class="absolute top-3 left-3 bg-green-600 text-white text-[10px] px-2 py-1 rounded font-bold z-10">CCEI 추천</div>
+                             <div class="absolute bottom-3 right-3 bg-gray-900 bg-opacity-70 text-white text-[10px] px-2 py-1 rounded flex items-center z-10">
+                                <i class="fas fa-map-marker-alt mr-1"></i> 부산 강서
+                            </div>
+                            <i class="fas fa-warehouse text-5xl text-gray-300 group-hover:scale-110 transition duration-300"></i>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                             <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-blue-600 transition">[#1982] 특수 물류 창고업</h3>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-blue-600 font-bold text-sm">88%</span>
+                                    <span class="text-[10px] text-gray-400">AI 매칭</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 text-sm mb-4 line-clamp-2">항만 인접 유리한 입지. 냉동/냉장 시설 완비. 2세 경영 포기로 인한 매각.</p>
+                            
+                            <div class="mt-auto pt-4 border-t border-gray-100 grid grid-cols-2 gap-y-2 text-sm">
+                                <div>
+                                    <p class="text-xs text-gray-400">연 매출</p>
+                                    <p class="font-bold text-gray-800">50억 원</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-400">희망 매도가</p>
+                                    <p class="font-bold text-blue-600">20억 원</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400">영업이익</p>
+                                    <p class="font-bold text-gray-800">4억 원</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-400">자산가치</p>
+                                    <p class="font-bold text-gray-800">18억 원</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal Card 3 -->
+                    <div class="group bg-white rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-lg transition cursor-pointer overflow-hidden flex flex-col h-full opacity-70">
+                        <div class="h-48 bg-gray-100 relative flex items-center justify-center">
+                            <div class="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center">
+                                <span class="bg-gray-800 text-white px-3 py-1 rounded font-bold text-sm">비밀 유지 서약 필요</span>
+                            </div>
+                            <i class="fas fa-question text-5xl text-gray-300"></i>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                             <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900 line-clamp-1">[#2055] 반도체 장비 부품 가공</h3>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-gray-400 font-bold text-sm">-</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 text-sm mb-4 line-clamp-2">S사 1차 협력사 등록. 독보적인 초정밀 가공 기술 보유. 기밀 유지를 위해 상세 정보 비공개.</p>
+                            
+                            <div class="mt-auto pt-4 border-t border-gray-100 text-center">
+                                <button class="text-sm font-bold text-gray-900 hover:underline">NDA 서명 후 열람 신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+
+            // 2. Financing
+            finance: `
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900">자금 조달 (Financing)</h2>
+                    <p class="text-gray-500 text-sm mt-1">정책 금융(기보/신보) 자동 심사와 민간 투자(VC)를 결합한 최적의 자금 구조를 제안합니다.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Calculator Panel -->
+                    <div class="lg:col-span-2 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                        <h2 class="font-bold text-lg mb-6 text-gray-800"><i class="fas fa-calculator mr-2 text-blue-500"></i>인수 자금 시뮬레이터</h2>
+                        
+                        <div class="mb-8 p-6 bg-gray-50 rounded-xl">
+                            <div class="flex justify-between mb-4 items-end">
+                                <span class="text-sm font-medium text-gray-600">목표 인수 금액</span>
+                                <span class="font-bold text-2xl text-gray-900">45억 원</span>
+                            </div>
+                            <!-- Progress Bar -->
+                            <div class="w-full h-6 bg-gray-200 rounded-full overflow-hidden flex shadow-inner">
+                                <div class="h-full bg-blue-600 flex items-center justify-center text-[10px] text-white font-bold" style="width: 50%">선순위 50%</div>
+                                <div class="h-full bg-purple-500 flex items-center justify-center text-[10px] text-white font-bold" style="width: 30%">후순위 30%</div>
+                                <div class="h-full bg-gray-500 flex items-center justify-center text-[10px] text-white font-bold" style="width: 20%">자본 20%</div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mt-4 text-center">
+                                <div>
+                                    <p class="text-xs text-gray-500">인수금융 (Loan)</p>
+                                    <p class="font-bold text-blue-600">22.5억 원</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">투자 유치 (Equity)</p>
+                                    <p class="font-bold text-purple-600">13.5억 원</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">자기자본</p>
+                                    <p class="font-bold text-gray-600">9억 원</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Policy Finance -->
+                            <div class="border border-gray-200 rounded-lg p-5 hover:border-blue-500 transition cursor-pointer relative overflow-hidden bg-white shadow-sm">
+                                <div class="absolute top-0 right-0 bg-blue-100 text-blue-600 text-[10px] px-3 py-1 font-bold rounded-bl-lg">심사 승인 완료</div>
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 text-xl"><i class="fas fa-university"></i></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-900 text-lg">제1금융권 인수금융</h4>
+                                        <p class="text-sm text-gray-500 mt-1">기술보증기금 보증서 90% 담보</p>
+                                        <div class="flex gap-3 mt-2">
+                                            <span class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">금리 연 4.2%~</span>
+                                            <span class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">3년 거치 7년 상환</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end justify-center h-full">
+                                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition">대출 신청</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <!-- VC Investment -->
+                            <div class="border border-gray-200 rounded-lg p-5 hover:border-purple-500 transition cursor-pointer relative bg-white shadow-sm">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600 text-xl"><i class="fas fa-hand-holding-usd"></i></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-900 text-lg">K-ETA 전용 프로젝트 펀드</h4>
+                                        <p class="text-sm text-gray-500 mt-1">Listing 파트너 VC 및 개인투자조합 매칭</p>
+                                        <div class="flex gap-3 mt-2">
+                                            <span class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">RCPS / CB</span>
+                                            <span class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">투자확약서(LOC) 발급</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end justify-center h-full">
+                                        <button class="border border-purple-600 text-purple-600 hover:bg-purple-50 px-4 py-2 rounded-lg font-bold text-sm transition">IR 자료 제출</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Panel: Auto-Assessment -->
+                    <div class="bg-blue-600 p-6 rounded-xl text-white shadow-lg h-max">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-robot text-2xl mr-3 text-blue-200"></i>
+                            <h3 class="font-bold text-lg">AI 보증 심사 리포트</h3>
+                        </div>
+                        <p class="text-sm text-blue-100 mb-6 leading-relaxed">
+                            Listing.co의 기업 분석 데이터를 기반으로 <br>공공 보증 기관(KIBO, KODIT)의 예비 심사 결과를 미리 확인하세요.
+                        </p>
+                        
+                        <div class="bg-white bg-opacity-10 p-4 rounded-lg border border-blue-400 mb-4 backdrop-blur-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-bold text-white">기술보증기금</span>
+                                <span class="text-xs bg-green-500 text-white px-2 py-0.5 rounded font-bold">적격</span>
+                            </div>
+                            <p class="text-xs text-blue-100">예상 보증 한도: <strong class="text-white text-sm">20억 원</strong></p>
+                        </div>
+                         <div class="bg-white bg-opacity-10 p-4 rounded-lg border border-blue-400 backdrop-blur-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-bold text-white">신용보증기금</span>
+                                <span class="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded font-bold">심사중</span>
+                            </div>
+                            <p class="text-xs text-blue-100">M&A 특례보증 심사 진행 중</p>
+                        </div>
+
+                        <button class="w-full mt-6 bg-white text-blue-600 py-3 rounded-lg font-bold text-sm hover:bg-gray-100 transition shadow">
+                            심사 결과 상세 보기
+                        </button>
+                    </div>
+                </div>
+            `,
+
+             // 3. Tech Transfer
+            tech: `
+                <div class="mb-8 text-center max-w-3xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">기술 이전 (Tech Transfer)</h2>
+                    <p class="text-gray-600 mb-8">산업부 국가기술은행(NTB) 데이터와 대학 TLO를 연동하여<br>피인수 기업의 혁신에 필요한 핵심 기술을 찾아드립니다.</p>
+                    
+                     <div class="relative">
+                        <input type="text" placeholder="필요한 기술 키워드를 입력하세요 (예: 스마트팩토리, 2차전지, AI비전)" class="w-full pl-6 pr-14 py-4 rounded-full border border-gray-300 shadow-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-lg transition">
+                        <button class="absolute right-2 top-2 bottom-2 bg-blue-600 text-white px-6 rounded-full font-bold hover:bg-blue-700 transition">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Recommended Tech List -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-4 flex items-center text-gray-800">
+                            <i class="fas fa-magic text-purple-500 mr-2"></i>
+                            <span class="underline decoration-purple-200 decoration-4">AI Roll-up 추천 기술</span>
+                        </h3>
+                        <p class="text-sm text-gray-500 mb-6">선택하신 <strong>[#2041] 정밀 자동차 부품 제조</strong> 기업의 가치를 높일 수 있는 기술입니다.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="border border-gray-200 rounded-lg p-5 hover:shadow-md hover:border-blue-300 transition cursor-pointer group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded font-bold">NTB 등록</span>
+                                    <i class="far fa-star text-gray-300 group-hover:text-yellow-400"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 text-lg group-hover:text-blue-600 transition">나노 복합재 기반 초경량 부품 성형 기술</h4>
+                                <p class="text-sm text-gray-500 mt-1 mb-3">한국재료연구원 | TRL 8단계 (상용화 임박)</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-1 rounded">예상 이전료: 5,000만원</span>
+                                    <button class="text-xs bg-gray-900 text-white px-3 py-1.5 rounded hover:bg-black">상담 신청</button>
+                                </div>
+                            </div>
+                            
+                            <div class="border border-gray-200 rounded-lg p-5 hover:shadow-md hover:border-blue-300 transition cursor-pointer group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded font-bold">대학 TLO</span>
+                                    <i class="far fa-star text-gray-300 group-hover:text-yellow-400"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 text-lg group-hover:text-blue-600 transition">IoT 기반 프레스 공정 실시간 모니터링</h4>
+                                <p class="text-sm text-gray-500 mt-1 mb-3">K공과대학교 산학협력단 | 특허 등록 완료</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-1 rounded">기술 지도(Consulting) 포함</span>
+                                    <button class="text-xs bg-gray-900 text-white px-3 py-1.5 rounded hover:bg-black">상담 신청</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Finance Support -->
+                    <div class="flex flex-col gap-6">
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex-1">
+                            <h3 class="font-bold text-lg mb-4 text-gray-800">기술 인수 금융 지원</h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mt-1">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-md font-bold text-gray-900">IP(지식재산) 인수 보증</h4>
+                                        <p class="text-sm text-gray-500 mt-1">기술 이전 비용의 최대 90% 보증 지원 (기술보증기금)</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mt-1">
+                                        <i class="fas fa-tools"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-md font-bold text-gray-900">사업화 R&D 자금</h4>
+                                        <p class="text-sm text-gray-500 mt-1">이전 기술 상용화를 위한 후속 R&D 지원 (최대 2억 원)</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mt-6">
+                                <a href="#" class="block w-full text-center border border-gray-300 text-gray-700 py-2 rounded-lg font-bold text-sm hover:bg-gray-50 transition">지원 사업 공고 전체보기</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Banner -->
+                        <div class="bg-gray-900 rounded-xl p-6 text-white relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-lg">찾는 기술이 없으신가요?</h3>
+                                <p class="text-sm text-gray-400 mt-2 mb-4">기술 전문가(CTO)가 기업에 딱 맞는 <br>핵심 기술을 대신 찾아드립니다.</p>
+                                <button class="text-xs bg-blue-600 px-3 py-2 rounded font-bold hover:bg-blue-500">기술 매칭 서비스 신청</button>
+                            </div>
+                            <div class="absolute right-0 bottom-0 opacity-20 transform translate-x-4 translate-y-4">
+                                <i class="fas fa-search text-9xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+
+            // 4. Education
+            edu: `
+                 <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">교육 (ETA Academy)</h2>
+                        <p class="text-gray-500 text-sm mt-1">입문부터 심화까지, M&A 전문가가 검증한 실전 커리큘럼을 만나보세요.</p>
+                    </div>
+                    
+                    <!-- Filter & Search -->
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <select class="bg-white border border-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <option>전체 카테고리</option>
+                            <option>입문/기초</option>
+                            <option>재무/회계</option>
+                            <option>법률/계약</option>
+                        </select>
+                         <div class="relative flex-1 md:w-64">
+                            <input type="text" placeholder="강의명 검색" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-10">
+                    
+                    <!-- Course 1 -->
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-lg hover:border-blue-300 transition group cursor-pointer flex flex-col">
+                        <div class="h-44 bg-gray-100 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="ETA 기초">
+                            <div class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded">입문</div>
+                            <div class="absolute bottom-0 left-0 w-full h-1 bg-gray-200">
+                                <div class="bg-green-500 h-1" style="width: 100%"></div> <!-- Completed -->
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition line-clamp-2">인수창업(ETA) 개론: 사장님이 되는 가장 빠른 길</h3>
+                            <p class="text-sm text-gray-500 mb-4 line-clamp-2 flex-1">맨땅 창업보다 안전한 인수창업의 개념과 프로세스 전반을 이해합니다.</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+                                <span class="text-xs text-green-600 font-bold"><i class="fas fa-check-circle mr-1"></i>수강 완료</span>
+                                <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1 rounded font-medium">다시보기</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course 2 -->
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-lg hover:border-blue-300 transition group cursor-pointer flex flex-col">
+                        <div class="h-44 bg-gray-100 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="가치평가">
+                            <div class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded">재무</div>
+                            <div class="absolute bottom-0 left-0 w-full h-1 bg-gray-200">
+                                <div class="bg-blue-500 h-1" style="width: 45%"></div> <!-- In Progress -->
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition line-clamp-2">기업가치평가(Valuation) 실무: 얼마가 적정가인가?</h3>
+                            <p class="text-sm text-gray-500 mb-4 line-clamp-2 flex-1">EBITDA 멀티플, DCF 등 실무에서 쓰이는 가치평가 기법을 엑셀 실습과 함께 배웁니다.</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+                                <span class="text-xs text-blue-600 font-bold"><i class="fas fa-play-circle mr-1"></i>45% 진행 중</span>
+                                <button class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded font-medium">이어보기</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course 3 -->
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-lg hover:border-blue-300 transition group cursor-pointer flex flex-col">
+                        <div class="h-44 bg-gray-100 relative overflow-hidden">
+                             <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="재무실사">
+                            <div class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded">회계</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition line-clamp-2">재무제표의 숨은 리스크 찾기 (실사 기초)</h3>
+                            <p class="text-sm text-gray-500 mb-4 line-clamp-2 flex-1">분식회계 징후 발견법, 우발채무 확인 등 실사(Due Diligence) 핵심 체크리스트.</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px]"><i class="fas fa-user-tie"></i></div>
+                                    <span class="text-xs text-gray-500">이회계사</span>
+                                </div>
+                                <button class="text-xs border border-blue-600 text-blue-600 hover:bg-blue-50 px-3 py-1 rounded font-medium">수강신청</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+
+            // 5. Support (Policy/Legal/Escrow)
+            policy: `
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900">전문가 지원 서비스 (Support)</h2>
+                    <p class="text-gray-500 text-sm mt-1">성공적인 인수를 위해 에스크로, 회계 실사, 법률 자문 등 필수 전문가 서비스를 선택하세요.</p>
+                </div>
+
+                <!-- 1. Escrow Section -->
+                <section class="bg-white rounded-xl border border-gray-200 shadow-sm mb-10 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 flex items-center">
+                                <span class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"><i class="fas fa-shield-alt"></i></span>
+                                1. 안심 에스크로 (Escrow)
+                            </h3>
+                            <p class="text-sm text-gray-500 mt-1 ml-11">거래 대금을 제3기관에 예치하여 '먹튀' 사고를 방지하고 안전하게 자산을 이전합니다.</p>
+                        </div>
+                        <span class="text-[10px] bg-green-50 text-green-700 px-2 py-1 rounded border border-green-200 font-bold">금융위원회 등록 사업자</span>
+                    </div>
+                    
+                    <div class="p-6 bg-gray-50">
+                        <!-- Progress Visual -->
+                        <div class="relative py-4 max-w-4xl mx-auto">
+                            <div class="flex justify-between text-xs font-bold text-gray-500 mb-3 px-2">
+                                <span>계약금 예치</span>
+                                <span>실사 및 자산확인</span>
+                                <span class="text-blue-600">잔금 지급 (딜 클로징)</span>
+                                <span>주식/경영권 양도</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-200 rounded-full flex overflow-hidden">
+                                <div class="w-1/4 h-full bg-green-500"></div>
+                                <div class="w-1/4 h-full bg-green-500"></div>
+                                <div class="w-1/4 h-full bg-blue-500 animate-pulse relative">
+                                    <div class="absolute top-0 left-0 w-full h-full bg-white opacity-30 animate-ping"></div>
+                                </div>
+                                <div class="w-1/4 h-full bg-gray-300"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex flex-col md:flex-row justify-center items-center gap-6">
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 text-center w-full md:w-auto min-w-[300px]">
+                                <p class="text-sm font-bold text-gray-800 mb-1">나의 에스크로 상태</p>
+                                <p class="text-lg font-bold text-blue-600 mb-2">잔금 예치 대기 중</p>
+                                <p class="text-xs text-gray-400 mb-4">전용 계좌: 우리은행 1002-XXX-XXXX (예금주: K-ETA)</p>
+                                <button class="text-xs bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">입금 확인증 발급</button>
+                            </div>
+                            <div class="text-sm text-gray-500 space-y-2">
+                                <p><i class="fas fa-check text-green-500 mr-2"></i>계약금 10% 입금 확인 (2025.12.01)</p>
+                                <p><i class="fas fa-check text-green-500 mr-2"></i>실사 종료 확인서 제출 (2025.12.15)</p>
+                                <p><i class="fas fa-clock text-blue-500 mr-2"></i>잔금 90% 입금 대기 (D-5)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Accounting Due Diligence Section -->
+                <section class="mb-10">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"><i class="fas fa-file-invoice-dollar"></i></span>
+                        <h3 class="font-bold text-xl text-gray-900">2. 회계/재무 실사 (Financial DD)</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-6 ml-11">거래 규모와 목적에 맞는 실사 서비스를 선택하세요. 모든 보고서는 공인회계사(CPA)가 직접 작성합니다.</p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 ml-0 md:ml-4">
+                        <!-- Option A: 약식 실사 -->
+                        <div class="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-blue-400 transition shadow-sm relative group flex flex-col">
+                            <div class="absolute top-0 right-0 bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-bl-lg font-bold">Screening</div>
+                            <h4 class="font-bold text-lg text-gray-900 mb-2">약식 재무 실사 <span class="block text-sm font-normal text-gray-500">(High-Level Due Diligence)</span></h4>
+                            <p class="text-sm text-gray-600 mb-4 h-10">거래 초기 단계에서 중대 리스크를 신속히 식별하여, 본 실사 진행 여부를 판단하기 위한 스크리닝 목적의 실사입니다.</p>
+                            
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6 flex-1 text-sm text-gray-700">
+                                <ul class="space-y-2 list-disc list-inside text-gray-600 text-xs">
+                                    <li><strong class="text-gray-800">손익 구조:</strong> 매출 구성, 일회성 손익 식별</li>
+                                    <li><strong class="text-gray-800">BS 항목:</strong> 주요 자산/부채 증감 내역 분석</li>
+                                    <li><strong class="text-gray-800">잠재 리스크:</strong> 자본잠식, 우발채무, 특수관계자 거래 점검</li>
+                                    <li><strong class="text-gray-800">산출물:</strong> 약식 보고서 (10~15p 내외)</li>
+                                    <li><strong class="text-gray-800">기간:</strong> 1주일 소요</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border-t border-gray-100 pt-4 flex justify-between items-center mt-auto">
+                                <div>
+                                    <p class="text-xs text-gray-400">서비스 비용</p>
+                                    <p class="text-xl font-bold text-gray-900">500만원</p>
+                                </div>
+                                <button class="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg font-bold text-sm transition">
+                                    선택하기
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Option B: 정밀 실사 -->
+                        <div class="bg-white rounded-xl border-2 border-blue-600 p-6 shadow-md relative group flex flex-col">
+                            <div class="absolute top-0 center bg-blue-600 text-white text-xs px-3 py-1 rounded-b-lg font-bold transform -translate-x-1/2 left-1/2">추천 (Best)</div>
+                            <h4 class="font-bold text-lg text-gray-900 mb-2 mt-2">정밀 회계 실사 + 가치평가 <span class="block text-sm font-normal text-gray-500">(Full FDD & Valuation)</span></h4>
+                            <p class="text-sm text-gray-600 mb-4 h-10">인수가격 협상과 SPA 작성을 위한 객관적 근거를 확보하고, M&A 공정가치를 산정하는 풀 패키지입니다.</p>
+                            
+                            <div class="bg-blue-50 rounded-lg p-4 mb-6 flex-1 text-sm text-gray-700">
+                                <ul class="space-y-2 list-disc list-inside text-gray-600 text-xs">
+                                    <li><strong class="text-gray-800">수익 인식:</strong> 매출 적정성, 주요 계약 구조 검토</li>
+                                    <li><strong class="text-gray-800">비용/자산:</strong> Normalized EBITDA, 부실 자산 식별</li>
+                                    <li><strong class="text-gray-800">부채/세무:</strong> 우발채무, 세무 리스크(세무조사 이력)</li>
+                                    <li><strong class="text-gray-800">가치평가:</strong> DCF법/상대가치법, 시나리오별 분석</li>
+                                    <li><strong class="text-gray-800">산출물:</strong> 정밀 보고서(50p+) 및 가치평가 보고서</li>
+                                    <li><strong class="text-gray-800">기간:</strong> 4주일 소요</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border-t border-gray-100 pt-4 flex justify-between items-center mt-auto">
+                                <div>
+                                    <p class="text-xs text-gray-400">서비스 비용</p>
+                                    <p class="text-xl font-bold text-blue-600">3,000만원</p>
+                                </div>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold text-sm transition shadow-lg">
+                                    선택하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Legal Support Section -->
+                <section>
+                    <div class="flex items-center mb-4">
+                        <span class="bg-purple-100 text-purple-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"><i class="fas fa-gavel"></i></span>
+                        <h3 class="font-bold text-xl text-gray-900">3. 법률 지원 (Legal Support)</h3>
+                    </div>
+                    <div class="ml-0 md:ml-11 bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 mb-2">전문 변호사 매칭 및 계약서 검토</h4>
+                            <p class="text-sm text-gray-600 mb-4">M&A 전문 변호사가 주식양수도계약서(SPA), 주주간계약서(SHA) 등 법적 구속력이 있는 계약 서류를 검토하고 독소 조항을 수정 제안합니다.</p>
+                            <div class="flex gap-2">
+                                <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded">#SPA작성</span>
+                                <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded">#법률실사</span>
+                                <span class="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded">#노무리스크</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2 w-full md:w-auto">
+                             <button class="bg-gray-900 text-white px-5 py-3 rounded-lg text-sm font-bold hover:bg-black transition flex items-center justify-center">
+                                <i class="fas fa-file-signature mr-2"></i>표준 계약서 자동 작성
+                            </button>
+                            <button class="border border-gray-300 text-gray-700 px-5 py-3 rounded-lg text-sm font-bold hover:bg-gray-50 transition flex items-center justify-center">
+                                <i class="fas fa-user-tie mr-2"></i>변호사 상담 예약
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Voucher Banner -->
+                    <div class="ml-0 md:ml-11 mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 flex justify-between items-center">
+                        <div>
+                            <p class="text-sm font-bold text-blue-800"><i class="fas fa-ticket-alt mr-2"></i>M&A 실사/법률 지원 바우처</p>
+                            <p class="text-xs text-blue-600 mt-0.5">중소벤처기업부 지원사업으로 실사 비용의 최대 80%를 지원받으세요.</p>
+                        </div>
+                        <div class="text-right">
+                             <p class="text-xs text-gray-500">나의 잔여 한도</p>
+                             <p class="font-bold text-lg text-blue-700">1,500만원</p>
+                        </div>
+                    </div>
+                </section>
+            `,
+             // 6. Community
+            community: `
+                 <div class="flex flex-col md:flex-row justify-between items-end mb-6 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">커뮤니티 (Community)</h2>
+                        <p class="text-gray-500 text-sm mt-1">창업 선배들의 노하우를 듣고, 동료들과 자유롭게 토론해보세요.</p>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition shadow-sm flex items-center">
+                        <i class="fas fa-pen mr-2"></i>새 글 쓰기
+                    </button>
+                </div>
+
+                <!-- Forum Controls -->
+                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <!-- Categories -->
+                    <div class="flex gap-2 overflow-x-auto no-scrollbar w-full md:w-auto pb-2 md:pb-0">
+                        <button class="px-4 py-2 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg font-bold text-sm whitespace-nowrap">전체글</button>
+                        <button class="px-4 py-2 hover:bg-gray-50 text-gray-600 rounded-lg font-medium text-sm whitespace-nowrap">🔥 인기글</button>
+                        <button class="px-4 py-2 hover:bg-gray-50 text-gray-600 rounded-lg font-medium text-sm whitespace-nowrap">자유게시판</button>
+                        <button class="px-4 py-2 hover:bg-gray-50 text-gray-600 rounded-lg font-medium text-sm whitespace-nowrap">Q&A 질문방</button>
+                        <button class="px-4 py-2 hover:bg-gray-50 text-gray-600 rounded-lg font-medium text-sm whitespace-nowrap">성공 사례 공유</button>
+                    </div>
+                    <!-- Search -->
+                    <div class="relative w-full md:w-72">
+                        <input type="text" placeholder="키워드 검색 (예: 실사, 에스크로)" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- Board List -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="hidden md:table-cell px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-20 text-center">번호</th>
+                                <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">제목</th>
+                                <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-32 md:w-40 text-center">작성자</th>
+                                <th class="hidden md:table-cell px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-24 text-center">날짜</th>
+                                <th class="hidden md:table-cell px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-20 text-center">조회</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm">
+                            <!-- Notice Item -->
+                            <tr class="bg-blue-50/30 hover:bg-blue-50/50 transition cursor-pointer">
+                                <td class="hidden md:table-cell px-6 py-4 text-center"><span class="bg-red-100 text-red-600 text-[10px] px-2 py-0.5 rounded font-bold">공지</span></td>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-gray-800">[필독] 커뮤니티 이용 수칙 및 매너 가이드 (2025.12 개정)</div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="flex items-center justify-center gap-1 font-bold text-gray-700"><i class="fas fa-crown text-yellow-500"></i> 운영자</span>
+                                </td>
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-500">12.01</td>
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-500">5.2k</td>
+                            </tr>
+
+                            <!-- Post Item 1 -->
+                            <tr class="hover:bg-gray-50 transition cursor-pointer">
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-400">1042</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-2 mb-1 md:mb-0">
+                                        <span class="bg-gray-100 text-gray-600 text-[10px] px-1.5 py-0.5 rounded border border-gray-200">Q&A</span>
+                                        <span class="font-medium text-gray-800 hover:text-blue-600">제조업 인수 시 재고 실사 팁 좀 부탁드립니다.</span>
+                                        <span class="text-xs text-blue-600 font-bold bg-blue-50 px-1.5 rounded ml-1"><i class="far fa-comment-dots mr-0.5"></i> 12</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-1 text-gray-600 text-xs">
+                                        <span>초보사장</span>
+                                        <i class="fas fa-check-circle text-gray-300" title="미인증"></i>
+                                    </div>
+                                </td>
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-500">13:42</td>
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-500">128</td>
+                            </tr>
+                            
+                             <!-- Post Item 2 -->
+                            <tr class="hover:bg-gray-50 transition cursor-pointer">
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-400">1041</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-2 mb-1 md:mb-0">
+                                        <span class="bg-purple-50 text-purple-600 text-[10px] px-1.5 py-0.5 rounded border border-purple-100 font-medium">성공사례</span>
+                                        <span class="font-medium text-gray-800 hover:text-blue-600">30년 된 식품 공장 인수 6개월 차 후기 (feat. PMI)</span>
+                                        <span class="text-xs text-red-500 font-bold bg-red-50 px-1.5 rounded ml-1"><i class="fas fa-fire mr-0.5"></i> 45</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-1 text-gray-600 text-xs">
+                                        <span class="font-bold">김인수</span>
+                                        <i class="fas fa-check-circle text-green-500" title="인증 완료"></i>
+                                    </div>
+                                </td>
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-500">12.16</td>
+                                <td class="hidden md:table-cell px-6 py-4 text-center text-gray-500">1.4k</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center py-6 bg-white border-t border-gray-100">
+                        <nav class="flex items-center gap-2">
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><i class="fas fa-chevron-left"></i></button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white font-bold">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-blue-600">2</button>
+                            <span class="text-gray-400 px-1">...</span>
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><i class="fas fa-chevron-right"></i></button>
+                        </nav>
+                    </div>
+                </div>
+            `
+        };
+
+        // Initialize with Deal Sourcing (Default)
+        document.getElementById('content-area').innerHTML = contentTemplates.deal;
+
+        // Navigation Logic
+        function loadModule(moduleId) {
+            // 1. Update Content with Fade Animation
+            const container = document.getElementById('content-area');
+            container.classList.remove('animate-fade-in');
+            void container.offsetWidth; // Trigger reflow
+            container.innerHTML = contentTemplates[moduleId] || '<p class="text-center p-10 text-gray-500">준비 중인 페이지입니다.</p>';
+            container.classList.add('animate-fade-in');
+
+            // 2. Update Nav Styling
+            document.querySelectorAll('.nav-link').forEach(el => {
+                el.classList.remove('active');
             });
-
-            // 2. Hide all content sections
-            const contents = document.querySelectorAll('.content-section');
-            contents.forEach(content => {
-                content.classList.add('hidden');
-            });
-
-            // 3. Activate selected button
-            const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.add('active');
-
-            // 4. Show selected content
-            const activeContent = document.getElementById('content-' + tabId);
-            activeContent.classList.remove('hidden');
+            const activeNav = document.getElementById('nav-' + moduleId);
+            if(activeNav) {
+                activeNav.classList.add('active');
+            }
         }
     </script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
 </body>
 </html>
