@@ -1,0 +1,142 @@
+/* Shared header: identical navigation, spacing and responsive behavior on every page. */
+.aip-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  margin-left: 0;
+  font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+  background: rgba(255, 255, 255, .97);
+  border-bottom: 1px solid var(--line, #dce5ed);
+}
+
+/* The overview pages wrap content in .app-shell.  Extend only the header
+   background to the viewport edges; its inner navigation stays capped. */
+.app-shell > .aip-site-header {
+  width: calc(100% + 48px);
+  margin-left: -24px;
+  box-shadow: 0 0 0 100vmax rgba(255,255,255,.97);
+  clip-path: inset(0 -100vmax);
+}
+
+.aip-header-inner {
+  width: min(1440px, calc(100% - 48px));
+  max-width: 1440px;
+  min-height: 82px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.aip-brand {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 12px;
+  min-width: 248px;
+  color: var(--ink, #142b43);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -.45px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.aip-brand img {
+  display: block;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+}
+
+.aip-primary-nav {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.aip-primary-nav::-webkit-scrollbar { display: none; }
+
+.aip-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 10px 12px 9px;
+  color: var(--muted, #61758a);
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.32px;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.aip-nav-link:hover,
+.aip-nav-link:focus-visible { color: var(--blue, #1771b9); border-bottom-color: var(--blue, #1771b9); }
+.aip-nav-link.active { color: var(--blue, #1771b9); border-bottom-color: var(--blue, #1771b9); background: #edf5fb; }
+.aip-nav-order { display: none; }
+
+.aip-header-status {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  color: var(--muted, #61758a);
+  font-size: 11px;
+  letter-spacing: -.32px;
+  white-space: nowrap;
+}
+
+.aip-header-status i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #12a28e;
+  box-shadow: 0 0 0 5px rgba(18, 162, 142, .11);
+}
+
+/* Keep the header breakpoint aligned with the overview shell breakpoint so
+   the root page and detail pages never switch width rules at different sizes. */
+@media (max-width: 1120px) {
+  .app-shell > .aip-site-header { width: calc(100% + 32px); margin-left: -16px; }
+  .aip-header-inner { width: calc(100% - 32px); gap: 20px; }
+  .aip-brand { min-width: 220px; }
+  .aip-nav-link { padding-inline: 9px; font-size: 13px; }
+}
+
+@media (max-width: 820px) {
+  .app-shell > .aip-site-header { width: calc(100% + 24px); margin-left: -12px; }
+  .aip-header-inner { width: calc(100% - 24px); min-height: 72px; gap: 14px; overflow: hidden; }
+  .aip-brand { min-width: 220px; font-size: 15px; }
+  .aip-brand img { width: 38px; height: 38px; }
+  .aip-primary-nav { justify-content: flex-start; }
+  .aip-header-status { display: none; }
+}
+
+@media (max-width: 560px) {
+  .app-shell > .aip-site-header { width: calc(100% + 20px); margin-left: -10px; }
+  .aip-header-inner { width: calc(100% - 20px); gap: 10px; }
+  /* Below ~560px the full brand wordmark ("AIP X DeepSearch 3-Engine
+     Solution") doesn't fit alongside the 4 nav links without pushing them
+     into a hidden (scrollbar-width:none) overflow area — flex:0 0 auto kept
+     the brand at its full content width regardless of min-width. An
+     ellipsis-truncated label still left too little room for all 4 links at
+     375px (measured: nav needs ~293px, only ~213px was left), so the text is
+     dropped entirely here and the brand becomes a logo-only link — the
+     aria-label ("전략 개요 홈") keeps it accessible. */
+  .aip-brand { flex: 0 0 auto; min-width: 0; font-size: 14px; }
+  .aip-brand span { display: none; }
+  .aip-brand img { width: 36px; height: 36px; }
+  .aip-nav-link { min-height: 46px; padding-inline: 8px; }
+}

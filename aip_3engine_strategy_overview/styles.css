@@ -1,0 +1,1605 @@
+:root {
+  --ink: #102a43;
+  --muted: #61758a;
+  --paper: #ffffff;
+  --canvas: #f5f6f8;
+  --line: #dce5ed;
+  --line-strong: #bfd0df;
+  --blue: #1771b9;
+  --teal: #008c7c;
+  --amber: #b66e00;
+  --violet: #7454c5;
+  --red: #c23c4a;
+  --navy: #113b59;
+  --shadow: 0 16px 36px rgba(30, 57, 80, .07);
+  font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; background: var(--canvas); }
+body { margin: 0; min-width: 320px; background: var(--canvas); color: var(--ink); }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+.site-header { background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+.nav-wrap { width: min(1440px, calc(100% - 48px)); max-width: 1440px; min-height: 86px; margin: 0 auto; display: flex; align-items: center; gap: 36px; }
+.brand { display: inline-flex; align-items: center; flex: 0 0 auto; gap: 12px; font-weight: 800; letter-spacing: -.45px; font-size: 18px; white-space: nowrap; }
+.brand img { display: block; width: 42px; height: 42px; border-radius: 11px; }
+.primary-nav { min-width: 0; display: flex; align-items: stretch; flex: 1; gap: 4px; }
+.nav-link { position: relative; min-width: 110px; padding: 16px 14px 14px; color: #526b80; border-bottom: 3px solid transparent; transition: color .16s ease, background .16s ease; white-space: nowrap; }
+.nav-link:hover { color: var(--ink); background: #f3f8fb; }
+.nav-link.active { color: var(--blue); border-color: var(--blue); font-weight: 800; }
+.nav-order { display: block; font-size: 10px; letter-spacing: .12em; color: #7e97a9; font-weight: 800; margin-bottom: 3px; }
+.nav-name { display: block; font-size: 14px; }
+.nav-status { flex: 0 0 auto; color: #688095; font-size: 12px; white-space: nowrap; }
+.nav-status i { display:inline-block; width:8px; height:8px; border-radius:50%; background:#12a28e; margin-right:7px; }
+
+.page-shell { width: min(1440px, calc(100% - 48px)); max-width: 1440px; margin: 0 auto; padding: 42px 0 72px; }
+.page-title { min-height: 142px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 29px 40px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.kicker { margin: 0 0 10px; font-size: 11px; font-weight: 900; letter-spacing: .14em; color: var(--violet); text-transform: uppercase; }
+.page-title h1, .section-heading h2, .section-heading h3 { margin: 0; letter-spacing: -.055em; }
+.page-title h1 { font-size: clamp(29px, 3vw, 43px); line-height: 1.12; }
+.page-title-note { text-align: right; color: #8ba0b0; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+
+.section { margin-top: 26px; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; overflow: clip; box-shadow: var(--shadow); }
+.section-heading { padding: 25px 30px 19px; display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; border-bottom: 1px solid var(--line); }
+.section-heading h2 { font-size: 23px; line-height: 1.25; }
+.section-heading h3 { font-size: 18px; line-height: 1.3; }
+.section-kicker { display: block; margin-bottom: 7px; color: var(--blue); font-size: 11px; letter-spacing: .13em; font-weight: 900; text-transform: uppercase; }
+.section-meta { color: var(--muted); font-size: 12px; font-weight: 700; text-align: right; }
+.section-actions { display:flex; align-items:center; justify-content:flex-end; gap:12px; min-width:0; }
+/* section-meta와 section-actions을 한 섹션 헤딩에 같이 둘 때(정량 분석 세부 지표 탭) -
+   .section-heading의 justify-content:space-between이 셋을 고르게 흩어놓지 않도록
+   둘을 한 오른쪽 그룹으로 묶어 세로로 쌓는다. */
+.section-heading-right { display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+/* 정량 분석 "세부 지표" 표의 지표별 일단위/월단위 적용 토글 - .range-btn과 같은 톤이지만
+   표 행 안에 들어가므로 그 min-height:40px를 그대로 쓰면 모든 행이 불필요하게 커진다. */
+.mode-toggle { display:flex; gap:4px; }
+.mode-toggle-btn { border-radius:6px; min-height:26px; padding:0 8px; border:1px solid #c8d9e6; background:#fff; color:#456378; font-weight:800; font-size:11px; white-space:nowrap; cursor:pointer; }
+.mode-toggle-btn.active { color:#fff; background:var(--navy); border-color:var(--navy); }
+.section-body { padding: 28px 30px 32px; }
+
+.tabs {
+  display: flex; overflow-x: auto; scrollbar-width: thin; border-bottom: 1px solid var(--line); padding: 0 30px; gap: 4px;
+  /* 탭이 많은 페이지(포트폴리오 등)는 모바일에서 뒤쪽 탭이 화면 밖으로 잘려도 가로 스크롤
+     힌트가 없었다 - .table-wrap과 동일한 순수 CSS 스크롤 그림자 기법. */
+  background:
+    linear-gradient(to right, #fbfcfd 30%, rgba(251,252,253,0)),
+    linear-gradient(to right, rgba(251,252,253,0), #fbfcfd 70%) 100% 0,
+    linear-gradient(to right, rgba(16,42,67,.14), rgba(16,42,67,0)),
+    linear-gradient(to left, rgba(16,42,67,.14), rgba(16,42,67,0)) 100% 0;
+  background-repeat: no-repeat;
+  background-color: #fbfcfd;
+  background-size: 24px 100%, 24px 100%, 10px 100%, 10px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+.tab { flex: 0 0 auto; border: 0; border-bottom: 3px solid transparent; background: transparent; color: #667e91; padding: 15px 17px 12px; font-size: 14px; font-weight: 800; }
+.tab:hover { color: var(--ink); background: #f0f6fa; }
+.tab.active { color: var(--blue); border-color: var(--blue); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.three-engine { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.engine-intro { min-height: 190px; padding: 30px 32px 28px; border-right: 1px solid var(--line); position: relative; }
+.engine-intro:last-child { border-right: 0; }
+.engine-no { color: #8ca2b2; font-size: 11px; letter-spacing: .12em; font-weight: 900; }
+.engine-name { display: block; margin-top: 24px; font-size: 26px; line-height: 1; letter-spacing: -.06em; font-weight: 900; }
+.engine-role { display: block; margin-top: 10px; color: var(--muted); font-size: 13px; font-weight: 700; }
+.engine-intro.income .engine-name { color: var(--amber); }
+.engine-intro.performance .engine-name { color: var(--blue); }
+.engine-intro.edge .engine-name { color: var(--teal); }
+.engine-intro::after { content: ""; position: absolute; height: 5px; left: 32px; right: 32px; bottom: 27px; background: currentColor; opacity: .18; }
+
+.path-line { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; padding: 8px 0; }
+.path-step { position: relative; min-height: 118px; padding: 20px 25px; border-right: 1px solid var(--line); }
+.path-step:last-child { border-right: 0; }
+.path-step .num { display: block; color: #90a1af; font-size: 11px; font-weight: 900; letter-spacing: .12em; }
+.path-step strong { display: block; margin-top: 11px; font-size: 19px; letter-spacing: -.04em; }
+.path-step span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+.split-grid { display:grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, .85fr); gap: 26px; align-items:start; }
+.wide-grid { display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items:start; }
+.editorial-note { min-height: 100%; padding: 28px; background: var(--navy); color: #fff; border-radius: 14px; }
+.editorial-note .kicker { color: #8ac9ff; }
+.editorial-note h3 { margin: 0; font-size: 24px; letter-spacing: -.05em; }
+.editorial-note p { color:#d2e5f3; line-height:1.7; font-size:13px; }
+.editorial-note ul { padding-left: 17px; color:#e9f5fc; font-size:13px; line-height:1.85; }
+
+.chart-box { height: 385px; width: 100%; }
+.chart-box.tall { height: 480px; }
+.chart-box.short { height: 285px; }
+.chart-frame { min-width: 0; padding: 3px 0 0; }
+.custom-range { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+.custom-range span { color:#8ba0b0; font-size:12px; }
+.custom-range input[type="date"] { min-height:40px; border-radius:8px; border:1px solid #c8d9e6; background:#fff; color:#294a60; padding:0 10px; font:inherit; font-size:12px; }
+/* 연/월/일을 각각 입력받는 커스텀 기간 인풋 - 네이티브 <input type="date">를 대신한다
+   (성과 분석 > MP 기준 탭 전용, 자릿수가 차면 다음 칸으로 자동 이동하는 JS와 짝을 이룸). */
+.date-parts { display:flex; align-items:center; gap:4px; min-height:40px; padding:0 8px; border-radius:8px; border:1px solid #c8d9e6; background:#fff; }
+.date-parts input { border:0; background:none; color:#294a60; font:inherit; font-size:12px; font-weight:700; text-align:center; padding:0; }
+.date-parts .date-part-y { width:38px; }
+.date-parts .date-part-m, .date-parts .date-part-d { width:20px; }
+.date-parts input:focus { outline:none; color:#1771b9; }
+.date-parts .date-sep { color:#8ba0b0; font-size:12px; }
+.chart-detail-panel { margin-top:14px; padding:18px 22px; border:1px solid #d4e0e9; border-radius:12px; background:#f8fafc; }
+.chart-detail-panel .detail-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.chart-detail-panel .detail-heading strong { font-size:15px; color:#153f5d; }
+.chart-detail-panel .detail-heading button { border:0; background:none; color:#7c93a3; font-size:12px; font-weight:800; cursor:pointer; }
+.chart-detail-panel .detail-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px 18px; }
+.chart-detail-panel .detail-stat span { display:block; color:#61788b; font-size:11px; font-weight:800; }
+.chart-detail-panel .detail-stat strong { display:block; margin-top:4px; font-size:16px; color:#153f5d; }
+.chart-detail-panel .detail-holdings { margin-top:14px; padding-top:14px; border-top:1px solid #e1eaf0; }
+.chart-detail-panel .detail-holdings-title { display:block; margin-bottom:8px; color:#61788b; font-size:11px; font-weight:800; }
+.chart-detail-panel .detail-holdings-list { display:flex; flex-wrap:wrap; gap:6px 10px; }
+.chart-detail-panel .detail-holdings-list span { padding:4px 9px; border-radius:999px; background:#fff; border:1px solid #dbe7ee; font-size:11px; color:#33526b; }
+.full-width-chart { width:100%; }
+/* Adjustment tab charts sit directly under .tab-panel with no .section-body
+   wrapper (unlike quantitative/performance charts), so they need their own
+   horizontal inset to match the 30px used everywhere else. (#raw-chart and
+   #market-chart already get a 24px margin from their own page-specific rule
+   further down, so they're excluded here to avoid a doubled inset.)
+   #forecast-chart (국면예보 탭) and #category-chart (조정 입력 탭 세부 지표 시계열)
+   are the same direct-tab-panel-child situation, so they reuse this rule
+   instead of a new one. */
+#stress-chart, #category-chart, #indicator-chart, #forecast-chart { padding:0 30px; }
+.chart-legend-note { margin-top: 8px; font-size: 11px; color: var(--muted); font-weight: 700; }
+
+.score-strip-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:20px 30px 0; }
+.score-strip-heading h4 { margin:0; font-size:15px; font-weight:850; letter-spacing:-.03em; color:var(--ink); }
+.score-strip-block + .score-strip-block { margin-top:8px; }
+.score-strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line); margin:12px 30px 0; }
+.score-cell { padding: 20px 18px 18px; border-right: 1px solid var(--line); min-height: 136px; }
+.score-cell:last-child { border-right:0; }
+.score-label { display:flex; align-items:center; gap:8px; color:#536e82; font-size:12px; font-weight:800; }
+.score-dot { width:8px; height:8px; border-radius:50%; }
+.score-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+.score-pair > div + div { border-left:1px solid var(--line); padding-left:12px; }
+.score-value { display:block; margin-top:4px; font-size:25px; line-height:1; letter-spacing:-.06em; font-weight:900; }
+.score-sub { display:block; color:var(--muted); font-size:10px; font-weight:800; }
+.final-score-cell { background:#f2f7fb; }
+.final-score-cell .score-label { color:#173952; }
+.final-score-cell .score-value { color:#102a43; }
+.series-controls { display:flex; flex-wrap:wrap; gap:8px; padding:17px 30px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#fbfcfd; }
+.chart-range-row { display:flex; justify-content:flex-end; padding:16px 0 0; }
+.series-control { display:inline-flex; align-items:center; gap:7px; min-height:34px; padding:6px 11px; border:1px solid #d4e0e9; border-radius:999px; background:#fff; color:#667e91; font-size:12px; font-weight:800; }
+.series-control::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--series-color,#8193a2); opacity:.42; }
+.series-control.active { border-color:var(--series-color,#1771b9); color:#173952; background:#f3f8fb; }
+.series-control.active::before { opacity:1; }
+.score-stat-section { margin-top:30px; margin-bottom:28px; border-top:1px solid var(--line); }
+.subsection-heading { padding:22px 0 13px; }
+.subsection-heading .section-kicker { display:block; }
+.subsection-heading h3 { margin:5px 0 0; font-size:18px; letter-spacing:-.04em; }
+.score-stat-label { display:inline-flex; align-items:center; gap:8px; font-weight:850; }
+.score-stat-label i { display:inline-block; width:8px; height:8px; border-radius:50%; }
+.score-stat-table .current { font-weight:900; color:var(--navy); }
+
+.stat-rail { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); border-top:1px solid var(--line); }
+.stat { min-height:112px; padding:20px 21px; border-right:1px solid var(--line); }
+.stat:last-child { border-right:0; }
+.stat-label { color:#657c8d; font-size:11px; font-weight:800; }
+.stat-value { display:block; margin-top:12px; font-size:25px; letter-spacing:-.05em; font-weight:900; }
+.stat-sub { margin-top:7px; color:#8ba0b0; font-size:11px; font-weight:700; }
+
+.filter-bar { display:flex; align-items:flex-end; justify-content:space-between; gap:22px; padding:24px 30px; background:#fbfcfd; border-bottom:1px solid var(--line); }
+.market-note { display:grid; gap:6px; padding:18px 30px; background:#f4f9fc; border-bottom:1px solid var(--line); color:#315a73; }
+.market-note strong { color:#173952; font-size:13px; }
+.market-note span { color:#176cae; font-size:13px; font-weight:800; line-height:1.5; }
+.market-note small { color:#71899a; font-size:11px; line-height:1.5; }
+/* The market tab writes a three-part source note dynamically. Keep each
+   element on its own readable line instead of inheriting right-aligned
+   section metadata styles. */
+#market-note {
+  display:grid;
+  gap:6px;
+  padding:18px 30px;
+  background:#f4f9fc;
+  border-bottom:1px solid var(--line);
+  color:#315a73;
+  text-align:left;
+}
+#market-note strong { color:#173952; font-size:13px; line-height:1.35; }
+#market-note span { color:#176cae; font-size:13px; font-weight:800; line-height:1.5; overflow-wrap:anywhere; }
+#market-note small { color:#71899a; font-size:11px; line-height:1.5; overflow-wrap:anywhere; }
+.tab-panel[data-panel="market"] .filter-bar { align-items:flex-end; }
+.tab-panel[data-panel="market"] .input-group { min-width:240px; }
+.tab-panel[data-panel="market"] .input-group select { width:100%; }
+.tab-panel[data-panel="market"] .table-wrap + .stat-rail { border-top:0; }
+.filter-title { flex:1; min-width:180px; }
+.filter-title strong { display:block; font-size:19px; letter-spacing:-.04em; }
+.filter-title span { display:block; margin-top:6px; color:var(--muted); font-size:12px; }
+.filter-controls { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:flex-end; gap:10px; }
+.input-group { display:grid; gap:6px; }
+.input-group label { color:#61788b; font-size:11px; font-weight:800; }
+.input-group input, .input-group select, .input-group textarea { border:1px solid #bfd0df; border-radius:8px; color:var(--ink); background:#fff; padding:10px 12px; min-height:40px; outline:none; }
+/* select는 옵션이 많고 그 중 일부 텍스트가 길면(예: 시장 지표 67개, 보조 지표 13개) 일부
+   모바일 환경에서 .input-group(display:grid)의 auto 행 높이 계산이 select 자체를 100px+로
+   부풀리는 렌더링 버그가 있었다(대신 category-indicator처럼 옵션이 짧은 select는 정상) - select는
+   네이티브로도 항상 한 줄(닫힌 상태)만 차지해야 하므로 높이를 명시적으로 고정해 막는다.
+   textarea는 여러 줄이 정상이라 이 규칙에서 제외(위 min-height만 적용받음). */
+.input-group select { height:40px; }
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(23,113,185,.11); }
+.filter-hint { display:block; min-height:14px; margin-top:6px; padding-right:4px; color:#8ba0b0; font-size:11px; font-weight:700; text-align:right; }
+.range-buttons { display:flex; gap:7px; }
+.range-btn, .line-btn, .primary-btn { border-radius:8px; min-height:40px; padding:0 14px; border:1px solid #c8d9e6; background:#fff; color:#456378; font-weight:800; font-size:13px; white-space:nowrap; }
+.range-btn.active, .primary-btn { color:#fff; background:var(--navy); border-color:var(--navy); }
+.primary-btn:hover { background:#0b304c; }
+.line-btn:hover, .range-btn:hover { background:#f0f6fa; }
+/* Current adjustment markup uses the action/check aliases below; keep them
+   visually identical to the established console controls. */
+.primary-action, .secondary-action { border-radius:8px; min-height:40px; padding:0 14px; border:1px solid #c8d9e6; background:#fff; color:#456378; font:inherit; font-size:13px; font-weight:800; cursor:pointer; }
+.primary-action { color:#fff; background:var(--navy); border-color:var(--navy); }
+.primary-action:hover { background:#0b304c; }
+.secondary-action:hover { background:#f0f6fa; }
+.form-card > .check-row { display:flex; align-items:center; gap:11px; min-height:48px; padding:13px 14px; border:1px solid var(--line); background:#fbfcfd; color:var(--ink); font-size:13px; font-weight:800; }
+.check-row + .check-row { margin-top:10px; }
+.check-row input { width:19px; height:19px; accent-color:var(--blue); }
+
+/* 차트 배경(markArea)의 국면/구간 색이 뭘 뜻하는지 알려주는 작은 범례 한 줄 -
+   A.ensureLegendBefore()가 차트 바로 위에 끼워 넣는다. */
+.regime-legend { display:flex; flex-wrap:wrap; gap:6px 16px; padding:14px 24px 0; font-size:11px; color:var(--muted); }
+.regime-legend-item { display:inline-flex; align-items:center; gap:6px; }
+.regime-legend-item i { width:10px; height:10px; border-radius:2px; display:inline-block; flex:0 0 auto; }
+.stress-shading-caption { padding:0 30px; margin:10px 0 0; }
+.stress-shading-caption .regime-legend-item { color:var(--muted); }
+
+/* "저장된 조건 없음" 류 빈 상태 행 - colspan으로 표 전체를 가로지르는 안내문이라 다른 셀과
+   같은 좁은 패딩만 있으면 카드 바로 아래에 붕 떠 보인다. 살짝 더 여유를 두고 톤을 낮춘다. */
+td[colspan] { padding:28px 15px; color:var(--muted); background:#fbfcfd; }
+
+.table-wrap {
+  overflow-x: auto; overflow-y: visible; max-height: none; border-top: 1px solid var(--line);
+  /* 모바일에서 열이 많은 표(지표 비교표 등)가 화면 끝에서 잘려 보여도 가로 스크롤이 더
+     있다는 힌트가 전혀 없어 표가 깨진 것처럼 보였다 - 스크롤 가능한 방향에만 옅은 그림자가
+     보이고 끝까지 스크롤하면 저절로 사라지는 순수 CSS 기법(양 끝의 반투명 배경이 스크롤되는
+     콘텐츠와 함께 움직이며 서로를 가려서, 실제로 더 스크롤할 내용이 없을 때만 그림자가 안
+     보이게 만든다 - background-attachment:local/scroll의 조합). */
+  background:
+    linear-gradient(to right, #fff 30%, rgba(255,255,255,0)),
+    linear-gradient(to right, rgba(255,255,255,0), #fff 70%) 100% 0,
+    linear-gradient(to right, rgba(16,42,67,.14), rgba(16,42,67,0)),
+    linear-gradient(to left, rgba(16,42,67,.14), rgba(16,42,67,0)) 100% 0;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+.ts-table-scroll { max-height:995px; overflow-y:auto; }
+/* performance.html's tables have no page-specific wrap styling (unlike
+   adjustment's raw/market .raw-catalog-wrap/.raw-detail-wrap and portfolio's
+   own .table-wrap override, which already carry their own inset), so they sit
+   flush against the tab-panel edge — give them the same 30px inset. */
+body[data-page="performance"] .table-wrap { margin:0 30px 30px; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th, td { text-align:center; }
+th { position:sticky; z-index:2; top:0; padding:14px 15px; white-space:nowrap; background:#f2f6f9; color:#547084; font-size:11px; letter-spacing:.02em; border-bottom:1px solid var(--line-strong); }
+th[data-sort-key] { cursor:pointer; user-select:none; }
+th[data-sort-key]:hover { background:#e7eef3; }
+th[data-sort-key]::after { content:''; display:inline-block; width:8px; margin-left:4px; font-size:9px; }
+th[data-sort-key][data-sort-dir="asc"]::after { content:'▲'; }
+th[data-sort-key][data-sort-dir="desc"]::after { content:'▼'; }
+td { padding:14px 15px; border-bottom:1px solid #e6edf2; vertical-align:top; line-height:1.45; }
+tr:last-child td { border-bottom:0; }
+tbody tr:hover { background:#f7fafc; }
+.numeric { text-align:center; font-variant-numeric: tabular-nums; white-space:nowrap; }
+.center { text-align:center; }
+.small { color:var(--muted); font-size:12px; }
+.nowrap { white-space:nowrap; }
+.wrap { white-space:normal; overflow-wrap:anywhere; }
+.tag { display:inline-block; padding:4px 8px; border-radius:999px; background:#edf4f7; color:#48687c; font-size:11px; font-weight:800; white-space:nowrap; }
+.tag.teal { background:#e4f5f0; color:#087d6e; }
+.tag.blue { background:#e8f2fb; color:#176cae; }
+.tag.amber { background:#fff3df; color:#a46100; }
+.tag.violet { background:#f0ebff; color:#6a4ebe; }
+.tag.red { background:#fde9eb; color:#b73041; }
+.tag.category-tag.macro { background:#f0ebff; color:#6a4ebe; }
+.tag.category-tag.vol { background:#fde9eb; color:#b73041; }
+.tag.category-tag.supply { background:#e4f5f0; color:#087d6e; }
+.tag.category-tag.technical { background:#e8f2fb; color:#176cae; }
+.tag.category-tag.fundamental { background:#fff3df; color:#a46100; }
+
+.category-table .category-name { white-space:nowrap; font-weight:900; }
+.category-table .rule { min-width:300px; max-width:600px; white-space:normal; overflow-wrap:anywhere; color:#536f82; text-align:left; }
+.category-table .indicator { white-space:nowrap; }
+/* 정량 분석 "세부 지표·스코어링 범위" 탭의 "세부 지표·스코어링 범위"/"선택 지표 시계열"
+   하위탭 - .tab-panel 자체엔 좌우 padding이 전혀 없고(.tab-panel{display:none} 뿐) 이
+   탭은 [data-panel="X"] 스코프의 카드형 여백 규칙이 애초에 하나도 없어서(다른 탭들과 달리)
+   표·필터바·차트가 전부 패널 가장자리에 그대로 붙어 있었다(실측 확인). */
+body[data-page="quantitative"] [data-indicator-panel="ledger"] > .table-wrap {
+  margin:0 24px 30px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+body[data-page="quantitative"] [data-indicator-panel="timeseries"] > .filter-bar {
+  margin:0;
+  padding:22px 30px;
+  background:#f7fafc;
+  border-bottom:1px solid var(--line);
+}
+body[data-page="quantitative"] [data-indicator-panel="timeseries"] > #indicator-chart {
+  width:auto; /* .chart-box의 width:100%+side margin 겹침 오버플로우 방지 - 다른 카드형 차트와 동일 이유 */
+  margin:18px 24px 0;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+body[data-page="quantitative"] [data-indicator-panel="timeseries"] > .table-wrap {
+  margin:18px 24px 30px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+/* "시계열 데이터" 탭(하위탭 없는 단일 패널) - #ledger-chart는 .chart-frame의 인라인
+   padding:3px 30px 0으로 이미 여백이 있었지만 바로 아래 표(.table-wrap, #ledger-body)엔
+   대응 규칙이 없어 패널 가장자리에 붙어 있었다(실측 확인). */
+body[data-page="quantitative"] [data-panel="ledger"] > .table-wrap {
+  margin:18px 24px 30px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+@media (max-width:820px) {
+  body[data-page="quantitative"] [data-panel="ledger"] > .table-wrap { margin-left:16px; margin-right:16px; }
+}
+@media (max-width:820px) {
+  body[data-page="quantitative"] [data-indicator-panel="timeseries"] > .filter-bar {
+    align-items:stretch;
+    flex-direction:column;
+    padding:18px 20px;
+  }
+  body[data-page="quantitative"] [data-indicator-panel="ledger"] > .table-wrap,
+  body[data-page="quantitative"] [data-indicator-panel="timeseries"] > #indicator-chart,
+  body[data-page="quantitative"] [data-indicator-panel="timeseries"] > .table-wrap {
+    margin-left:16px;
+    margin-right:16px;
+  }
+}
+
+.forecast-grid { display:grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap:0; border-top:1px solid var(--line); margin:0 30px; }
+.forecast { padding:22px 19px; border-right:1px solid var(--line); }
+.forecast:last-child { border-right:0; }
+.forecast-summary, .result-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line); margin:0 30px; }
+.forecast-summary > div, .result-grid > article { min-width:0; padding:21px 24px; border-right:1px solid var(--line); }
+.forecast-summary > div:last-child, .result-grid > article:last-child { border-right:0; }
+.forecast-summary span, .result-grid span { display:block; color:#627a8c; font-size:11px; font-weight:850; }
+.forecast-summary strong, .result-grid strong { display:block; margin-top:7px; color:var(--navy); font-size:25px; letter-spacing:-.05em; overflow-wrap:anywhere; }
+.forecast-summary small, .result-grid small { display:block; margin-top:7px; color:#8398a8; font-size:11px; font-weight:700; }
+.forecast-summary .ai-comment { margin:13px 0 0; padding-top:11px; border-top:1px solid var(--line); color:#587286; font-size:13px; line-height:1.65; overflow-wrap:anywhere; }
+.forecast-summary .ai-comment b { display:block; margin-bottom:9px; color:#1771b9; font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+.forecast-summary .ai-comment .forecast-ai-line { margin:0 0 9px; }
+.forecast-summary .ai-comment .forecast-ai-line:last-child { margin-bottom:0; }
+.forecast-ai-pane { min-height:165px; }
+.forecast-composite-stats { margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+.result-score-card { background:#f3f8fb; }
+.result-regime-card { background:#f1faf8; }
+.result-regime-card strong { color:#007f73; }
+.forecast-head { display:flex; justify-content:space-between; align-items:center; gap:6px; font-size:12px; font-weight:900; }
+.forecast-score { margin:16px 0 11px; font-size:32px; font-weight:900; letter-spacing:-.06em; }
+.forecast-row { display:flex; justify-content:space-between; margin-top:6px; color:#678095; font-size:11px; font-weight:700; }
+.forecast-row b { color:var(--ink); }
+/* 최종 스코어/세부 국면을 가상의 중앙선 기준 좌우 2열로 배치, 각 열은 중앙정렬(사용자 요청) -
+   기존 .forecast-detail의 좌-라벨/우-값 space-between·구분선은 이제 옆 칸(최종 스코어)과
+   나란히 앉으므로 제거. 통계(최저·최고/평균)도 같은 방식으로 좌우 2열 중앙정렬. 전체 폰트도 키움. */
+/* .forecast-score-pane는 옆 칸(.forecast-ai-pane, AI Comment 텍스트 길이에 따라 훨씬
+   길어짐)과 같은 grid row에서 stretch되므로 이 칸 자체의 높이가 내용물(스코어+세부국면+
+   통계)보다 훨씬 커진다 - align-items(같은 행 안 아이템 정렬)만으론 이 여분 공간을
+   못 잡아서, 내부 grid row 전체를 세로 중앙에 놓는 align-content가 따로 필요하다.
+   라벨(최종 스코어/세부 국면)과 값(스코어/세부국면값)을 각각 grid의 별도 행으로 분리해서
+   배치한다(HTML에서 라벨 2개를 먼저, 값 2개를 그 다음에 나열 → auto-flow가 "1행=라벨,
+   2행=값"으로 자동 배치) - 이렇게 해야 최종 스코어(큰 폰트)와 세부 국면(작은 폰트)처럼
+   폰트 크기가 서로 달라도 라벨끼리·값끼리 항상 같은 가로줄에 정렬되고, 폰트를 나중에
+   또 조정해도 중앙선·상하 기준 위치가 흔들리지 않는다. 통계(최저/평균/최고)도 동일한
+   원리로 라벨 3개+값 3개를 별도 행으로 분리.
+   AI Comment 글이 길어질수록 이 칸 위아래로 남는 빈 공간이 커지는데(내용은 중앙정렬돼도
+   옆 칸과 비교하면 "붕 뜬" 느낌) - 배경 틴트(.result-score-card와 같은 계열 색)로 이
+   칸 자체를 하나의 통계 카드처럼 보이게 해서 여백이 "빈 공간"이 아니라 "카드 내부 여백"으로
+   읽히게 한다(사용자 확인: 중앙정렬 유지 + 왼쪽 시각적으로 채움). */
+.forecast-score-pane { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:auto 52px; column-gap:18px; row-gap:10px; align-items:center; justify-items:center; align-content:center; background:#f3f8fb; }
+.forecast-score-pane > span { font-size:15px; line-height:1.2; }
+.forecast-score-pane > strong { font-size:38px; line-height:1.2; margin-top:0; }
+.forecast-score-pane > b { font-size:26px; line-height:1.2; color:#007f73; }
+.forecast-composite-stats { grid-column:1 / -1; justify-self:stretch; display:grid; grid-template-columns:repeat(3,1fr); column-gap:18px; row-gap:8px; align-items:center; justify-items:center; }
+.forecast-composite-stats span { font-size:15px; line-height:1.2; }
+.forecast-composite-stats b { font-size:19px; line-height:1.2; color:var(--ink); }
+
+.adjust-grid { display:grid; grid-template-columns: minmax(0,1.25fr) minmax(320px,.75fr); gap:26px; }
+.adjust-list { border-top:1px solid var(--line); }
+.adjust-row { display:grid; grid-template-columns:16px minmax(0,1fr) 110px; align-items:center; gap:14px; min-height:69px; padding:12px 14px; border-bottom:1px solid #e5edf2; }
+.adjust-row input { width:100%; min-height:38px; border:1px solid #bfd0df; border-radius:7px; text-align:right; padding:8px 10px; color:var(--ink); font-weight:800; }
+.adjust-row label { font-weight:900; }
+.adjust-row small { color:var(--muted); font-size:11px; font-weight:700; }
+/* 기간별 조정 이력 표(adjustment.html)의 인라인 편집 셀 - 기본 input 너비(브라우저 기본값)로
+   두면 13개 컬럼이 지나치게 넓어지므로 셀별로 압축한다. */
+.period-cell-input { width:72px; min-height:32px; border:1px solid #bfd0df; border-radius:6px; padding:4px 6px; text-align:right; font-weight:700; color:var(--ink); }
+.period-cell-input[type="date"] { width:130px; text-align:left; font-weight:600; }
+.period-cell-input[data-period-field="note"] { width:150px; text-align:left; font-weight:600; }
+/* "기간별 조정 이력" 하위 탭 - .table-wrap은 원래 좌우 여백이 없는 범용 클래스라(다른 카드형
+   섹션의 side padding에 얹혀써왔음) 이 하위 탭에선 그 여백을 대신 줄 부모가 없어 표가 패널
+   가장자리에 그대로 붙어 보였다(실측 확인). 다른 하위 탭 표(글로벌 중앙은행 금리 등)와
+   같은 카드형 여백을 준다. */
+body[data-page="adjustment"] [data-adjust-panel="period"] > .table-wrap,
+body[data-page="adjustment"] [data-adjust-panel="periods"] > .table-wrap {
+  margin:0 24px 30px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+/* "히스토리" 탭(하위탭 없음) - 같은 패널의 .form-grid/설명 <p>는 이미 30px 여백이 있는데
+   그 아래 강제국면 이력 표(.table-wrap, #override-history-body)만 대응 규칙이 없어 패널
+   가장자리에 붙어 있었다(실측 확인). */
+body[data-page="adjustment"] [data-panel="history"] > .table-wrap {
+  margin:0 24px 30px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+@media (max-width:820px) {
+  body[data-page="adjustment"] [data-panel="history"] > .table-wrap { margin-left:16px; margin-right:16px; }
+}
+.switch-list { display:grid; gap:11px; }
+.check-option { display:flex; align-items:center; gap:11px; padding:17px 16px; border:1px solid var(--line); background:#fbfcfd; font-size:13px; font-weight:800; }
+.check-option input { width:19px; height:19px; accent-color:var(--blue); }
+.adjust-preview { min-width:0; margin-top:18px; padding:21px; background:var(--navy); color:#fff; border-radius:12px; }
+.adjust-preview .kicker { color:#8ac9ff; font-size:15px; line-height:1.3; font-weight:900; letter-spacing:.02em; }
+.preview-score-compare { display:grid; grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr); align-items:center; margin-top:6px; }
+.preview-score-block { min-width:0; padding:5px 12px; text-align:center; }
+.preview-score-block span { display:block; color:#b8d2e4; font-size:11px; font-weight:800; line-height:1.35; overflow-wrap:anywhere; }
+.preview-score-block strong { display:block; margin-top:8px; font-size:34px; line-height:1; letter-spacing:-.06em; }
+.preview-score-block small { display:block; margin-top:7px; color:#9bb9ce; font-size:10px; font-weight:700; }
+.preview-score-raw strong { color:#fff; }
+.preview-score-adjusted strong { color:#66dfd5; }
+.preview-score-divider { width:1px; height:76px; background:rgba(255,255,255,.24); }
+.adjust-preview p:last-child { margin:14px 0 0; color:#d2e5f3; font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.save-row { display:flex; justify-content:flex-end; gap:9px; padding-top:19px; }
+
+/* Restore the two-column adjustment workspace used by the console design. */
+.form-grid {
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);
+  gap:26px;
+  padding:24px 0 30px;
+  margin:0 30px;
+  border-bottom:1px solid var(--line);
+}
+.form-card {
+  min-width:0;
+  padding:20px;
+  border:1px solid var(--line);
+  background:#fff;
+}
+.form-card h3 { margin:0 0 15px; font-size:18px; line-height:1.3; letter-spacing:-.04em; }
+.form-card > label { display:block; margin:0 0 8px; color:#627a8c; font-size:11px; font-weight:850; }
+.form-card > input:not([type="checkbox"]) {
+  width:100%; min-height:40px; border:1px solid #bfd0df; border-radius:8px;
+  padding:8px 11px; color:var(--ink); font-size:16px; font-weight:800;
+}
+.form-card > select {
+  width:100%; min-height:40px; border:1px solid #bfd0df; border-radius:8px;
+  padding:8px 11px; color:var(--ink); font-size:16px; font-weight:800; background:#fff;
+}
+.form-card > p { margin:9px 0 0; color:var(--muted); font-size:11px; line-height:1.5; }
+.form-card:nth-child(2) { grid-row:1 / span 2; }
+.form-card:nth-child(3) { align-self:start; }
+/* .form-grid는 원래 카드 3개(관측기간/분류별조정/세부국면축) 배치에 맞춰 2단 그리드로 짜여
+   있었다 - 이후 추가된 "새 기간 조정 추가"(조정 입력 탭)·"새 강제 설정 추가"(성과 분석 히스토리
+   탭) 폼은 카드 1개만 들어있는 별도 .form-grid를 새로 만들어 썼는데, 그러면 카드가 1번째
+   칸(1.25fr)만 차지하고 2번째 칸(.75fr, 최소 320px)이 통째로 빈 채 남아 데스크톱에서 폼 오른쪽에
+   큰 여백이 생겼다. 카드가 하나뿐인 grid에서만 전체 폭을 쓰도록 한다(카드 3개인 원래 그리드는
+   :only-child에 안 걸리므로 그대로 유지됨). */
+.form-grid > .form-card:only-child { grid-column:1 / -1; }
+.form-card .adjust-list { border-top:1px solid var(--line); }
+.preview-panel {
+  margin:0 30px 30px; padding:21px; background:var(--navy); color:#fff;
+  border-radius:12px; overflow:hidden;
+}
+.preview-values { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; }
+.preview-values > div { min-width:0; padding:5px 14px; text-align:center; }
+.preview-values > div + div { border-left:1px solid rgba(255,255,255,.24); }
+.preview-values span, .preview-regime span { display:block; color:#b8d2e4; font-size:11px; font-weight:800; line-height:1.35; }
+.preview-values strong { display:block; margin-top:8px; color:#66dfd5; font-size:34px; line-height:1; letter-spacing:-.06em; }
+.preview-values > div:first-child strong { color:#fff; }
+.preview-regime { display:flex; flex-direction:column; align-items:center; gap:8px; margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,.2); text-align:center; }
+.preview-regime strong { min-width:0; color:#66dfd5; font-size:18px; line-height:1.25; letter-spacing:-.04em; text-align:center; overflow-wrap:anywhere; }
+
+/* The current AI panel uses labels as lanes; give them the same framed
+   three-column treatment as the previous AI Comment workspace. */
+.ai-grid > label {
+  display:flex; min-width:0; flex-direction:column; padding:24px;
+  border-right:1px solid var(--line); color:var(--ink); font-size:13px; font-weight:850;
+}
+.ai-grid > label:last-child { border-right:0; }
+.ai-grid > label textarea {
+  width:100%; min-height:110px; margin-top:14px; resize:vertical;
+  border:1px solid #bfd0df; border-radius:8px; padding:10px; color:var(--ink); font:inherit; font-weight:500;
+}
+.ai-grid > label .ai-comment-text {
+  width:100%; min-height:110px; margin-top:14px; box-sizing:border-box;
+  border:1px solid #bfd0df; border-radius:8px; padding:14px; color:var(--ink); font:inherit; font-weight:500;
+  line-height:1.55;
+}
+.ai-comment-text .ai-comment-title { margin:0 0 10px; font-weight:800; color:var(--ink); line-height:1.4; }
+.ai-comment-text .ai-comment-line { margin:0 0 8px; }
+.ai-comment-text .ai-comment-line:last-child { margin-bottom:0; }
+.tab-panel[data-panel="ai"] > .primary-action { margin:20px 24px 24px; }
+
+/* Methodology rows are generated by adjustment.js and need an explicit
+   layout; otherwise the browser's default list bullets collapse the text. */
+.method-list { display:grid; gap:8px; margin:14px 0 0; padding:0; list-style:none; }
+.method-list li { display:grid; grid-template-columns:minmax(86px,.32fr) minmax(0,1fr); gap:12px; align-items:start; padding-top:8px; border-top:1px solid #e6eef3; color:#5f788a; font-size:11px; line-height:1.55; overflow-wrap:anywhere; }
+.method-list li:first-child { padding-top:0; border-top:0; }
+.method-list li b { color:var(--ink); font-size:11px; }
+.method-list code { color:#49677d; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:10px; white-space:normal; overflow-wrap:anywhere; }
+
+.ai-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line); margin:0 30px; }
+
+.stress-band { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line); margin:0 30px; }
+.stress-card { padding:24px; border-right:1px solid var(--line); }
+.stress-card:last-child { border-right:0; }
+.stress-card h3 { margin:0; font-size:18px; }
+.stress-number { margin-top:14px; font-size:42px; line-height:1; letter-spacing:-.07em; font-weight:900; }
+.stress-card p { margin:11px 0 0; color:var(--muted); font-size:12px; line-height:1.5; }
+.stress-asof { display:block; margin-top:7px; color:#a46100; font-size:11px; font-weight:750; }
+/* Plain-language stress summary + collapse toggle sitting between the
+   stress-band cards and the (now hidden-by-default) stress-methodology
+   detail, using the same 30px side margin convention as its neighbors. */
+.stress-summary-row { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:20px 30px 0; }
+.stress-summary-comment { margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
+.stress-summary-comment b { color:var(--ink); }
+.stress-methodology { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:0 30px; }
+/* .stress-methodology's own `display:grid` above is author-normal, same origin
+   as the UA's default `[hidden]{display:none}` rule but with higher specificity
+   settled by source order alone — so the bare `hidden` attribute this element
+   now starts with would be silently ignored without this ID-scoped override. */
+#stress-methodology[hidden] { display:none; }
+.stress-methodology article { min-width:0; padding:23px 24px; border-right:1px solid var(--line); }
+.stress-methodology article:last-child { border-right:0; }
+.stress-methodology h3 { margin:5px 0 0; font-size:17px; letter-spacing:-.04em; }
+.stress-methodology p { margin:10px 0 0; color:#5f788a; font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.stress-thresholds { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-bottom:1px solid var(--line); background:#fbfdff; }
+.stress-thresholds article { min-width:0; padding:20px 24px 22px; border-right:1px solid var(--line); }
+.stress-thresholds article:nth-child(2) { border-right:0; }
+.stress-thresholds h3 { margin:5px 0 0; font-size:17px; letter-spacing:-.04em; }
+.stress-thresholds p { margin:10px 0 0; color:#5f788a; font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.stress-thresholds strong { color:var(--navy); }
+.stress-chart-frame { min-width:0; padding:22px 26px 28px; overflow:hidden; }
+.stress-chart-controls { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:0 2px 16px; }
+.stress-chart-controls .section-kicker { color:var(--blue); }
+.chart-box.stress-chart { height:520px; min-width:0; }
+
+.portfolio-layout { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr); gap:26px; }
+.portfolio-layout.mp-only { grid-template-columns:1fr; }
+.regime-banner { padding:25px 27px; border:1px solid #a9ded6; background:#edf9f7; }
+.regime-banner .eyebrow { color:#527e7c; font-size:11px; font-weight:900; }
+.regime-banner strong { display:block; margin-top:9px; color:var(--teal); font-size:34px; letter-spacing:-.07em; }
+.regime-banner .small { display:block; margin-top:8px; }
+.engine-filter-row { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding:0 0 17px; }
+.engine-filter { display:flex; flex-wrap:wrap; gap:7px; }
+.engine-filter button { border:1px solid var(--line-strong); border-radius:999px; background:#fff; color:#587286; padding:7px 12px; font-size:12px; font-weight:800; }
+.engine-filter button.active { background:var(--navy); color:#fff; border-color:var(--navy); }
+.engine-save-status { color:var(--muted); font-size:11px; font-weight:800; white-space:nowrap; }
+.engine-row-add { display:flex; align-items:flex-end; gap:8px; margin-left:auto; }
+.engine-row-add label { display:block; color:var(--muted); font-size:11px; font-weight:800; white-space:nowrap; }
+.engine-row-add select { min-height:36px; border:1px solid var(--line-strong); border-radius:7px; background:#fff; color:var(--ink); padding:7px 28px 7px 10px; font-size:12px; font-weight:750; }
+.universe-controls { display:grid; grid-template-columns:minmax(230px,1.35fr) repeat(4,minmax(170px,1fr)) auto; column-gap:16px; row-gap:10px; align-items:end; padding:20px 24px; background:#fbfcfd; border-bottom:1px solid var(--line); }
+.universe-controls .input-group { min-width:0; }
+.universe-controls .input-group input,
+.universe-controls .input-group select { width:100%; min-width:0; box-sizing:border-box; }
+.universe-controls .line-btn { white-space:nowrap; }
+.universe-note { padding:11px 24px; color:#607b8e; background:#f7fafc; border-bottom:1px solid var(--line); font-size:11px; line-height:1.5; }
+.universe-summary { padding:12px 24px; color:#176cae; background:#fff; border-bottom:1px solid var(--line); font-size:12px; font-weight:800; }
+.universe-table { min-width:1120px; }
+.universe-table td { vertical-align:middle; }
+.universe-mapping .universe-engine,
+.universe-mapping .universe-feature {
+  display:block;
+  line-height:1.35;
+}
+.universe-mapping .universe-engine {
+  font-weight:800;
+  color:var(--ink);
+}
+.universe-mapping .universe-feature {
+  margin-top:3px;
+  color:var(--muted);
+  font-size:.92em;
+}
+.universe-table .universe-identity strong { display:block; }
+.universe-table .universe-identity small { display:block; margin-top:3px; color:var(--muted); }
+.universe-table .universe-characteristic, .universe-table .universe-mapping { min-width:160px; white-space:normal; overflow-wrap:anywhere; }
+.tab-panel[data-panel="universe"] #universe-summary {
+  display:flex;
+  align-items:center;
+  min-height:52px;
+  box-sizing:border-box;
+  margin:0 30px;
+  padding:15px 0;
+  color:#176cae;
+  background:#fff;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+  line-height:1.45;
+  font-weight:850;
+  letter-spacing:-.01em;
+  text-align:left;
+  white-space:normal;
+}
+.tab-panel[data-panel="universe"] .table-wrap table { min-width:1120px; }
+.tab-panel[data-panel="universe"] .universe-identity { min-width:220px; text-align:left; }
+.tab-panel[data-panel="universe"] .universe-identity strong {
+  display:block;
+  color:#173952;
+  font-size:14px;
+  line-height:1.35;
+  white-space:normal;
+}
+.tab-panel[data-panel="universe"] .universe-identity small {
+  display:block;
+  margin-top:6px;
+  color:#6f8798;
+  font-size:12px;
+  line-height:1.35;
+  white-space:normal;
+}
+
+/* 시가총액·거래대금 셀 - 원 단위 전체 숫자를 크게, 조/억 축약형을 작은 캡션으로
+   아래에 붙인다. universe-identity의 strong+small 2단 표기 관례를 그대로 재사용. */
+.tab-panel[data-panel="universe"] .universe-metric-cell strong {
+  display:block;
+  color:#173952;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.35;
+}
+.tab-panel[data-panel="universe"] .universe-metric-cell small {
+  display:block;
+  margin-top:4px;
+  color:#6f8798;
+  font-size:11px;
+  line-height:1.3;
+}
+
+/* 유니버스 "장바구니" 저장 조건 - 색상 점이 붙은 각 행 배지. */
+.tab-panel[data-panel="universe"] .universe-cart-badges {
+  display:flex;
+  gap:4px;
+  margin-bottom:5px;
+  justify-content:flex-start;
+}
+.tab-panel[data-panel="universe"] .universe-cart-dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  display:inline-block;
+  flex:0 0 auto;
+}
+
+/* Portfolio workspace refresh: a single visual system across all four tabs. */
+body[data-page="portfolio"] {
+  background:linear-gradient(180deg,#f5f8fb 0%,#eef3f7 100%);
+}
+body[data-page="portfolio"] .page-title {
+  min-height:176px;
+  box-sizing:border-box;
+  padding:36px 42px;
+  border:1px solid #dce7ef;
+  border-radius:18px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 14px 34px rgba(24,58,84,.06);
+}
+body[data-page="portfolio"] .page-title h1 { color:#102f49; font-size:42px; letter-spacing:-.075em; }
+body[data-page="portfolio"] .page-title-note { color:#8296a6; font-size:12px; letter-spacing:.11em; font-weight:900; }
+body[data-page="portfolio"] .tab-panel > .section-heading {
+  min-height:105px;
+  box-sizing:border-box;
+  padding:28px 30px 24px;
+  align-items:flex-start;
+  background:#fff;
+  border-bottom:1px solid #e1eaf0;
+}
+body[data-page="portfolio"] .tab-panel > .section-heading h2 {
+  margin:5px 0 0;
+  color:#12344f;
+  font-size:25px;
+  letter-spacing:-.055em;
+}
+body[data-page="portfolio"] .tab-panel > .section-heading .section-meta {
+  align-self:flex-start;
+  margin-top:6px;
+  padding:8px 11px;
+  border:1px solid #e0eaf0;
+  border-radius:999px;
+  background:#f8fbfd;
+  color:#6a8191;
+  font-size:11px;
+  letter-spacing:-.01em;
+}
+body[data-page="portfolio"] .tab-panel > .section-heading .section-actions { gap:8px; }
+body[data-page="portfolio"] .tab-panel > .section-heading .primary-action,
+body[data-page="portfolio"] .tab-panel > .section-heading .secondary-action {
+  min-height:38px;
+  padding:0 14px;
+  border-radius:9px;
+  font-size:12px;
+}
+body[data-page="portfolio"] .table-wrap {
+  margin:22px 24px 28px;
+  border:1px solid #dce7ef;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(24,58,84,.045);
+  overflow:auto;
+}
+body[data-page="portfolio"] .table-wrap table { width:100%; border-collapse:separate; border-spacing:0; }
+body[data-page="portfolio"] .table-wrap thead th {
+  position:sticky;
+  top:0;
+  z-index:2;
+  padding:13px 14px;
+  background:#edf4f8;
+  color:#4d687b;
+  border-bottom:1px solid #d5e2ea;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:-.02em;
+  text-align:center;
+  white-space:nowrap;
+}
+body[data-page="portfolio"] .table-wrap tbody td {
+  padding:14px 14px;
+  color:#1d3a50;
+  border-bottom:1px solid #e8eef2;
+  font-size:12px;
+  line-height:1.45;
+  text-align:center;
+  vertical-align:middle;
+}
+body[data-page="portfolio"] .table-wrap tbody tr:last-child td { border-bottom:0; }
+body[data-page="portfolio"] .table-wrap tbody tr:hover td { background:#f6fafc; }
+body[data-page="portfolio"] .table-wrap tbody td.universe-identity { text-align:left; }
+
+body[data-page="portfolio"] #universe-controls {
+  display:grid;
+  align-items:start;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  gap:13px 14px;
+  padding:22px 24px 20px;
+  background:#f8fafc;
+  border-bottom:1px solid #e1eaf0;
+}
+body[data-page="portfolio"] #universe-controls .input-group:nth-child(1) { grid-column:span 3; }
+body[data-page="portfolio"] #universe-controls .input-group:nth-child(2) { grid-column:span 2; }
+body[data-page="portfolio"] #universe-controls .input-group:nth-child(3),
+body[data-page="portfolio"] #universe-controls .input-group:nth-child(4) { grid-column:span 2; }
+body[data-page="portfolio"] #universe-controls > .secondary-action { grid-column:span 1; min-width:0; padding:0 10px; align-self:start; margin-top:18.8px; height:42px; }
+body[data-page="portfolio"] #universe-controls .input-group label { color:#587488; font-size:11px; }
+body[data-page="portfolio"] #universe-controls input,
+body[data-page="portfolio"] #universe-controls select { min-height:42px; border-color:#cadbe6; border-radius:9px; background:#fff; font-size:12px; }
+body[data-page="portfolio"] #universe-summary { border-top:0; }
+
+/* 유니버스 "장바구니" - 저장 조건 이름 입력/저장 버튼(정적 마크업, 항상 그대로 유지)과
+   그 아래 칩 목록(합집합 토글 + 조건별 칩, portfolio.js가 매번 다시 그림). */
+body[data-page="portfolio"] .universe-cart-bar {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px 20px;
+  padding:14px 0;
+  margin:0 24px;
+  background:#fff;
+  border-bottom:1px solid #e1eaf0;
+}
+body[data-page="portfolio"] .universe-cart-compose { display:flex; align-items:center; gap:8px; }
+body[data-page="portfolio"] .universe-cart-compose input {
+  min-height:36px;
+  min-width:220px;
+  border:1px solid var(--line-strong);
+  border-radius:8px;
+  padding:0 11px;
+  color:var(--ink);
+  background:#fff;
+  font-size:12px;
+}
+body[data-page="portfolio"] .universe-cart-compose input:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(23,113,185,.11); }
+body[data-page="portfolio"] .universe-cart-compose .secondary-action { min-height:36px; padding:0 14px; font-size:12px; }
+body[data-page="performance"] .override-banner,
+body[data-page="portfolio"] .override-banner {
+  margin:0 30px 0;
+  padding:10px 14px;
+  border:1px solid #bfe0f5;
+  border-radius:8px;
+  background:#eef7fd;
+  color:#1a5f85;
+  font-size:12px;
+  font-weight:700;
+}
+body[data-page="performance"] .override-banner a,
+body[data-page="portfolio"] .override-banner a { color:#1771b9; text-decoration:underline; }
+body[data-page="portfolio"] .override-banner,
+body[data-page="performance"] .override-banner { margin:20px 30px 0; }
+/* performance.html에서 배너 바로 다음이 .filter-bar인 경우 - 배너(파란 테두리+배경)와
+   filter-bar(자기 배경 #fbfcfd)가 서로 다른 배경색의 박스라 여백 없이 붙으면 경계가
+   시각적으로 딱 붙어 보인다(실측 확인: 두 박스 사이 0px, 그런데 form-grid처럼 배경 없는
+   요소 뒤에 오는 경우와 달리 여긴 patting만으론 안 가려짐). 배너가 실제로 보일 때만
+   (:not([hidden]))로 한정 - 평소(오버라이드 없음)엔 filter-bar가 패널 맨 위 요소이므로
+   이 마진이 붙으면 안 된다. */
+body[data-page="performance"] .override-banner:not([hidden]) + .filter-bar { margin-top:16px; }
+/* 히스토리 테이블의 행 전체가 override-detail.html로 연결된다(삭제 버튼만 예외) -
+   삭제 버튼 위에서는 손가락 커서를 되돌려 "이것만 별도 동작"이라는 걸 드러낸다. */
+.override-row { cursor:pointer; }
+.override-row [data-delete-override] { cursor:pointer; }
+.override-row:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+
+/* override-detail.html - 강제 국면 설정 개별 상세 페이지(탭 없는 단일 컬럼 페이지라
+   .tab-panel 관련 패딩 상속 규칙과는 무관 - .table-wrap/.chart-frame은 여기서 직접 여백을 준다). */
+body[data-page="override-detail"] .page-title-note a { color:var(--blue); font-weight: 900; }
+body[data-page="override-detail"] .page-title-note a:hover { text-decoration:underline; }
+/* 다른 페이지는 .page-title-note에 장식용 텍스트만 넣어서 @media(max-width:820px)의
+   ".page-title-note { display:none; }"가 안전하지만, 이 페이지는 유일한 뒤로가기 링크가
+   그 안에 있으므로 모바일에서도 계속 보여야 한다. */
+body[data-page="override-detail"] .page-title-note { display:block; }
+body[data-page="override-detail"] .table-wrap { margin:0 30px 30px; }
+body[data-page="override-detail"] #detail-not-found .section-body a { color:var(--blue); font-weight:700; }
+body[data-page="override-detail"] #detail-not-found .section-body a:hover { text-decoration:underline; }
+body[data-page="override-detail"] #detail-note-wrap { padding-top:20px; }
+body[data-page="override-detail"] #detail-impact-short-window { color:var(--amber); font-weight:700; }
+
+/* 기간 지정 국면 재구성 백테스트 블록("국면에 따른 엔진별·특성별 비중"/"엔진별·특성별 MP"
+   탭 공통) - .regime-backtest-block 자체는 .tab-panel의 직속 자식이지만 그 안의
+   .section-heading은 아니므로(중첩 1단 더 깊음) 포트폴리오 페이지 전용 ".tab-panel >
+   .section-heading" 패딩 규칙을 못 받는다 - 기본(비스코프) .section-heading 규칙만
+   적용되고, 나머지 요소는 여기서 직접 30px 여백을 맞춰준다. */
+/* "강제 조정" 초안 폼(fw-period-form/inv-period-form)을 감싸는 .form-grid는 안에 원본과
+   똑같이 넓은 표(engine-feature-weight-table 등)를 그대로 재사용하므로, 인라인 style로
+   좌우 padding을 고정하면(예전엔 30px 고정) 모바일에서도 안 줄어들어 그 표의 가로 스크롤
+   가능 폭이 기본값 탭의 절반 수준으로 좁아졌다(실측 확인) - 클래스로 옮겨 뷰포트별로
+   좌우 padding을 줄인다. */
+body[data-page="portfolio"] .fw-period-grid { padding:16px 30px 20px; }
+@media (max-width:820px) {
+  body[data-page="portfolio"] .fw-period-grid { padding:16px 20px 20px; }
+}
+@media (max-width:500px) {
+  body[data-page="portfolio"] .fw-period-grid { padding:16px 12px 20px; }
+}
+body[data-page="portfolio"] .regime-backtest-block .backtest-desc {
+  margin:0 30px 16px;
+  color:#5b7587;
+  font-size:12px;
+  line-height:1.6;
+}
+body[data-page="portfolio"] .regime-backtest-block .custom-range { margin:0 30px 6px; }
+body[data-page="portfolio"] .regime-backtest-block .backtest-error { margin:4px 30px 0; min-height:16px; color:#c23c4a; font-size:12px; }
+body[data-page="portfolio"] .regime-backtest-block .backtest-result { margin-top:16px; }
+body[data-page="portfolio"] .regime-backtest-block .input-group { margin:16px 30px; max-width:340px; }
+/* #fw-backtest-stats/#inv-backtest-stats(재구성 실행 결과 통계 4칸) - 같은 블록의 다른
+   요소(backtest-desc/custom-range/input-group/신호일 table-wrap)는 전부 여백 규칙이 있는데
+   .stat-rail만 빠져 있어 패널 가장자리에 그대로 붙어 있었다(실측 확인) - [data-panel="mp"]
+   .stat-rail과 동일한 카드형 여백을 그대로 맞춘다. */
+body[data-page="portfolio"] .regime-backtest-block .stat-rail {
+  margin:0 24px 20px;
+  border:1px solid #dce7ef;
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+}
+@media (max-width:820px) {
+  body[data-page="portfolio"] .regime-backtest-block .stat-rail { margin-left:16px; margin-right:16px; }
+}
+body[data-page="portfolio"] .universe-cart-notice {
+  flex-basis:100%;
+  margin:0;
+  padding:8px 12px;
+  border:1px solid #bfe0f5;
+  border-radius:8px;
+  background:#eef7fd;
+  color:#1a5f85;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.5;
+}
+body[data-page="portfolio"] .universe-cart-chips { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+body[data-page="portfolio"] .cart-chip-empty { color:#8ba0b0; font-size:11px; font-weight:700; }
+body[data-page="portfolio"] .cart-chip {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:30px;
+  padding:0 10px;
+  border:1px solid #cfdce6;
+  border-radius:999px;
+  background:#fff;
+  color:#4d687b;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+}
+body[data-page="portfolio"] .cart-chip-union, body[data-page="portfolio"] .cart-chip-all { border-style:dashed; }
+body[data-page="portfolio"] .cart-chip.active {
+  border-style:solid;
+  border-color:var(--chip-color, var(--blue));
+  background:#f3f8fb;
+  color:#173952;
+  box-shadow:inset 0 0 0 1px var(--chip-color, var(--blue));
+}
+body[data-page="portfolio"] .cart-chip-dot { width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
+body[data-page="portfolio"] .cart-chip-name { max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body[data-page="portfolio"] .cart-chip-remove {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:16px;
+  height:16px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  padding:0;
+  color:#8ba0b0;
+  font-size:13px;
+  line-height:1;
+  cursor:pointer;
+}
+body[data-page="portfolio"] .cart-chip-remove:hover { background:#eef4f8; color:#c23c4a; }
+
+body[data-page="portfolio"] [data-panel="engine-feature-weight"] .table-wrap { margin-top:22px; }
+body[data-page="portfolio"] .engine-feature-weight-table { min-width:1080px; }
+body[data-page="portfolio"] .engine-feature-weight-table thead tr:first-child th {
+  padding:15px 10px;
+  background:linear-gradient(135deg,#194d75,#2e79a8);
+  color:#fff;
+  border-color:rgba(255,255,255,.23);
+  font-size:15px;
+}
+body[data-page="portfolio"] .engine-feature-weight-table thead tr:nth-child(2) th { background:#eef4f8; color:#617b8c; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody td { padding:12px 10px; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody tr:nth-child(odd) td { background:#f5f8fb; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody tr:nth-child(even) td { background:#fff; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody .phase-cell { background:#e8f0f5 !important; color:#173f5c; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody .detail-cell { background:#f1f6f9 !important; color:#274b64; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody .total-cell { background:#edf8f5 !important; color:#137f70; }
+body[data-page="portfolio"] .engine-feature-weight-table tbody .total-cell.is-invalid { background:#fde9eb !important; color:#b73041; }
+body[data-page="portfolio"] .engine-feature-weight-table .feature-weight-line input { border-color:#c9dce8; border-radius:7px; text-align:center; }
+
+body[data-page="portfolio"] [data-panel="investment"] .toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:20px 24px 0;
+  padding:13px 15px;
+  border:1px solid #dce7ef;
+  border-radius:12px;
+  background:#f7fafc;
+}
+body[data-page="portfolio"] [data-panel="investment"] .button-group { display:flex; flex-wrap:wrap; gap:7px; }
+body[data-page="portfolio"] [data-panel="investment"] .filter-chip {
+  min-height:34px;
+  padding:0 14px;
+  border:1px solid #ccdce6;
+  border-radius:999px;
+  background:#fff;
+  color:#5a7386;
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+}
+body[data-page="portfolio"] [data-panel="investment"] .filter-chip.active { color:#fff; background:#153f5d; border-color:#153f5d; }
+body[data-page="portfolio"] [data-panel="investment"] .toolbar-right { display:flex; align-items:center; gap:8px; }
+/* "강제 조정" 하위 탭의 새 행 추가 toolbar는 .form-card(자체 padding:20px) 안에 중첩돼
+   있어, 원래 탭-패널 직속 자식용으로 설계된 .toolbar의 margin:20px 24px 0(좌우 24px)이
+   form-card 패딩 위에 또 얹혀 이중으로 좁아진다 - 390px 모바일에서 select+버튼이 겨우
+   158px 안에 눌려 select 너비(173px)조차 못 채우고 버튼이 그 밖으로 밀려났었다(실측
+   확인). form-card 안에서는 좌우 마진을 없애 form-card의 패딩만 남긴다. */
+body[data-page="portfolio"] [data-panel="investment"] .form-card .toolbar { margin-left:0; margin-right:0; }
+body[data-page="portfolio"] [data-panel="investment"] .toolbar-right select { min-height:36px; max-width:230px; border:1px solid #c7d9e5; border-radius:8px; background:#fff; color:#294a60; padding:0 30px 0 10px; font-size:12px; }
+body[data-page="portfolio"] [data-panel="investment"] .toolbar-right .secondary-action { min-height:36px; padding:0 13px; font-size:12px; }
+body[data-page="portfolio"] [data-panel="investment"] .mp-editor-table td { background:#fff; }
+body[data-page="portfolio"] [data-panel="investment"] .mp-editor-table tbody tr:hover td { background:#f4f9fc; }
+body[data-page="portfolio"] [data-panel="investment"] .mp-editor-auto-name { color:#153f5d; }
+body[data-page="portfolio"] [data-panel="investment"] .mp-editor-symbol,
+body[data-page="portfolio"] [data-panel="investment"] .mp-editor-weight { border-color:#c8dbe7; border-radius:8px; }
+
+/* .subtabs/.subtab는 원래 "국면 MP" 탭(mp-view-tabs) 전용이었으나 "국면에 따른 엔진별·특성별
+   비중"/"엔진별·특성별 MP"(기본값/강제 조정)과 "정량 분석"의 세부 지표 시계열(점수/원데이터)
+   등 여러 페이지에서 동일한 시각 스타일을 그대로 재사용하므로 페이지·패널 스코프를 아예
+   뺐다 - 사이트 전체에서 이 클래스면 항상 같은 모양. */
+.subtabs {
+  display:flex;
+  gap:8px;
+  /* 아래쪽도 위와 대칭으로 18px - 0이었을 땐 바로 다음 콘텐츠가 자기 자신의 위쪽 여백을
+     안 갖고 있는 탭(예: 시장 지표, 엔진별·특성별 비중)에서 하위 탭 선택 줄과 그 아래 내용이
+     완전히 붙어 보이는 문제가 있었다(실측: gap=0px). "국면 MP"처럼 다음 요소가 이미 자체
+     여백을 가진 탭은 CSS 마진이 인접 형제끼리 겹치는(collapse) 성질 덕분에 이중 여백이
+     되지 않는다(실측 확인). */
+  margin:18px 24px;
+  padding:5px;
+  border:1px solid #dce7ef;
+  border-radius:10px;
+  background:#f5f8fa;
+}
+.subtab {
+  min-height:36px;
+  padding:0 14px;
+  border:1px solid transparent;
+  border-radius:7px;
+  background:transparent;
+  color:#5a7386;
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+}
+.subtab.active { color:#fff; background:#153f5d; }
+/* "강제 조정" 하위 탭으로 옮긴 저장/기본값 복원 버튼 - 원래 .tab-panel > .section-heading
+   안에 있을 때만 적용되던 사이즈 규칙(38px/12px)을 이 두 버튼에 한해 ID로 그대로 이전한다.
+   클래스 기반으로 넓히면 이 페이지의 다른 secondary-action(필터 초기화, 행 추가 등)까지
+   의도치 않게 같이 커져버리므로 일부러 ID로 좁게 스코프한다. */
+body[data-page="portfolio"] #save-feature-weights,
+body[data-page="portfolio"] #reset-feature-weights,
+body[data-page="portfolio"] #save-engine-mp,
+body[data-page="portfolio"] #reset-engine-mp {
+  min-height:38px;
+  padding:0 14px;
+  border-radius:9px;
+  font-size:12px;
+}
+body[data-page="portfolio"] [data-panel="mp"] .mp-snapshot-picker {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:14px 24px 0;
+}
+/* display:flex 위 규칙이 브라우저 기본 [hidden]{display:none}보다 명시도가 높아
+   row.hidden=true를 줘도 화면엔 계속 보이던 버그 - [hidden] 명시도를 하나 더 얹어 이긴다. */
+body[data-page="portfolio"] [data-panel="mp"] .mp-snapshot-picker[hidden] { display:none; }
+body[data-page="portfolio"] [data-panel="mp"] .mp-snapshot-picker label { color:#5b7587; font-size:11px; font-weight:850; }
+body[data-page="portfolio"] [data-panel="mp"] .mp-snapshot-picker select {
+  min-height:36px;
+  min-width:260px;
+  border:1px solid #c7d9e5;
+  border-radius:8px;
+  background:#fff;
+  color:#294a60;
+  padding:0 11px;
+  font-size:12px;
+}
+body[data-page="portfolio"] [data-panel="mp"] .regime-banner {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  margin:18px 24px 0;
+  padding:24px 28px;
+  border:1px solid #b9e1db;
+  border-radius:13px;
+  background:linear-gradient(135deg,#effaf8,#e6f6f3);
+}
+body[data-page="portfolio"] [data-panel="mp"] .regime-banner span { color:#5e8582; font-size:11px; font-weight:850; }
+body[data-page="portfolio"] [data-panel="mp"] .regime-banner strong { margin-top:6px; color:#108675; font-size:32px; }
+body[data-page="portfolio"] [data-panel="mp"] .regime-banner p { margin:0; color:#567a7c; font-size:12px; text-align:right; }
+body[data-page="portfolio"] [data-panel="mp"] .stat-rail {
+  margin:18px 24px 0;
+  border:1px solid #dce7ef;
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+}
+body[data-page="portfolio"] [data-panel="mp"] .stat { min-height:98px; padding:18px 20px; }
+body[data-page="portfolio"] [data-panel="mp"] .table-tools { display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:14px 16px; background:#f8fafc; border-bottom:1px solid #e1eaf0; }
+body[data-page="portfolio"] [data-panel="mp"] .table-tools label { color:#5b7587; font-size:11px; font-weight:850; }
+body[data-page="portfolio"] [data-panel="mp"] .table-tools select { min-height:34px; border:1px solid #c7d9e5; border-radius:8px; background:#fff; padding:0 26px 0 9px; color:#294a60; font-size:12px; }
+
+@media (max-width:1100px) {
+  body[data-page="portfolio"] #universe-controls { grid-template-columns:repeat(6,minmax(0,1fr)); }
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(1) { grid-column:span 2; }
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(2) { grid-column:span 1; }
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(3),
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(4) { grid-column:span 1; }
+  body[data-page="portfolio"] #universe-controls > .secondary-action { grid-column:span 1; }
+}
+@media (max-width:820px) {
+  body[data-page="portfolio"] .page-title { min-height:140px; padding:28px 24px; }
+  body[data-page="portfolio"] .page-title h1 { font-size:32px; }
+  body[data-page="portfolio"] .tab-panel > .section-heading { flex-direction:column; gap:12px; }
+  body[data-page="portfolio"] .tab-panel > .section-heading .section-meta { align-self:flex-start; }
+  body[data-page="portfolio"] #universe-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(1),
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(2),
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(3),
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(4) { grid-column:span 1; }
+  body[data-page="portfolio"] #universe-controls > .secondary-action { grid-column:span 2; margin-top:0; }
+  body[data-page="portfolio"] .universe-cart-bar { flex-direction:column; align-items:stretch; }
+  body[data-page="portfolio"] .universe-cart-compose { width:100%; }
+  body[data-page="portfolio"] .universe-cart-compose input { flex:1; min-width:0; }
+  body[data-page="portfolio"] [data-panel="investment"] .toolbar { align-items:flex-start; flex-direction:column; }
+  body[data-page="portfolio"] [data-panel="investment"] .toolbar-right { width:100%; }
+  body[data-page="portfolio"] [data-panel="investment"] .toolbar-right select { flex:1; max-width:none; }
+  /* .form-card 안에 중첩된 toolbar(강제 조정 하위 탭의 "행 추가")는 .toolbar 자체의 padding(13px
+     15px)까지 겹쳐 위 select flex:1 규칙만으로는 폭이 부족해 select조차 다 못 채우고 버튼이
+     밖으로 밀려난다(select는 flex:1이어도 min-width:auto 기본값 때문에 내용 너비 밑으로는
+     안 줄어듦) - 이 좁은 컨텍스트에서는 select/버튼을 세로로 쌓아 폭 부족 자체를 없앤다. */
+  body[data-page="portfolio"] [data-panel="investment"] .form-card .toolbar-right { flex-direction:column; align-items:stretch; }
+  body[data-page="portfolio"] [data-panel="investment"] .form-card .toolbar-right select { width:100%; }
+  body[data-page="portfolio"] [data-panel="investment"] .form-card .toolbar-right .secondary-action { width:100%; }
+  body[data-page="portfolio"] [data-panel="mp"] .regime-banner { align-items:flex-start; flex-direction:column; }
+  body[data-page="portfolio"] [data-panel="mp"] .regime-banner p { text-align:left; }
+}
+@media (max-width:520px) {
+  body[data-page="portfolio"] .page-title { min-height:124px; padding:23px 20px; }
+  body[data-page="portfolio"] .page-title h1 { font-size:26px; }
+  body[data-page="portfolio"] .tab-panel > .section-heading { padding:22px 20px 18px; }
+  body[data-page="portfolio"] .tab-panel > .section-heading h2 { font-size:21px; }
+  body[data-page="portfolio"] #universe-controls { grid-template-columns:1fr; padding:18px 20px; }
+  body[data-page="portfolio"] #universe-controls .input-group:nth-child(n),
+  body[data-page="portfolio"] #universe-controls > .secondary-action { grid-column:span 1; }
+  body[data-page="portfolio"] #universe-summary { margin:0 20px; padding:13px 0; font-size:12px; }
+  body[data-page="portfolio"] .table-wrap { margin:16px 16px 22px; }
+  .subtabs { margin-left:16px; margin-right:16px; overflow-x:auto; }
+  body[data-page="portfolio"] [data-panel="mp"] .mp-snapshot-picker { margin-left:16px; margin-right:16px; flex-wrap:wrap; }
+  body[data-page="portfolio"] [data-panel="mp"] .mp-snapshot-picker select { min-width:0; flex:1; }
+  body[data-page="portfolio"] [data-panel="mp"] .regime-banner,
+  body[data-page="portfolio"] [data-panel="mp"] .stat-rail { margin-left:16px; margin-right:16px; }
+}
+.mp-editor-table td { vertical-align:middle; }
+.mp-editor-table th:nth-child(3) { min-width:145px; }
+.mp-editor-table th:nth-child(4) { min-width:230px; }
+.mp-editor-table th:nth-child(5) { min-width:150px; }
+.mp-editor-table th:last-child { min-width:64px; }
+.mp-editor-input { width:100%; min-height:38px; border:1px solid #bfd0df; border-radius:7px; background:#fff; color:var(--ink); padding:8px 10px; font-weight:750; outline:none; }
+.mp-editor-input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(23,113,185,.11); }
+.mp-editor-symbol { width:145px; min-width:145px; text-align:center; letter-spacing:.04em; }
+.mp-editor-auto-name { display:inline-block; min-width:190px; color:var(--ink); font-weight:800; text-align:left; }
+.mp-editor-auto-name.is-empty { color:#9aaebb; font-weight:650; }
+.mp-editor-weight { width:88px; min-width:88px; text-align:center; }
+.mp-editor-unit { display:inline-block; margin-left:6px; color:var(--muted); font-size:12px; font-weight:800; }
+.mp-editor-name-cell { display:inline-flex; flex-direction:column; align-items:flex-start; gap:2px; }
+.mp-editor-mismatch { color:#b73041; font-size:11px; font-weight:750; }
+.save-status { color:var(--muted); font-size:11px; font-weight:800; white-space:nowrap; }
+.save-status.is-error { color:#b73041; }
+.row-action { text-align:center; }
+.table-action-btn { border:1px solid #e1b7be; border-radius:6px; background:#fff7f8; color:#ba4254; padding:7px 9px; font-size:11px; font-weight:850; cursor:pointer; }
+.table-action-btn:hover { background:#ba4254; color:#fff; }
+
+/* 엔진별 특성별 비중: 이미지 기준의 1차 국면·세부 국면·엔진 묶음 표 */
+.engine-feature-weight-body { padding:0; }
+.allocation-note { margin:0; padding:22px 25px 20px; color:var(--ink); font-size:16px; line-height:1.6; }
+.allocation-note strong { font-weight:900; }
+.engine-feature-weight-table-wrap { border-top:0; overflow-x:auto; }
+.engine-feature-weight-table { min-width:1080px; table-layout:fixed; font-size:13px; }
+.engine-feature-weight-table .phase-col { width:100px; }
+.engine-feature-weight-table .detail-col { width:165px; }
+.engine-feature-weight-table .feature-col { width:170px; }
+.engine-feature-weight-table .weight-col { width:70px; }
+.engine-feature-weight-table .total-col { width:82px; }
+.engine-feature-weight-table th,
+.engine-feature-weight-table td { text-align:center; vertical-align:middle; }
+.engine-feature-weight-table thead tr:first-child th { padding:15px 10px; background:#5688bf; color:#fff; border-right:1px solid rgba(255,255,255,.42); font-size:18px; font-weight:850; letter-spacing:-.035em; }
+.engine-feature-weight-table thead tr:first-child th:last-child { border-right:0; }
+.engine-feature-weight-table thead tr:nth-child(2) th { padding:11px 9px; background:#eef3f9; color:#587189; border-right:1px solid var(--line); font-size:11px; }
+.engine-feature-weight-table tbody td { padding:11px 9px; border-right:1px solid #fff; border-bottom:1px solid #fff; line-height:1.35; }
+.engine-feature-weight-table tbody tr:nth-child(odd) td { background:#d7e0ef; }
+.engine-feature-weight-table tbody tr:nth-child(even) td { background:#e8edf5; }
+.engine-feature-weight-table tbody .phase-cell { background:#cbd7e8 !important; color:#1f2e3f; font-size:15px; font-weight:900; }
+.engine-feature-weight-table tbody .detail-cell { background:#dbe4f1 !important; color:#253548; font-size:14px; font-weight:850; }
+.engine-feature-weight-table tbody .weight { font-size:14px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.engine-feature-weight-table tbody .total-cell { background:#e7edf5 !important; color:#1f2e3f; font-size:15px; font-weight:900; }
+.engine-feature-weight-table tbody .total-cell.is-invalid { background:#fde9eb !important; color:#b73041; }
+.engine-feature-weight-table .engine-income { border-left:2px solid #d2dceb; }
+.engine-feature-weight-table .engine-performance { border-left:2px solid #d2dceb; }
+.engine-feature-weight-table .engine-edge { border-left:2px solid #d2dceb; }
+.engine-feature-weight-table .empty-cell { color:transparent; }
+.feature-weight-line { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:30px; text-align:left; }
+.feature-weight-line span { min-width:0; overflow-wrap:anywhere; }
+.feature-weight-line input { width:62px; min-width:62px; border:1px solid #b8cbe0; border-radius:6px; padding:6px 5px; text-align:right; font:inherit; color:#102a43; background:#fff; }
+
+/* Keep each feature and its editable allocation visibly paired line-by-line. */
+.engine-feature-weight-table tbody td { vertical-align: middle; }
+.engine-feature-weight-table .feature-weight-line {
+  min-height: 34px;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.72);
+}
+.engine-feature-weight-table .feature-weight-line:last-child { border-bottom: 0; }
+/* 엔진마다 특성 개수가 다르다(Income/Performance 5개, Edge 4개) - 소계를 특성 줄에 이어
+   붙이면(예전 방식) 엔진별로 소계 세로 위치가 들쑥날쑥해진다. 대신 세부 국면 1개당 <tr>을
+   2개(특성 입력 행 + 엔진 소계·합계 행)로 나눠서, 소계 3개+합계가 항상 같은 가로줄에
+   나란히 붙도록 표 구조 자체로 해결(JS: renderFeatureWeights 참고). */
+.engine-feature-weight-table .subtotal-row-cell { padding-top: 10px; padding-bottom: 10px; font-weight: 900; color: #1f2e3f; }
+.engine-feature-weight-table .subtotal-row-cell:nth-child(odd) { color: #45607a; font-weight: 800; font-size: 12px; }
+/* 특성 입력 행과 배경을 다르게 줘서 "요약 줄"임을 한눈에 구분(기존 홀/짝 행 배경 규칙과
+   동일 명시도라 소스 순서로 이겨야 함 - 반드시 그 규칙보다 뒤에 위치할 것). */
+.engine-feature-weight-table tbody tr[data-feature-subtotal-row] td,
+.engine-feature-weight-table tbody tr[data-fw-draft-subtotal-row] td { background: #c3d0e6; }
+.engine-feature-weight-table td.weight { background: rgba(255,255,255,.28); }
+.engine-feature-weight-table td.weight .feature-weight-line { justify-content: center; gap: 7px; }
+.engine-feature-weight-table td.weight .feature-weight-line > span { flex: 0 0 auto; }
+.engine-feature-weight-table td.engine-income + td.weight { border-left: 1px solid rgba(255,255,255,.8); }
+.engine-feature-weight-table td.engine-performance + td.weight { border-left: 1px solid rgba(255,255,255,.8); }
+.engine-feature-weight-table td.engine-edge + td.weight { border-left: 1px solid rgba(255,255,255,.8); }
+.mp-table-toolbar { display:flex; justify-content:flex-end; align-items:center; gap:10px; padding:0 20px 14px; }
+.mp-table-toolbar label { color:#55718b; font-size:13px; font-weight:700; }
+.mp-table-toolbar select { min-width:140px; border:1px solid var(--line); border-radius:6px; padding:8px 10px; background:#fff; color:#102a43; }
+
+.metric-table th, .metric-table td { padding:12px 13px; }
+.positive { color:#008472; font-weight:900; }
+.negative { color:var(--red); font-weight:900; }
+.neutral { color:#61788b; font-weight:900; }
+
+.empty-state { min-height: 170px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:30px; color:#668094; background:#f8fafb; border-top:1px solid var(--line); }
+.empty-state strong { font-size:18px; color:var(--ink); }
+.empty-state span { margin-top:7px; font-size:12px; }
+.hidden { display:none !important; }
+
+@media (max-width: 1100px) {
+  .nav-wrap { width: min(100% - 32px, 1480px); gap:22px; }
+  .nav-status { display:none; }
+  .page-shell { width: min(100% - 32px, 1480px); }
+  .split-grid, .portfolio-layout { grid-template-columns:1fr; }
+  .page-title { padding:27px 30px; }
+  .score-strip, .forecast-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .score-cell:nth-child(3), .forecast:nth-child(3) { border-right:0; }
+  .score-cell:nth-child(-n+3), .forecast:nth-child(-n+3) { border-bottom:1px solid var(--line); }
+  .universe-controls { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 820px) {
+  .site-header { position:relative; }
+  .nav-wrap { min-height:auto; padding:14px 0; align-items:flex-start; overflow-x:auto; gap:20px; }
+  .brand { font-size:15px; }
+  .brand img { width:38px; height:38px; }
+  .primary-nav { flex:0 0 auto; }
+  .nav-link { min-width:104px; padding:8px 10px 10px; }
+  .nav-name { font-size:12px; }
+  .page-shell { padding-top:22px; width:calc(100% - 24px); }
+  .page-title { min-height:116px; padding:22px; }
+  .page-title h1 { font-size:29px; }
+  .page-title-note { display:none; }
+  .section-heading, .filter-bar { padding-left:20px; padding-right:20px; }
+  .section-heading { align-items:flex-start; flex-direction:column; }
+  .section-actions { width:100%; align-items:flex-start; justify-content:space-between; }
+  .section-actions .section-meta { text-align:left; }
+  .section-body { padding:20px; }
+  .three-engine, .path-line, .wide-grid, .adjust-grid, .ai-grid, .stress-band, .stress-methodology, .stress-thresholds { grid-template-columns:1fr; }
+  .forecast-summary, .result-grid { grid-template-columns:1fr; }
+  .forecast-summary > div, .result-grid > article { border-right:0; border-bottom:1px solid var(--line); }
+  .forecast-summary > div:last-child, .result-grid > article:last-child { border-bottom:0; }
+  .engine-intro, .path-step, .stress-card, .stress-methodology article { border-right:0; border-bottom:1px solid var(--line); }
+  .stress-thresholds article { border-right:0; }
+  .stress-thresholds article + article { border-top:1px solid var(--line); }
+  .engine-intro:last-child, .path-step:last-child, .stress-card:last-child, .stress-methodology article:last-child { border-bottom:0; }
+  .path-step { min-height:auto; padding:19px 20px; }
+  .score-strip, .forecast-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .score-cell:nth-child(3), .forecast:nth-child(3) { border-right:1px solid var(--line); }
+  .score-cell:nth-child(-n+4), .forecast:nth-child(-n+4) { border-bottom:1px solid var(--line); }
+  .score-cell:nth-child(2n), .forecast:nth-child(2n) { border-right:0; }
+  .stat-rail { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .stat:nth-child(2) { border-right:0; }
+  .stat:nth-child(-n+2) { border-bottom:1px solid var(--line); }
+  .filter-bar { align-items:flex-start; flex-direction:column; }
+  .filter-controls { justify-content:flex-start; }
+  .chart-box { height:315px; }
+  .chart-box.tall { height:390px; }
+  .chart-box.stress-chart { height:420px; }
+  .adjust-row { grid-template-columns:16px minmax(100px,1fr) 96px; }
+  .adjust-row small { display:none; }
+  .engine-filter-row { align-items:flex-start; flex-direction:column; }
+  .engine-row-add { width:100%; margin-left:0; flex-wrap:wrap; }
+  .engine-row-add select { flex:1 1 220px; min-width:0; }
+  .mp-editor-auto-name { min-width:160px; }
+  .universe-controls { grid-template-columns:repeat(2,minmax(0,1fr)); padding:17px 20px; }
+}
+@media (max-width: 500px) {
+  .nav-wrap { width:calc(100% - 20px); }
+  .brand span { display:none; }
+  .page-shell { width:calc(100% - 16px); padding-bottom:35px; }
+  .page-title { border-radius:13px; }
+  .section { border-radius:13px; }
+  .section-heading h2 { font-size:20px; }
+  .tabs { padding:0 12px; }
+  .tab { padding-left:12px; padding-right:12px; }
+  .score-strip, .forecast-grid { grid-template-columns:1fr; }
+  .score-cell, .forecast { border-right:0 !important; }
+  .score-cell:not(:last-child), .forecast:not(:last-child) { border-bottom:1px solid var(--line); }
+  .stat-rail { grid-template-columns:1fr; }
+  .stat { border-right:0 !important; border-bottom:1px solid var(--line); }
+  .stat:last-child { border-bottom:0; }
+  .filter-controls { width:100%; }
+  .input-group { flex:1 1 130px; }
+  .input-group input, .input-group select { width:100%; }
+  .universe-controls { grid-template-columns:1fr; }
+  .universe-controls .line-btn { width:100%; }
+  .range-buttons { flex-wrap:wrap; }
+  .stress-chart-controls { align-items:flex-start; flex-wrap:wrap; }
+  .chart-box { height:280px; }
+  .adjust-row { grid-template-columns:16px minmax(0,1fr) 83px; gap:9px; }
+  .portfolio-layout, .split-grid, .wide-grid { gap:16px; }
+}
+
+@media (max-width: 820px) {
+  .form-grid { grid-template-columns:1fr; gap:18px; padding:20px; }
+  .form-card:nth-child(2) { grid-row:auto; }
+  .preview-panel { margin:0 20px 20px; }
+  .ai-grid > label { border-right:0; border-bottom:1px solid var(--line); }
+  .ai-grid > label:last-child { border-bottom:0; }
+  .method-list li { grid-template-columns:1fr; gap:3px; }
+}
+@media (max-width: 500px) {
+  .form-grid { padding:16px; }
+  .preview-panel { margin:0 16px 16px; padding:17px; }
+  .preview-values > div { padding-inline:7px; }
+  .preview-values strong { font-size:28px; }
+  .preview-regime { align-items:flex-start; flex-direction:column; gap:6px; }
+  .preview-regime strong { text-align:left; }
+}
+
+/* Keep detail pages on the same readable maximum width as the overview. */
+.page-shell {
+  width: min(1440px, calc(100% - 48px));
+  max-width: 1440px;
+}
+@media (max-width: 1120px) {
+  .page-shell { width: calc(100% - 32px); }
+}
+@media (max-width: 820px) {
+  .page-shell { width: calc(100% - 24px); }
+}
+@media (max-width: 500px) {
+  .page-shell { width: calc(100% - 20px); }
+}
+
+/* Keep every universe column, including the final listing-date column,
+   inside the viewport at compact widths. Long text wraps; the table does not
+   push the page itself wider. */
+@media (max-width:1100px) {
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap { overflow-x:hidden; }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap table {
+    width:100%;
+    min-width:0;
+    table-layout:fixed;
+  }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th,
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td {
+    padding:12px 8px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(1),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(1) { width:24%; }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(2),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(2) { width:18%; }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(3),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(3) { width:12%; }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(4),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(4) {
+    width:12%;
+    white-space:normal;
+    line-height:1.3;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(5),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(5) { width:9%; }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(6),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(6) { width:9%; }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(7),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(7) {
+    width:16%;
+    white-space:normal;
+    word-break:keep-all;
+    overflow-wrap:normal;
+  }
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(1),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(1),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(2),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(2),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(3),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(3),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(5),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(5),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th:nth-child(6),
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td:nth-child(6) {
+    overflow-wrap:break-word;
+    word-break:keep-all;
+  }
+}
+@media (max-width:520px) {
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap th,
+  body[data-page="portfolio"] [data-panel="universe"] .table-wrap td { padding:10px 5px; font-size:10px; }
+  body[data-page="portfolio"] [data-panel="universe"] .universe-identity strong { font-size:11px; }
+  body[data-page="portfolio"] [data-panel="universe"] .universe-identity small { font-size:10px; }
+}
+
+/* Supporting indicators + market indicators: catalog first, then the selected
+   indicator workflow. Both tabs share the exact same reordered layout
+   (arrangeRawLayout()/arrangeMarketLayout() in adjustment.js), so these
+   selectors intentionally match both [data-panel="raw"] and [data-panel="market"]. */
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-heading,
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-selected-heading,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-heading,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-selected-heading {
+  padding:22px 0 12px;
+  margin-left:24px;
+  margin-right:24px;
+  background:#fff;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-heading h3,
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-selected-heading h3,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-heading h3,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-selected-heading h3 {
+  margin:4px 0 0;
+  color:var(--ink);
+  font-size:18px;
+  line-height:1.3;
+  letter-spacing:-.04em;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-wrap,
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-detail-wrap,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-wrap,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-detail-wrap {
+  margin-left:24px;
+  margin-right:24px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-wrap,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-wrap {
+  margin-top:0;
+  margin-bottom:34px;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-heading,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-heading {
+  margin-top:8px;
+  border-top:1px solid var(--line);
+  background:#fbfcfd;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-wrap + .filter-bar,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-wrap + .filter-bar {
+  border-top:1px solid var(--line);
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.filter-bar,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel] > .filter-bar {
+  align-items:flex-end;
+  gap:18px;
+  margin:0;
+  padding:22px 30px;
+  background:#f7fafc;
+  border-bottom:1px solid var(--line);
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.filter-bar .input-group,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel] > .filter-bar .input-group {
+  flex:1 1 360px;
+  min-width:0;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.filter-bar .input-group select,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel] > .filter-bar .input-group select {
+  width:100%;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.filter-bar .range-buttons,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel] > .filter-bar .range-buttons {
+  flex:0 0 auto;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >#raw-stats,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > #market-stats,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="compare"] > #compare-stats {
+  margin:22px 24px 0;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >#raw-chart,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > #market-chart,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="compare"] > #compare-chart {
+  /* .chart-box sets width:100%, which (combined with this rule's own
+     side margins) pushed the chart 24px past the panel's right edge,
+     silently clipped by .section's overflow:clip. width:auto lets the
+     box resolve to the margin-adjusted available width instead. */
+  width:auto;
+  margin:18px 24px 0;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-selected-heading,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-selected-heading {
+  margin-top:18px;
+  border-top:1px solid var(--line);
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-detail-wrap,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-detail-wrap {
+  margin-top:0;
+  margin-bottom:30px;
+}
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-wrap table,
+body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-detail-wrap table,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-wrap table,
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-detail-wrap table {
+  width:100%;
+}
+body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > #market-note {
+  margin:22px 30px 0;
+}
+/* 글로벌 중앙은행 금리 서브탭 - 위 raw-catalog/raw-detail 패턴과 같은 카드형 컨테이너
+   비주얼(테두리+radius)을 쓰되, 이쪽은 카탈로그/선택지표 2단 구조가 아니라 단일
+   차트+표라 arrangeRawLayout() 같은 재배치 로직 없이 정적 마크업 순서 그대로 둔다. */
+body[data-page="adjustment"] [data-raw-panel="global-rates"] > .filter-bar {
+  margin:0;
+  padding:22px 30px;
+  background:#f7fafc;
+  border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+  row-gap:14px;
+}
+.country-toggles { display:flex; flex-wrap:wrap; gap:4px 16px; }
+.country-toggle { display:inline-flex; align-items:center; gap:7px; min-height:36px; padding:6px 2px; font-size:12px; font-weight:800; color:var(--ink); cursor:pointer; user-select:none; }
+.country-toggle input { width:17px; height:17px; accent-color:var(--blue); cursor:pointer; }
+.country-toggle:has(input:not(:checked)) { color:var(--muted); } /* #9fb2bf였던 이전 값은 배경(#f7fafc) 대비 2.1:1로 WCAG AA(4.5:1) 미달 - var(--muted)는 4.5:1 통과 확인됨 */
+body[data-page="adjustment"] [data-raw-panel="global-rates"] > #global-rates-chart {
+  width:auto; /* #raw-chart와 동일한 이유 - width:100%+side margin 겹침 오버플로우 방지 */
+  margin:18px 24px 0;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+body[data-page="adjustment"] [data-raw-panel="global-rates"] > #global-rates-empty {
+  margin:18px 24px 0;
+  border:1px dashed var(--line);
+  border-radius:12px;
+  color:#657c8d;
+  text-align:center;
+}
+body[data-page="adjustment"] [data-raw-panel="global-rates"] > .table-wrap {
+  margin:18px 24px 30px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+}
+@media (max-width:820px) {
+  body[data-page="adjustment"] [data-raw-panel="global-rates"] > .filter-bar {
+    padding:18px 20px;
+    align-items:stretch;
+    flex-direction:column;
+  }
+  body[data-page="adjustment"] [data-raw-panel="global-rates"] > #global-rates-chart,
+  body[data-page="adjustment"] [data-raw-panel="global-rates"] > #global-rates-empty,
+  body[data-page="adjustment"] [data-raw-panel="global-rates"] > .table-wrap {
+    margin-left:16px;
+    margin-right:16px;
+  }
+}
+@media (max-width:820px) {
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.filter-bar,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel] > .filter-bar {
+    align-items:stretch;
+    flex-direction:column;
+    padding:18px 20px;
+  }
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.filter-bar .range-buttons,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel] > .filter-bar .range-buttons {
+    justify-content:flex-start;
+  }
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >#raw-stats,
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >#raw-chart,
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-wrap,
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-detail-wrap,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > #market-stats,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > #market-chart,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-wrap,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-detail-wrap,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="compare"] > #compare-stats,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="compare"] > #compare-chart {
+    margin-left:16px;
+    margin-right:16px;
+  }
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-catalog-heading,
+  body[data-page="adjustment"] [data-panel="raw"] [data-raw-panel="domestic"] >.raw-selected-heading,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-catalog-heading,
+  body[data-page="adjustment"] [data-panel="market"] [data-market-panel="index"] > .raw-selected-heading {
+    margin-left:16px;
+    margin-right:16px;
+  }
+}

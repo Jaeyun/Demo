@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>강제 국면 설정 상세 · AIP X DeepSearch Indicator</title><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="styles.css?v=20260819-banner-filterbar-gap"><link rel="stylesheet" href="header.css?v=20260815-mobile-nav-fix2"></head>
+<body data-page="override-detail"><header class="aip-site-header"></header><main class="page-shell"><section class="page-title"><div><p class="kicker">FORCED REGIME · DETAIL</p><h1>강제 국면 설정 상세</h1></div><div class="page-title-note"><a href="adjustment.html#history" id="back-to-history">← 히스토리 목록</a></div></section>
+
+<section class="section" id="detail-not-found" hidden><div class="section-heading"><div><span class="section-kicker">NOT FOUND</span><h2>설정을 찾을 수 없습니다</h2></div></div><div class="section-body"><p>삭제되었거나 잘못된 링크입니다. <a href="adjustment.html#history">히스토리 목록으로 돌아가기</a></p></div></section>
+
+<div id="detail-content" hidden>
+<section class="section"><div class="section-heading"><div><span class="section-kicker">SETTINGS</span><h2 id="detail-title">기간 · 국면 설정</h2></div><div class="section-actions"><button type="button" class="secondary-action" id="detail-delete">이 설정 삭제</button></div></div>
+<div class="stat-rail" id="detail-meta-stats"></div>
+<div class="section-body" id="detail-note-wrap" hidden><p class="small"><strong>메모</strong> · <span id="detail-note"></span></p></div>
+</section>
+
+<section class="section"><div class="section-heading"><div><span class="section-kicker">IMPACT</span><h2>자연 국면 대비 이 설정을 적용했을 때</h2></div></div>
+<div class="section-body" id="detail-impact-intro"><p class="small">이 설정 하나만 강제 적용한 경우와, 강제 설정이 전혀 없는 자연 국면인 경우를 이 기간(시작일~종료일)에 대해서만 비교합니다. 실제 리밸런싱 신호일이 이 기간에 없는 시스템은 "미적용"으로 표시되고 계산에서 제외됩니다.</p>
+<p class="small" id="detail-impact-empty" hidden>이 기간에는 정량 스코어·MP 기준 어느 쪽에도 실제로 반영되는 리밸런싱 신호일이 없습니다 — 이 강제 설정은 현재 완전히 무시됩니다.</p>
+<p class="small" id="detail-impact-short-window" hidden>선택한 기간이 매우 짧아(영업일 2일 미만) 아래 수치가 0%로 보일 수 있습니다 — 강제 국면은 신호 다음 영업일 시가부터 반영되고, 비교에 쓸 데이터가 2일 미만이면 지표 자체가 계산되지 않습니다. 실제 효과가 없다는 뜻이 아니라 이 짧은 기간으로는 측정할 수 없다는 뜻이니, 더 넓은 기간으로 다시 확인해 보세요.</p>
+<div id="detail-impact-chart-wrap" hidden><div class="chart-frame"><div id="detail-impact-chart" class="chart-box"></div></div></div>
+</div>
+<div class="table-wrap" id="detail-impact-table-wrap" hidden><table><thead><tr><th>시스템</th><th class="numeric">총수익률(자연/적용)</th><th class="numeric">CAGR(자연/적용)</th><th class="numeric">MDD(자연/적용)</th><th class="numeric">Sharpe(자연/적용)</th></tr></thead><tbody id="detail-impact-body"></tbody></table></div>
+</section>
+</div>
+
+</main><script src="echarts.min.js"></script><script src="data.js?v=20260819-cutoff-0814"></script><script src="etf-data.js?v=20260816-data-refresh"></script><script src="regime-override-data.js?v=20260819-qa-fixes"></script><script src="indicator-scores.js?v=20260819-cutoff-0814"></script><script src="app-common.js?v=20260819-qa-fixes"></script><script src="regime-override.js?v=20260819-mp-backtest-toggle"></script><script src="override-detail.js?v=20260819-mp-backtest-toggle"></script><script src="header-runtime.js?v=20260819-robust-nav-detect"></script></body></html>
